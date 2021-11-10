@@ -1,0 +1,3 @@
+/Users/yannis/Documents/c-projects/gtk_test/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/yannis/Documents/c-projects/gtk_test/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yannis/Documents/c-projects/gtk_test/cmake-build-debug/CMakeFiles/gtk_test.dir

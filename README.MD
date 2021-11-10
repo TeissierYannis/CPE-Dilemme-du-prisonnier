@@ -1,3 +1,8 @@
+al envoi depuis le client
+ya reception coté serveur
+ni regles du jeu
+ta graphisme
+
 graphisme
 - timer visuel pour début de round
 - fenetre de choix avec timer, numero de round (bloquer les boutons lorsque choix est deja fait)

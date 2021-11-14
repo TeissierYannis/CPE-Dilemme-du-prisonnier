@@ -1,0 +1,11 @@
+{
+    "ip_address": "127.0.0.1",
+    "port": "3000",
+    "nb_round": "3",
+    "betrayals_win": "-5",
+    "betrayals_loose": "-5",
+    "ollab_win": "-0.5",
+    "collab_loose": "-0.5",
+    "betrayals_collab_win": "0",
+    "betrayals_collab_loose": "-10"    
+}

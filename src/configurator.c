@@ -15,8 +15,6 @@
 server_config readconfig() {
      // Read config file
     FILE * file_p = fopen("../config/server_config.json", "r");
-    char * buffer = malloc(sizeof(char) * 100), * key = malloc(sizeof(char) * 20), * value = malloc(sizeof(char) * 20);
-    int i = 0;
 
     server_config server_config;
     init_config(&server_config);
@@ -29,8 +27,36 @@ server_config readconfig() {
 
     printf("\nReading configuration file...\n\n");
 
+    key_value("ip_address", server_config.ip, file_p);
+    key_value("port", server_config.port, file_p);
+
+    // Print config to debug
+    printf("========== Configuration ==========\n");
+    printf("\tPort: \t\t\t%s\n", server_config.port);
+    printf("\tServer ip: \t\t%s\n", server_config.ip);
+    printf("===================================\n\n");
+
+    printf("Configuration file read!\n\n");
+
+    // Close file
+    fclose(file_p);
+
+    // Return config
+    return server_config;
+}
+
+/**
+ * Initialize json parsing to key:value
+ * @brief Initialize json parsing to key:value
+ * @param server_config config file
+ */
+void parse_json(char * search_key, char * to_assign, FILE * config_file) {
+
+    char * buffer = malloc(sizeof(char) * 100), * key = malloc(sizeof(char) * 20), * value = malloc(sizeof(char) * 20);
+    int i = 0;
+
     // Read file word by word
-    while (fscanf(file_p, " %1023s", buffer) == 1) {
+    while (fscanf(config_file, " %1023s", buffer) == 1) {
         if (strcmp(buffer, "{") == 0 || strcmp(buffer, "}") == 0)
             continue;
 
@@ -51,36 +77,20 @@ server_config readconfig() {
             // Remove comma
             remchar(value, ',');
             // Check for key value pair
-            if (strcmp(key, "port") == 0) {
+            if (strcmp(key, search_key) == 0) {
                 // Set port
-                strcpy(server_config.port, value);
-            } else if (strcmp(key, "ip_address") == 0) {
-                // Set ip address
-                strcpy(server_config.ip, value);
+                strcpy(to_assign, value);
             }
             // Reset
             i--;
         }
     }
-
-    // Print config to debug
-    printf("========== Configuration ==========\n");
-    printf("\tPort: \t\t\t%s\n", server_config.port);
-    printf("\tServer ip: \t\t%s\n", server_config.ip);
-    printf("===================================\n\n");
-
-    printf("Configuration file read!\n\n");
-
+    // Reset file pointer
+    rewind(config_file);
     // Free memory
     free(buffer);
     free(key);
     free(value);
-
-    // Close file
-    fclose(file_p);
-
-    // Return config
-    return server_config;
 }
 
 /**

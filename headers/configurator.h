@@ -19,6 +19,13 @@ typedef struct {
 void init_config(server_config * config);
 
 /**
+ * Initialize json parsing to key:value
+ * @brief Initialize json parsing to key:value
+ * @param server_config config file
+ */
+void parse_json(char * search_key, char * to_assign, FILE * config_file);
+
+/**
  * Read config json file and setup server struct
  * @return server config struct
  */

@@ -24,7 +24,6 @@ void decrypting_incoming_message(char *message) {
     // display command
     printf("[/] %s %s\n", command_name, args);
 
-    // TODO send params to command
     // get command
     command cmd = find_command(command_name);
 

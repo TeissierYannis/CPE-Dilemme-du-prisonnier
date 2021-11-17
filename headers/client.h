@@ -26,12 +26,6 @@
 typedef struct{
     int id;
     char *status;
-
-    /***** a supprimer***/
-    int score;
-    char nom[30];
-    bool connected;
-    int choix;
 } Joueur;
 
 // Contient les informations de la partie
@@ -54,16 +48,14 @@ typedef struct {
     int J1_result;
     int J2_result;
     // Numero du round
-    char *number;
+    char number[20];
 } Round;
 
 // Récapitule la partie
 typedef struct {
     // Contient la liste des reponses de chaque joueur
-    Answer list_answer_J1[100];
-    Answer list_answer_J2[100];
-    Joueur J1;
-    Joueur J2;
+    Answer *list_answer_J1;
+    Answer *list_answer_J2;
 } Recap;
 
 // Se connecte au serveur et retourne la socket client
@@ -74,8 +66,6 @@ void send_answer(int socketClient, Game game);
 void client_fermer(int * socketClient, Joueur player);
 // Deconnecter le joueur
 void disconnect_player(int socketClient, Joueur player);
-// Afficher les informations du joueur
-void display_player(Joueur player);
 // Creer une socket client
 int create_socket();
 // Recevoir id du joueur pour initialiser le joueur
@@ -106,4 +96,7 @@ struct sockaddr_in create_serv_adrr();
 int get_clique();
 // Recuperer le temps que le joueur a pris pour faire un choix
 int get_time_clique();
+
+// Comparer 2 chaine de caracteres
+bool are_equal(char *c, char *b);
 #endif

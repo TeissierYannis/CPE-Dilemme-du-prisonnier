@@ -62,32 +62,43 @@ int client_connexion()
 	return socketClient;
 }
 
-
+// Le client reçoit un id
 int client_recevoir_id(int socketClient){
 	int id;
 	recv(socketClient, &id, sizeof(id), 0);
 	return id;
 }
 
-// Initialiser le joueur
+// Initialiser le joueur avec id reçu
 Joueur initialise_player(int socketClient){
 	Joueur player;
 	printf("Reception id du joueur...\n");
 	int identifiant = client_recevoir_id(socketClient);
 	player.id = identifiant;
+	player.status = "online";
+
 	return player;
 }
 
 
-// Recupérer le choix du joueur
+// Recevoir l'identifiant de la partie et créer la partie
+Game create_game(int socketClient, Joueur player){
+	Game game;
+	game.id = client_recevoir_id(socketClient);
+	game.player_id = player.id;
+	printf("Creation partie...\n");
+	return game;
+}
+
+// Recupérer le choix du joueur (trahier ->0 ou colaborer -> 1 ?)
 Answer get_answer(Game game){
 	int time_clique;
 	Answer answer;
+	printf("Recuperation reponse du joueur... \n");
 	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie + le choix du joueur + son temps de reponse
 	answer.game = game;
 	answer.choice = get_clique();
 	answer.time = get_time_clique();
-	printf("Recuperation reponse du joueur... \n");
 	return answer;
 }
 
@@ -109,42 +120,14 @@ void send_answer(int socketClient, Game game){
 	}
 }
 
-// On ferme le client
-void client_fermer(int * socketClient, Joueur player){
-	int fermeture;
 
-	// Envoyer un message de fermeture au serveur ? 
-//	disconnect_player(*socketClient, player);
-
-	// Fermeture de la socket client
-	fermeture = close(*socketClient);
-	// Affichage du succès ou echec de la fermeture
-	if(fermeture == 0){
-		printf("Client fermé !\n");
-	}
-	else if(fermeture == -1){
-		printf("Erreur fermeture client !\n");
-	}
-}
-
-// Recevoir l'identifiant de la partie et créer la partie
-Game create_game(int socketClient, Joueur player){
-	Game game;
-	game.id = client_recevoir_id(socketClient);
-	game.player_id = player.id;
-	printf("Creation partie...\n");
-	return game;
-}
-
-
-// Recuperer les informations du round
+// Recuperer les informations du round (resultats J1 et J2 + n° du round)
 Round get_round(int socketClient){
 	Round round;
 	int recevoir;
 	printf("Reception round du serveur...\n");
 	// Recevoir des données du serveur et les stock dans le round
 	recevoir = recv(socketClient, &round, sizeof(round), 0);
-	
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
 		printf("Erreur reception round\n");
@@ -154,18 +137,19 @@ Round get_round(int socketClient){
 }
 
 
-// Permet de jouer en communicant avec le serveur
+// Permet de jouer en communicant avec le serveur (envoie du choix + reception resultat)
 void jouer(int socket, Game game){
 	// Contient les informations d'un round
     Round round;
-    round.number = "0";
-
+    strcpy(round.number, "012");
 	// Tant que le nombre de round n'est pas terminé on continue
-	while(!game_end(round)){
+	while(game_end(round) == false){
+		//printf("game end = %s\n", game_end(round) ? "true" : "false");
 		// Envoyer le choix du joueur au serveur
     	send_answer(socket, game);
     	// Le serveur nous renvois les resultat du round
     	round = get_round(socket);
+		printf("\n");
 	}
 	printf("Fin de partie ! \n");
 }
@@ -174,14 +158,21 @@ void jouer(int socket, Game game){
 // Indique si la partie est fini ou continue
 bool game_end(Round round){
 	bool result = false;
+	printf("round n° %s \n", round.number);
+	int len = sizeof(round.number)/sizeof(round.number[0]);
+	int compteur = 0;
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
-	if(round.number == "end_game"){
+	if(are_equal(round.number, "end_game")){
 		result = true;
 	}
+	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
+	//if(round.number == "end_game"){
+	//	result = true;
+	//}
 	return result;
 }
 
-// Recuperer la structure qui recaptilue la partie
+// Recevoir le recapitulatif de la partie
 Recap get_recap(int socketClient){
 	Recap recap;
 	int recevoir;
@@ -197,7 +188,7 @@ Recap get_recap(int socketClient){
 	return recap;
 }
 
-// Récaptiluer la partie
+// Récaptiluer la partie (resultats des deux joueurs à chaque round)
 void game_recap(int socketClient){
 	Recap recap;
 	recap = get_recap(socketClient);
@@ -206,10 +197,12 @@ void game_recap(int socketClient){
 	print_recap(recap.list_answer_J2);
 }
 
-// Afficher la recapitulation de la partie du joueur choisi
+// Afficher la recapitulation de la partie pour le joueur indiqué
 void print_recap(Answer *answer){
-	int len = strlen(answer);
+	int len = sizeof(*answer)/sizeof(answer[0]);
+	printf("len recap = %d\n", len);
 	int id_player = answer[0].game.player_id;
+
 	// Afficher chaque choix du joueur avec le temps qu'il a mis pour faire ce choix
 	printf("Recap du joueur %d\n", id_player);
 	for(int i = 0; i<len; i++){
@@ -238,16 +231,48 @@ int get_time_clique(){
 	client_envoyer(socketClient, player);
 }*/
 
+// On ferme le client
+void client_fermer(int * socketClient, Joueur player){
+	int fermeture;
 
-// Afficher informations du joueur
-void display_player(Joueur player){
-	printf("\nInformations joueur...\n");
-	// Afficher propriétés
-	printf("Nom : %s\n", player.nom);
-	printf("Score = %d\n", player.score);
-	printf("Identifiant : %d \n", player.id);
-	printf("Choix : %d \n", player.choix);
-	printf("Connecté = %s \n", player.connected ? "true" : "false");
-	printf("\n\n");
+	// Envoyer un message de fermeture au serveur ? 
+//	disconnect_player(*socketClient, player);
+
+	// Fermeture de la socket client
+	fermeture = close(*socketClient);
+	// Affichage du succès ou echec de la fermeture
+	if(fermeture == 0){
+		printf("Client fermé !\n");
+	}
+	else if(fermeture == -1){
+		printf("Erreur fermeture client !\n");
+	}
 }
 
+
+// Comparer 2 chaine de caracteres
+bool are_equal(char *a, char *b){
+	int len_a, len_b, len;
+	int compteur = 0;
+	bool result = false;
+	// Connaitre la longueur
+	len_a = strlen(a);
+	len_b = strlen(b);
+	len = len_a;
+	// Si ils ne font pas la même taille alors ils ne sont pas egaux
+	if(len_a != len_b){
+		return result;
+	}
+	// Comparer chaque element de la chaine
+	for(int i = 0; i<len; i++){
+		// Si un des elements est pas identique les chaines ne sont pas egales
+		if(a[i] != b[i]){
+			return result;
+		}
+		
+	}
+	// Si chaine identiques
+	result = true;
+	return result;
+	
+}

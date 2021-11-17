@@ -1,0 +1,47 @@
+// Serveur attente de join de client
+// Serveur renvoi id client
+
+// Client recoit id client et attend pour adversaire.
+
+// Serveur, quand + de deux joueurs qui ont join
+// Serveur randomize les pairs et initilise les parties (struct)
+// Seveur informe le client que la partie va débuter
+
+// Le client s'actualise sur la page de jeu
+// Client en attente de clique sur le bouton
+// Client envoi reponse clique
+
+// Serveur att reponse clique et actualise la struct round.
+
+// Client attend joueur 2
+// Client envoi reponse clique
+
+// Serveur actualise struct round et informe le client quand le round est terminé en envoyant les résultats du round
+// Serveur ajoute à la struct partie le round terminé
+
+// Serveur si nb max round pas atteind, recommence un round jusqu'a max round atteind
+// Serveur, une fois max round atteind, informe le client que la partie est terminée et affiche les resultats (party struct)
+
+// Stocke résult de party dans csv
+// Supprime party & rounds dans struct
+// Garde struct joueurs mais si déconnexion, suppression de joueur struct. sinon attente de nouvelle partie.
+
+
+game:
+listPlayers: player[]
+listParty: party[]
+
+Player
+id
+status: inGame, waiting
+...
+
+Party
+id
+joueurs = j1, j2
+rounds = r1, r2, r3
+cpt_rounds = 3
+
+Round
+j1_result
+j2_result

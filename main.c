@@ -14,6 +14,9 @@ int main(int argc, char **argv)
     // Initialize the configuration
     server_config server_config = readconfig();
 
+    // Read rules
+    read_rules();
+  
     // Initialize the server commands
     setup_commands();
 

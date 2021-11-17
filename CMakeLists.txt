@@ -3,4 +3,11 @@ project(server C)
 
 set(CMAKE_C_STANDARD 99)
 
+find_package(Threads)
+
+include_directories(${Threads_INCLUDE_DIRS})
+link_directories(${Threads_LIBRARY_DIRS})
+
 add_executable(${CMAKE_PROJECT_NAME} main.c src/configs/read_rules.c headers/configs/read_rules.h headers/srvcxnmanager.h src/srvcxnmanager.c src/communication/communication.c headers/communication/communication.h src/configs/configurator.c headers/configs/configurator.h headers/utils/string_utils.h src/utils/string_utils.c src/communication/commands.c headers/communication/commands.h headers/game/core.h src/game/core.c headers/utils/files_utils.h src/utils/files_utils.c)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} ${Threads_LIBRARIES})

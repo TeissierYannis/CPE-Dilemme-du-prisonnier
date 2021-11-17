@@ -64,8 +64,7 @@ Joueur client_recevoir(int socketClient){
 	} 
 
 	// Afficher les données reçues
-	printf("Nom : %s\n", user.nom);
-	printf("Score = %d\n", user.score);
+	display_player(user);
 
 	return user;
 }
@@ -107,4 +106,16 @@ void disconnect_player(int socketClient, Joueur player){
 	// Envoyer un message de fermeture au serveur ? 
 	player.connected = false;
 	client_envoyer(socketClient, player);
+}
+
+// Afficher informations du joueur
+void display_player(Joueur player){
+	printf("\nInformations joueur...\n");
+	// Afficher les données reçues
+	printf("Nom : %s\n", player.nom);
+	printf("Score = %d\n", player.score);
+	printf("Identifiant : %d \n", player.id);
+	printf("Choix : %d \n", player.choix);
+	printf("Connecté = %s \n", player.connected ? "true" : "false");
+	printf("\n\n");
 }

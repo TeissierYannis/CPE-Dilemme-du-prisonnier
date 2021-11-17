@@ -2,6 +2,8 @@
 // Created by Yannis Teissier on 17/11/2021.
 //
 
+// TODO : Modifier les regles avec de l'argent (un wallet)
+
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
@@ -9,11 +11,14 @@ typedef struct {
     int id;
     int status;
     char * ip;
+    int wallet;
 } player;
 
 typedef struct {
     int p1_result;
+    int p1_decision_time;
     int p2_result;
+    int p2_decision_time;
 } round;
 
 typedef struct {
@@ -64,9 +69,11 @@ void init_party(party * party, player player1, player player2);
  * Initialize round struct
  * @param round round to initialize
  * @param p1_result (0 or 1)
+ * @param p1_decision_time time of p1 decision (timestamp)
  * @param p2_result (0 or 1)
+ * @param p2_decision_time time of p2 decision (timestamp)
  */
-void init_round(round * round, int p1_result, int p2_result);
+void init_round(round * round, int p1_result, int p1_decision_time, int p2_result,  int p2_decision_time);
 
 /**
  * Add round to party

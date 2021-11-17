@@ -26,6 +26,7 @@
 // Supprime party & rounds dans struct
 // Garde struct joueurs mais si déconnexion, suppression de joueur struct. sinon attente de nouvelle partie.
 
+// No Partie , no round, choix j1, choix j2, temps de decision j1, temps de decision j2, solde j1, solde j2
 
 game:
 listPlayers: player[]

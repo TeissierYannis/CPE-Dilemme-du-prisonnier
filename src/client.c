@@ -56,7 +56,7 @@ int client_connexion()
 		printf("Connexion réussie !\n");
 	}
 	else if (connexion == -1){
-		printf("Erreur connexion client");
+		printf("Erreur connexion client \n");
 		exit(EXIT_FAILURE);
 	}	
 	return socketClient;
@@ -81,12 +81,44 @@ Joueur client_recevoir(int socketClient){
 	return user;
 }
 
-// Envoyer des données au serveur
-void client_envoyer(int socketClient, Joueur player){
+int client_recevoir_id(int socketClient){
+	int id;
+	recv(socketClient, &id, sizeof(id), 0);
+	return id;
+}
+
+// Initialiser le joueur
+Joueur initialise_player(int socketClient){
+	Joueur player;
+	int identifiant = client_recevoir_id(socketClient);
+	player.id = identifiant;
+	return player;
+}
+
+
+// Recupérer le choix du joueur
+Answer get_answer(Game game){
+	int time_clique;
+	Answer answer;
+	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie + le choix du joueur + son temps de reponse
+	answer.game = game;
+	answer.choice = get_clique();
+	answer.time = get_time_clique();
+	printf("Recuperation reponse du joueur... \n");
+	return answer;
+}
+
+// Envoyer des données (reponses du joueur) au serveur 
+void send_answer(int socketClient, Game game){
+	Answer answer;
 	int envoie;
+
+	// Recuperer la reponse du joueur
+	answer = get_answer(game);
+
 	printf("Envoie de donnees au serveur...\n");
-	// On envoie les elements du joueur contenu dans la structure
-	envoie = send(socketClient, &player, sizeof(player), 0);
+	// On envoie la reponse du joueur
+	envoie = send(socketClient, &answer, sizeof(answer), 0);
 
 	// Si envoie echoue
 	if(envoie == -1){
@@ -112,12 +144,54 @@ void client_fermer(int * socketClient, Joueur player){
 	}
 }
 
+// Recevoir l'identifiant de la partie et créer la partie
+Game create_game(int socketClient, Joueur player){
+	Game game;
+	game.id = client_recevoir_id(socketClient);
+	game.player_id = player.id;
+	printf("Creation partie...\n");
+	return game;
+}
+
+
+// Recuperer les informations du round
+Round get_round(int socketClient){
+	Round round;
+	int recevoir;
+	printf("Reception de donnees du serveur...\n");
+	// Recevoir des données du serveur et les stock dans le round
+	recevoir = recv(socketClient, &round, sizeof(round), 0);
+	
+	// Retourne -1 en cas d'erreur
+	if(recevoir == -1){
+		printf("Erreur reception client\n");
+	} 
+	
+	return round;
+}
+
+
+/* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
+// Recuperer le numero du carre cliqué
+int get_clique(){
+	int clique = 1;
+	return clique;
+}
+
+/* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
+// Recuperer le temps que le joueur a pris pour faire un choix
+int get_time_clique(){
+	int time_clique = 5;
+	return time_clique;
+}
+
 // Envoyer un message de deconnexion du joueur au serveur
 /*void disconnect_player(int socketClient, Joueur player){
 	// Envoyer un message de fermeture au serveur ? 
 	player.connected = false;
 	client_envoyer(socketClient, player);
 }*/
+
 
 // Afficher informations du joueur
 void display_player(Joueur player){
@@ -130,3 +204,4 @@ void display_player(Joueur player){
 	printf("Connecté = %s \n", player.connected ? "true" : "false");
 	printf("\n\n");
 }
+

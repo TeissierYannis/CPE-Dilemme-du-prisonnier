@@ -53,11 +53,6 @@ Joueur client_recevoir(int socketClient){
 	// Recevoir des données du serveur et les stock dans le Joueur
 	recevoir = recv(socketClient, &user, sizeof(user), 0);
 	
-	// A voir pour gérer les erreurs
-	/* printf("reception = %d\n",recevoir);
-	if(recevoir == 0){
-		printf("Reception client OK\n");
-	}*/
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
 		printf("Erreur reception client\n");
@@ -75,9 +70,8 @@ void client_envoyer(int socketClient, Joueur player){
 	printf("Envoie de donnees au serveur...\n");
 	// On envoie les elements du joueur contenu dans la structure
 	envoie = send(socketClient, &player, sizeof(player), 0);
-/*	if(envoie == 0){
-		printf("Succès envoie des données\n");
-	}*/
+
+	// Si envoie echoue
 	if(envoie == -1){
 		printf("Erreur envoie des données\n");
 	}
@@ -111,7 +105,7 @@ void disconnect_player(int socketClient, Joueur player){
 // Afficher informations du joueur
 void display_player(Joueur player){
 	printf("\nInformations joueur...\n");
-	// Afficher les données reçues
+	// Afficher propriétés
 	printf("Nom : %s\n", player.nom);
 	printf("Score = %d\n", player.score);
 	printf("Identifiant : %d \n", player.id);

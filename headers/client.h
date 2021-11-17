@@ -54,8 +54,8 @@ typedef struct {
 // Récapitule la partie
 typedef struct {
     // Contient la liste des reponses de chaque joueur
-    Answer *list_answer_J1;
-    Answer *list_answer_J2;
+    Answer list_answer_J1[10];
+    Answer list_answer_J2[10];
 } Recap;
 
 // Se connecte au serveur et retourne la socket client

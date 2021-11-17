@@ -5,10 +5,18 @@
 
 // Serveur, quand + de deux joueurs qui ont join
 // Serveur randomize les pairs et initilise les parties (struct)
-// Seveur informe le client que la partie va débuter
+// Seveur informe le client que la partie va débuter et envoie les infos de la partie (id)
 
 // Le client s'actualise sur la page de jeu
 // Client en attente de clique sur le bouton
+
+struct {
+    int player_id;
+    int party_id;
+    int answer;
+    int time;
+} answer;
+
 // Client envoi reponse clique
 
 // Serveur att reponse clique et actualise la struct round.
@@ -18,6 +26,8 @@
 
 // Serveur actualise struct round et informe le client quand le round est terminé en envoyant les résultats du round
 // Serveur ajoute à la struct partie le round terminé
+
+next_round
 
 // Serveur si nb max round pas atteind, recommence un round jusqu'a max round atteind
 // Serveur, une fois max round atteind, informe le client que la partie est terminée et affiche les resultats (party struct)

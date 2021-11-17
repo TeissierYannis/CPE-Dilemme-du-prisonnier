@@ -42,9 +42,6 @@ void decrypting_incoming_message(char *message) {
  */
 void sending_message(char *message, int client_socket) {
     printf("[DEBUG] Sending message %s\n", message);
-    printf("[DEBUG] Message length %d\n", strlen(message));
     // send message
     write(client_socket, message, strlen(message));
-}
-
 }

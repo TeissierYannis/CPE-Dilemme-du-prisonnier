@@ -10,7 +10,6 @@
 typedef struct {
     int id;
     int status;
-    char * ip;
     int wallet;
 } player;
 

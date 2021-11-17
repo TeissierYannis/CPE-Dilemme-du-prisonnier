@@ -27,8 +27,8 @@ server_config readconfig() {
 
     printf("\nReading configuration file...\n\n");
 
-    key_value("ip_address", server_config.ip, file_p);
-    key_value("port", server_config.port, file_p);
+    parse_json("ip_address", server_config.ip, file_p);
+    parse_json("port", server_config.port, file_p);
 
     // Print config to debug
     printf("========== Configuration ==========\n");

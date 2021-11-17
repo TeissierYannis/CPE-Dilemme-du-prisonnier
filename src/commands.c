@@ -76,6 +76,12 @@ void setup_commands() {
     add_command(&COMMAND_LIST, "answer", "userid answer");
 }
 
+/**
+ * Execute callback function from command
+ * @brief Execute callback function from command
+ * @param command command struct
+ * @param arguments arguments of the command
+ */
 void call_command(command command, char * arguments) {
     // if command is help
     if (strcmp(command.name, "help") == 0) {
@@ -96,7 +102,7 @@ void help() {
     printf("\n=================================\n");
     printf("|\t\tHelp Commands\t\t\t|\n");
     printf("|\t\tNo help\t\t\t\t\t|\n");
-    printf("=================================\n");
+    printf("=================================\n\n");
 }
 
 // join
@@ -119,9 +125,11 @@ void answer(char * arguments) {
 
     printf("\n[COMMAND][DEBUG] AnswerFunction : %s\n", arguments);
 
+    // split arguments
     char * token = strtok(arguments, " ");
     int user_id = atoi(token);
 
+    // get answer
     token = strtok(NULL, " ");
     char * user_answer = token;
 

@@ -13,8 +13,8 @@ void decrypting_incoming_message(char *message) {
     // Print base message
     printf("[DEBUG] Message %s\n", message);
 
-    char *command_name = malloc(sizeof(char) * 100);
-    char *args = malloc(sizeof(char) * 300);
+    char *command_name;
+    char *args;
     // Split message into command and args
     command_name = strtok(message, " ");
     args = strtok(NULL, "\0");
@@ -34,15 +34,5 @@ void decrypting_incoming_message(char *message) {
         // if command does not exist
         printf("[ERROR] Command not found\n");
     }
-
-    /* do {
-        printf("[Ø] %s\n", token);
-        token = strtok(NULL, " ");
-    } while (token != NULL);
-
-    if (strcmp(message, "test\n") == 0) {
-        printf("[DEBUG] Debug message\n");
-        return;
-    } */
 }
 

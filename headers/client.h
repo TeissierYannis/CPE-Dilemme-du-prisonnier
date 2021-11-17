@@ -50,15 +50,24 @@ typedef struct {
 
 // Contient les informations du round
 typedef struct {
+    // Resultat de chaque joueur
     int J1_result;
     int J2_result;
+    // Numero du round
     char *number;
 } Round;
 
+// Récapitule la partie
+typedef struct {
+    // Contient la liste des reponses de chaque joueur
+    Answer list_answer_J1[100];
+    Answer list_answer_J2[100];
+    Joueur J1;
+    Joueur J2;
+} Recap;
+
 // Se connecte au serveur et retourne la socket client
 int client_connexion();
-// Reçoit des données par le serveur
-Joueur client_recevoir(int socketClient);
 // Envoyer des données au serveur
 void send_answer(int socketClient, Game game);
 // On ferme le client
@@ -83,6 +92,12 @@ Round get_round(int socket);
 void jouer(int socket, Game game);
 // Indique si la partie est fini ou continue
 bool game_end(Round round);
+// Récaptiluer la partie
+void game_recap(int socketClient);
+// Recuperer la structure qui recaptilue la partie
+Recap get_recap(int socketClient);
+// Afficher la recapitulation de la partie
+void print_recap(Answer *answer);
 
 // Creer structure adresse serveur
 struct sockaddr_in create_serv_adrr();

@@ -62,24 +62,6 @@ int client_connexion()
 	return socketClient;
 }
 
-// Recevoir des données du serveur
-Joueur client_recevoir(int socketClient){
-	Joueur user;
-	int recevoir;
-	printf("Reception de donnees du serveur...\n");
-	// Recevoir des données du serveur et les stock dans le Joueur
-	recevoir = recv(socketClient, &user, sizeof(user), 0);
-	
-	// Retourne -1 en cas d'erreur
-	if(recevoir == -1){
-		printf("Erreur reception client\n");
-	} 
-
-	// Afficher les données reçues
-	display_player(user);
-
-	return user;
-}
 
 int client_recevoir_id(int socketClient){
 	int id;
@@ -90,6 +72,7 @@ int client_recevoir_id(int socketClient){
 // Initialiser le joueur
 Joueur initialise_player(int socketClient){
 	Joueur player;
+	printf("Reception id du joueur...\n");
 	int identifiant = client_recevoir_id(socketClient);
 	player.id = identifiant;
 	return player;
@@ -158,13 +141,13 @@ Game create_game(int socketClient, Joueur player){
 Round get_round(int socketClient){
 	Round round;
 	int recevoir;
-	printf("Reception de donnees du serveur...\n");
+	printf("Reception round du serveur...\n");
 	// Recevoir des données du serveur et les stock dans le round
 	recevoir = recv(socketClient, &round, sizeof(round), 0);
 	
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
-		printf("Erreur reception client\n");
+		printf("Erreur reception round\n");
 	} 
 
 	return round;
@@ -184,6 +167,7 @@ void jouer(int socket, Game game){
     	// Le serveur nous renvois les resultat du round
     	round = get_round(socket);
 	}
+	printf("Fin de partie ! \n");
 }
 
 
@@ -195,6 +179,42 @@ bool game_end(Round round){
 		result = true;
 	}
 	return result;
+}
+
+// Recuperer la structure qui recaptilue la partie
+Recap get_recap(int socketClient){
+	Recap recap;
+	int recevoir;
+	printf("Reception recap du serveur...\n");
+	// Recevoir des données du serveur et les stock dans le round
+	recevoir = recv(socketClient, &recap, sizeof(recap), 0);
+	
+	// Retourne -1 en cas d'erreur
+	if(recevoir == -1){
+		printf("Erreur reception recap\n");
+	} 
+
+	return recap;
+}
+
+// Récaptiluer la partie
+void game_recap(int socketClient){
+	Recap recap;
+	recap = get_recap(socketClient);
+	// Afficher l'historique de la partie
+	print_recap(recap.list_answer_J1);
+	print_recap(recap.list_answer_J2);
+}
+
+// Afficher la recapitulation de la partie du joueur choisi
+void print_recap(Answer *answer){
+	int len = strlen(answer);
+	int id_player = answer[0].game.player_id;
+	// Afficher chaque choix du joueur avec le temps qu'il a mis pour faire ce choix
+	printf("Recap du joueur %d\n", id_player);
+	for(int i = 0; i<len; i++){
+		printf("choix = %d et temps = %d\n", answer[i].choice, answer[i].time);
+	}
 }
 
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/

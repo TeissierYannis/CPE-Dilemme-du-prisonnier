@@ -4,8 +4,8 @@
     "trahison_win": "-5",
     "trahison_loose": "-5",
 
-    "collab_win": "-0.5",
-    "collab_loose": "-0.5",
+    "collab_win": "-1",
+    "collab_loose": "-1",
     
     "trahison_collab_win": "0",
     "trahison_collab_loose": "-10"    

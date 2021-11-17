@@ -21,12 +21,16 @@ int client_connexion()
 	int PROTOCOL = 0;
 	int socketClient = socket(DOMAIN, TYPE, PROTOCOL);
 
+	// IP et Port du serveur
+	char *adresse_serv = "127.0.0.1";
+	int port_serveur = 30000;
+
 	// stockaddr_in correspond à une adresse internet (IP et un port)
 	struct sockaddr_in addrClient;
 	// Indiquer adresse du serveur
-	addrClient.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addrClient.sin_addr.s_addr = inet_addr(adresse_serv);
 	addrClient.sin_family = DOMAIN;
-	addrClient.sin_port = htons(30000); //htons converti un entier en port
+	addrClient.sin_port = htons(port_serveur); //htons converti un entier en port
 
 	// Le client se connecte à l'adresse du serveur
 	int connexion;
@@ -83,10 +87,9 @@ void client_envoyer(int socketClient, Joueur player){
 // On ferme le client
 void client_fermer(int * socketClient, Joueur player){
 	int fermeture;
-	
+
 	// Envoyer un message de fermeture au serveur ? 
-	player.connected = false;
-	client_envoyer(*socketClient, player);
+	disconnect_player(*socketClient, player);
 
 	// Fermeture de la socket client
 	fermeture = close(*socketClient);
@@ -97,4 +100,11 @@ void client_fermer(int * socketClient, Joueur player){
 	else if(fermeture == -1){
 		printf("Erreur fermeture client !\n");
 	}
+}
+
+// Envoyer un message de deconnexion du joueur au serveur
+void disconnect_player(int socketClient, Joueur player){
+	// Envoyer un message de fermeture au serveur ? 
+	player.connected = false;
+	client_envoyer(socketClient, player);
 }

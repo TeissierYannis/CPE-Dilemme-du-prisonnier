@@ -32,5 +32,7 @@ Joueur client_recevoir(int socketClient);
 void client_envoyer(int socketClient, Joueur player);
 // On ferme le client
 void client_fermer(int * socketClient, Joueur player);
+// Deconnecter le joueur
+void disconnect_player(int socketClient, Joueur player);
 
 #endif

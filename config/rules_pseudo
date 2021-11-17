@@ -1,4 +1,10 @@
+// TODO TELECHARGER FICHIER RECAPS TOUTES LES PARTIES
+
 // Serveur attente de join de client
+
+com client:
+join
+
 // Serveur renvoi id client
 
 // Client recoit id client et attend pour adversaire.
@@ -7,9 +13,15 @@
 // Serveur randomize les pairs et initilise les parties (struct)
 // Seveur informe le client que la partie va débuter et envoie les infos de la partie (id)
 
+com serv:
+start <party_id>
+
 // Le client s'actualise sur la page de jeu
 // Client en attente de clique sur le bouton
 
+// Client envoi reponse clique
+
+com client:
 struct {
     int player_id;
     int party_id;
@@ -17,17 +29,26 @@ struct {
     int time;
 } answer;
 
-// Client envoi reponse clique
-
 // Serveur att reponse clique et actualise la struct round.
 
 // Client attend joueur 2
 // Client envoi reponse clique
 
 // Serveur actualise struct round et informe le client quand le round est terminé en envoyant les résultats du round
+
+com serv:
+struct round;
+
 // Serveur ajoute à la struct partie le round terminé
 
-next_round
+com serv:
+next_round | end_game
+com serv:
+struct {
+    round[];
+    j1.score;
+    j2.score;
+} final_result;
 
 // Serveur si nb max round pas atteind, recommence un round jusqu'a max round atteind
 // Serveur, une fois max round atteind, informe le client que la partie est terminée et affiche les resultats (party struct)

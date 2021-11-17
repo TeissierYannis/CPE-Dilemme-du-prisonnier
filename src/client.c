@@ -166,10 +166,36 @@ Round get_round(int socketClient){
 	if(recevoir == -1){
 		printf("Erreur reception client\n");
 	} 
-	
+
 	return round;
 }
 
+
+// Permet de jouer en communicant avec le serveur
+void jouer(int socket, Game game){
+	// Contient les informations d'un round
+    Round round;
+    round.number = "0";
+
+	// Tant que le nombre de round n'est pas terminé on continue
+	while(!game_end(round)){
+		// Envoyer le choix du joueur au serveur
+    	send_answer(socket, game);
+    	// Le serveur nous renvois les resultat du round
+    	round = get_round(socket);
+	}
+}
+
+
+// Indique si la partie est fini ou continue
+bool game_end(Round round){
+	bool result = false;
+	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
+	if(round.number == "end_game"){
+		result = true;
+	}
+	return result;
+}
 
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
 // Recuperer le numero du carre cliqué

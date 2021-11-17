@@ -12,9 +12,6 @@ int main(int argc, char **argv)
     int socket;
     // Contient les informations de la partie
     Game game;
-    // Contient les informations d'un round
-    Round round;
-    round.number = "0";
 
     // Connexion au serveur et création de la socket client (sert à la communication)
     socket = client_connexion();
@@ -23,11 +20,6 @@ int main(int argc, char **argv)
     // Creation de la partie avec son identifiant et l'id du joueur
     game = create_game(socket, player);
 
-    // Envoyer le choix du joueur au serveur
-    send_answer(socket, game);
-
-    // Le serveur nous renvois les resultat du round
-    round = get_round(socket);
 
     // Fermer le client
     client_fermer(&socket, player);

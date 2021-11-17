@@ -79,7 +79,10 @@ Game create_game(int socketClient, Joueur player);
 Answer get_answer(Game game);
 // Recuperer les informations du round
 Round get_round(int socket);
-
+// Permet de jouer en communicant avec le serveur
+void jouer(int socket, Game game);
+// Indique si la partie est fini ou continue
+bool game_end(Round round);
 
 // Creer structure adresse serveur
 struct sockaddr_in create_serv_adrr();

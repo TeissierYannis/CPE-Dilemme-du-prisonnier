@@ -10,6 +10,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #ifndef CLIENT_H
 #define CLIENT_H
@@ -20,6 +21,7 @@ typedef struct{
     int choix;
     int id;
     char nom[30];
+    bool connected;
 } Joueur;
 
 // Se connecte au serveur et retourne la socket client
@@ -29,6 +31,6 @@ Joueur client_recevoir(int socketClient);
 // Envoyer des données au serveur
 void client_envoyer(int socketClient, Joueur player);
 // On ferme le client
-void client_fermer(int * socketClient);
+void client_fermer(int * socketClient, Joueur player);
 
 #endif

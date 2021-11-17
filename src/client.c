@@ -53,10 +53,11 @@ Joueur client_recevoir(int socketClient){
 	/* printf("reception = %d\n",recevoir);
 	if(recevoir == 0){
 		printf("Reception client OK\n");
-	}
-	else if(recevoir == -1){
+	}*/
+	// Retourne -1 en cas d'erreur
+	if(recevoir == -1){
 		printf("Erreur reception client\n");
-	} */
+	} 
 
 	// Afficher les données reçues
 	printf("Nom : %s\n", user.nom);
@@ -71,17 +72,22 @@ void client_envoyer(int socketClient, Joueur player){
 	printf("Envoie de donnees au serveur...\n");
 	// On envoie les elements du joueur contenu dans la structure
 	envoie = send(socketClient, &player, sizeof(player), 0);
-	if(envoie == 0){
+/*	if(envoie == 0){
 		printf("Succès envoie des données\n");
-	}
-	else if(envoie == -1){
+	}*/
+	if(envoie == -1){
 		printf("Erreur envoie des données\n");
 	}
 }
 
 // On ferme le client
-void client_fermer(int * socketClient){
+void client_fermer(int * socketClient, Joueur player){
 	int fermeture;
+	
+	// Envoyer un message de fermeture au serveur ? 
+	player.connected = false;
+	client_envoyer(*socketClient, player);
+
 	// Fermeture de la socket client
 	fermeture = close(*socketClient);
 	// Affichage du succès ou echec de la fermeture

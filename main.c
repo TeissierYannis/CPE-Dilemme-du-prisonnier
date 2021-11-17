@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     // Envoyer des données concernant le joueur au serveur
     client_envoyer(socket, player);
     // Fermer le client
-    client_fermer(&socket);
+    client_fermer(&socket, player);
 
     return 0;
 }

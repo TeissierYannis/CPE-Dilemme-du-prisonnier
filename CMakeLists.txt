@@ -3,4 +3,4 @@ project(server C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(${CMAKE_PROJECT_NAME} main.c src/read_rules.c headers/read_rules.h headers/srvcxnmanager.h src/srvcxnmanager.c src/communication/communication_translater.c headers/communication/communication_translater.h src/configs/configurator.c headers/configs/configurator.h headers/utils/string_utils.h src/utils/string_utils.c src/communication/commands.c headers/communication/commands.h headers/game/core.h src/game/core.c)
+add_executable(${CMAKE_PROJECT_NAME} main.c src/configs/read_rules.c headers/configs/read_rules.h headers/srvcxnmanager.h src/srvcxnmanager.c src/communication/communication_translater.c headers/communication/communication_translater.h src/configs/configurator.c headers/configs/configurator.h headers/utils/string_utils.h src/utils/string_utils.c src/communication/commands.c headers/communication/commands.h headers/game/core.h src/game/core.c headers/utils/files_utils.h src/utils/files_utils.c)

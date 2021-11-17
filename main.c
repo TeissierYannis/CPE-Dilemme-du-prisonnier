@@ -4,10 +4,11 @@
 #include <pthread.h>
 #include <sys/socket.h>
 #include <stdbool.h>
-
+#include <string.h>
 #include "headers/communication/commands.h"
 #include "headers/srvcxnmanager.h"
 #include "headers/configs/configurator.h"
+#include "headers/configs/read_rules.h"
 
 int main(int argc, char **argv)
 {

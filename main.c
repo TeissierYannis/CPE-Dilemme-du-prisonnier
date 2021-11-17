@@ -20,6 +20,8 @@ int main(int argc, char **argv)
     // Creation de la partie avec son identifiant et l'id du joueur
     game = create_game(socket, player);
 
+    // Jouer a la partie
+    jouer(socket, game);
 
     // Fermer le client
     client_fermer(&socket, player);

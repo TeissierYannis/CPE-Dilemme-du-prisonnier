@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include "../../headers/communication/communication_translater.h"
+#include <unistd.h>
+#include "../../headers/communication/communication.h"
 #include "../../headers/utils/string_utils.h"
 #include "../../headers/communication/commands.h"
 
@@ -35,3 +36,15 @@ void decrypting_incoming_message(char *message) {
     }
 }
 
+/**
+ * Send message to the client
+ * @param message message to send
+ */
+void sending_message(char *message, int client_socket) {
+    printf("[DEBUG] Sending message %s\n", message);
+    printf("[DEBUG] Message length %d\n", strlen(message));
+    // send message
+    write(client_socket, message, strlen(message));
+}
+
+}

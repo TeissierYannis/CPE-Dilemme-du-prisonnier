@@ -9,7 +9,7 @@
 #include <arpa/inet.h>
 
 #include "../headers/srvcxnmanager.h"
-#include "../headers/communication/communication_translater.h"
+#include "../headers/communication/communication.h"
 
 connection_t* connections[MAXSIMULTANEOUSCLIENTS];
 

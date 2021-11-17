@@ -13,4 +13,10 @@
  */
 void decrypting_incoming_message(char *message);
 
+/**
+ * Send message to the client
+ * @param message message to send
+ */
+void sending_message(char *message, int client_socket);
+
 #endif //CLIENT_CONFIGURATOR_H

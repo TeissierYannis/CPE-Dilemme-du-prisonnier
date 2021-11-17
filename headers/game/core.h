@@ -7,6 +7,19 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
+typedef struct 
+{
+    int nb_round;
+    int trahison_win;
+    int trahison_loose;
+    int collab_win;
+    int collab_loose;
+    int trahison_collab_win;
+    int trahison_collab_loose;
+
+} rules;
+
+
 typedef struct {
     int id;
     int status;

@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include "../headers/communication_translater.h"
-#include "../headers/string_utils.h"
-#include "../headers/commands.h"
+#include "../../headers/communication/communication_translater.h"
+#include "../../headers/utils/string_utils.h"
+#include "../../headers/communication/commands.h"
 
 /**
  * Interpret incoming messages from the client

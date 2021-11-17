@@ -5,9 +5,9 @@
 #include <sys/socket.h>
 #include <stdbool.h>
 
-#include "headers/commands.h"
+#include "headers/communication/commands.h"
 #include "headers/srvcxnmanager.h"
-#include "headers/configurator.h"
+#include "headers/configs/configurator.h"
 
 int main(int argc, char **argv)
 {

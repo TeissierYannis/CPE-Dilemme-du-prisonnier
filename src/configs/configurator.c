@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../headers/configurator.h"
-#include "../headers/string_utils.h"
+#include "../../headers/configs/configurator.h"
+#include "../../headers/utils/string_utils.h"
 
 /**
  * Read config json file and setup server struct

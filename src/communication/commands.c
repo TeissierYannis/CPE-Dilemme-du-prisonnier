@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../headers/commands.h"
+#include "../../headers/communication/commands.h"
 
 command_list COMMAND_LIST;
 

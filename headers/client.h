@@ -11,6 +11,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h> // a voir si obligatoire
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <string.h>
 
 #ifndef CLIENT_H
 #define CLIENT_H
@@ -18,10 +25,10 @@
 // Contient les informations d'un Joueur
 typedef struct{
     int score;
-    int choix;
+	int choix;
     int id;
     char nom[30];
-    bool connected;
+	bool connected;
 } Joueur;
 
 // Se connecte au serveur et retourne la socket client
@@ -36,4 +43,9 @@ void client_fermer(int * socketClient, Joueur player);
 void disconnect_player(int socketClient, Joueur player);
 // Afficher les informations du joueur
 void display_player(Joueur player);
+// Creer une socket client
+int create_socket();
+
+// Creer structure adresse serveur
+struct sockaddr_in create_serv_adrr();
 #endif

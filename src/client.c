@@ -10,9 +10,8 @@
 
 #include "../headers/client.h"
 
-// Partie client
-int client_connexion()
-{
+// Créer une socket
+int create_socket(){
 	// Socket(Protocole IP, Protocole transmission des données, Port)
 	// AF_INET = Domaine d'adresse IPV4
 	// SOCK_STREAM = TCP
@@ -21,17 +20,35 @@ int client_connexion()
 	int PROTOCOL = 0;
 	int socketClient = socket(DOMAIN, TYPE, PROTOCOL);
 
-	// IP et Port du serveur
-	char *adresse_serv = "127.0.0.1";
-	int port_serveur = 30000;
+	return socketClient;
+}
+
+
+// Creer structure adresse serveur
+struct sockaddr_in create_serv_adrr(char *adresse_serv, int port_serveur){
 
 	// stockaddr_in correspond à une adresse internet (IP et un port)
 	struct sockaddr_in addrClient;
 	// Indiquer adresse du serveur
 	addrClient.sin_addr.s_addr = inet_addr(adresse_serv);
-	addrClient.sin_family = DOMAIN;
+	addrClient.sin_family = AF_INET;
 	addrClient.sin_port = htons(port_serveur); //htons converti un entier en port
 
+	return addrClient;
+}
+
+// Partie client
+int client_connexion()
+{
+	int socketClient = create_socket();
+
+	// IP et Port du serveur
+	char *adresse_serv = "127.0.0.1";
+	int port_serveur = 30000;
+
+	// stockaddr_in correspond à une adresse internet (IP et un port)
+	struct sockaddr_in addrClient = create_serv_adrr(adresse_serv, port_serveur);
+	
 	// Le client se connecte à l'adresse du serveur
 	int connexion;
 	connexion = connect(socketClient, (const struct sockaddr *)& addrClient, sizeof(addrClient));
@@ -82,7 +99,7 @@ void client_fermer(int * socketClient, Joueur player){
 	int fermeture;
 
 	// Envoyer un message de fermeture au serveur ? 
-	disconnect_player(*socketClient, player);
+//	disconnect_player(*socketClient, player);
 
 	// Fermeture de la socket client
 	fermeture = close(*socketClient);
@@ -96,11 +113,11 @@ void client_fermer(int * socketClient, Joueur player){
 }
 
 // Envoyer un message de deconnexion du joueur au serveur
-void disconnect_player(int socketClient, Joueur player){
+/*void disconnect_player(int socketClient, Joueur player){
 	// Envoyer un message de fermeture au serveur ? 
 	player.connected = false;
 	client_envoyer(socketClient, player);
-}
+}*/
 
 // Afficher informations du joueur
 void display_player(Joueur player){

@@ -18,6 +18,9 @@ int main(int argc, char **argv)
     player.score = 547;
     // Envoyer des données concernant le joueur au serveur
     client_envoyer(socket, player);
+
+    //player = client_recevoir(socket);
+
     // Fermer le client
     client_fermer(&socket, player);
 

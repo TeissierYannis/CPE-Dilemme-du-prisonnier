@@ -25,7 +25,7 @@
 // Contient les informations d'un Joueur
 typedef struct{
     int id;
-    char *status;
+    char status[11];
 } Joueur;
 
 // Contient les informations de la partie
@@ -87,7 +87,12 @@ void game_recap(int socketClient);
 // Recuperer la structure qui recaptilue la partie
 Recap get_recap(int socketClient);
 // Afficher la recapitulation de la partie
-void print_recap(Answer *answer);
+void print_recap(Answer answer[]);
+
+// Relancer une partie
+bool restart_game(int socketClient, Joueur player);
+// Envoyer le status du joueur pour qu'il soit ajouté dans une nouvelle partie
+void send_player_status(int socketClient, Joueur player);
 
 // Creer structure adresse serveur
 struct sockaddr_in create_serv_adrr();
@@ -96,6 +101,8 @@ struct sockaddr_in create_serv_adrr();
 int get_clique();
 // Recuperer le temps que le joueur a pris pour faire un choix
 int get_time_clique();
+// Recuperer le choix si le joueur relance ou pas une partie
+int continue_game();
 
 // Comparer 2 chaine de caracteres
 bool are_equal(char *c, char *b);

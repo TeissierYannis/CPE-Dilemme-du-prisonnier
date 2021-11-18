@@ -75,7 +75,8 @@ Joueur initialise_player(int socketClient){
 	printf("Reception id du joueur...\n");
 	int identifiant = client_recevoir_id(socketClient);
 	player.id = identifiant;
-	player.status = "online";
+	// Status du joueur "en ligne"
+	strcpy(player.status, "online");
 
 	return player;
 }
@@ -198,8 +199,9 @@ void game_recap(int socketClient){
 }
 
 // Afficher la recapitulation de la partie pour le joueur indiqué
-void print_recap(Answer *answer){
-	int len = sizeof(*answer)/sizeof(answer[0]);
+void print_recap(Answer answer[]){
+	// Mettre dans recap le nombre de round pour connaitre la taille ?
+	int len = sizeof(*answer)/sizeof(answer[0]); // PAS OK
 	printf("len recap = %d\n", len);
 	int id_player = answer[0].game.player_id;
 
@@ -207,6 +209,37 @@ void print_recap(Answer *answer){
 	printf("Recap du joueur %d\n", id_player);
 	for(int i = 0; i<len; i++){
 		printf("choix = %d et temps = %d\n", answer[i].choice, answer[i].time);
+	}
+}
+
+
+// Relancer une partie
+bool restart_game(int socketClient, Joueur player){
+	// Par défaut le client quitte la partie
+	bool result = false;
+	// Selon le choix du joueur (quitter partie ou relancer partie)
+	if(!continue_game()){
+		strcpy(player.status, "disconnect");
+	}
+	else {
+		strcpy(player.status, "online");
+		result = true;
+	}
+	// Envoyer le status du joueur au serveur
+	send_player_status(socketClient, player);
+	return result;
+}
+
+// Envoyer le status du joueur pour qu'il soit ajouté dans une nouvelle partie
+void send_player_status(int socketClient, Joueur player){
+	int envoie;
+	printf("Envoie du status du joueur au serveur...\n");
+	// On envoie le status du joueur
+	envoie = send(socketClient, &player.status, sizeof(player.status), 0);
+
+	// Si envoie echoue
+	if(envoie == -1){
+		printf("Erreur envoie du status du joueur \n");
 	}
 }
 
@@ -224,6 +257,14 @@ int get_time_clique(){
 	return time_clique;
 }
 
+/* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
+// Recuperer le choix si le joueur relance ou pas une partie
+int continue_game(){
+	int choice = 0;
+	return choice;
+}
+
+
 // Envoyer un message de deconnexion du joueur au serveur
 /*void disconnect_player(int socketClient, Joueur player){
 	// Envoyer un message de fermeture au serveur ? 
@@ -234,10 +275,6 @@ int get_time_clique(){
 // On ferme le client
 void client_fermer(int * socketClient, Joueur player){
 	int fermeture;
-
-	// Envoyer un message de fermeture au serveur ? 
-//	disconnect_player(*socketClient, player);
-
 	// Fermeture de la socket client
 	fermeture = close(*socketClient);
 	// Affichage du succès ou echec de la fermeture

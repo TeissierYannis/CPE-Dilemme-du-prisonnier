@@ -1,5 +1,6 @@
 {
     "nb_round": "3",
+    "default_wallet": "0",
 
     "trahison_win": "-5",
     "trahison_loose": "-5",

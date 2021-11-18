@@ -34,6 +34,10 @@ void read_rules()
         parse_json("nb_round", nb_round, file_rule);
         rules.nb_round = atoi(nb_round);
 
+        char * default_wallet = malloc(sizeof(char) * 20);
+        parse_json("default_wallet", default_wallet, file_rule);
+        rules.default_wallet = atoi(default_wallet);
+
         char * trahison_win = malloc(sizeof(char) * 20);
         parse_json("trahison_win", trahison_win, file_rule);
         rules.trahison_win = atoi(trahison_win);

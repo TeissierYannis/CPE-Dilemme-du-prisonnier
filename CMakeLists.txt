@@ -11,7 +11,7 @@ MESSAGE(STATUS "GTK3_LIBRARY_DIRS: ${GTK3_LIBRARY_DIRS}")
 
 include_directories(${GTK3_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS})
-
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -rdynamic")
 add_definitions(${GTK3_CFLAGS_OTHER})
 add_executable(${CMAKE_PROJECT_NAME} main.c src/test.c headers/test.h)
 

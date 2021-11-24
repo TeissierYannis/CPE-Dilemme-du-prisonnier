@@ -78,9 +78,6 @@
             <property name="height-request">50</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <attributes>
-              <attribute name="size" value="15360"/>
-            </attributes>
           </object>
           <packing>
             <property name="x">240</property>

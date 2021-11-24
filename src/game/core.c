@@ -95,14 +95,3 @@ void add_round_to_party(party * party, round round)
     party->round = malloc(sizeof(round)*20);
     party->round[count] = round;
 }
-
-/**
- * Destroy player struct when player is leaving
- * Remove player from game struct
- * Remove player struct
- * @param player player who is leaving
- */
-void destroy_player(game * game0, player * player)
-{
-    game0->player[player->id];
-}

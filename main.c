@@ -10,7 +10,7 @@
 #include "headers/configs/configurator.h"
 #include "headers/configs/read_rules.h"
 #include "headers/game/core.h"
-
+#include "headers/results/writefile.h"
 
 
 int main(int argc, char **argv)
@@ -52,6 +52,7 @@ int main(int argc, char **argv)
     
 
     // TEST
+    writefile();
     /*
     printf("Test: %d\n", game->parties_count);
     printf("Test: %d\n", game->players_count); 
@@ -96,6 +97,6 @@ int main(int argc, char **argv)
         }
     }
 
-    //free(game0);
+    
     return EXIT_SUCCESS;
 }

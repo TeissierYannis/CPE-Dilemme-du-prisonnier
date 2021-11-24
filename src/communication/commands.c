@@ -73,6 +73,9 @@ void setup_commands() {
     add_command(&COMMAND_LIST, "help");
     add_command(&COMMAND_LIST, "answer");
     add_command(&COMMAND_LIST, "join");
+    add_command(&COMMAND_LIST, "start");
+    add_command(&COMMAND_LIST, "next_round");
+    add_command(&COMMAND_LIST, "end_game");
 }
 
 /**
@@ -81,14 +84,23 @@ void setup_commands() {
  * @param command command struct
  * @param arguments arguments of the command
  */
-void call_command(command command) {
+command_function call_command(command command) {
     // if command is help
     if (strcmp(command.name, "help") == 0) {
         // print help
-        help();
+        return help;
     } else if (strcmp(command.name, "answer") == 0) {
         // print answer
-        answer();
+        return answer;
+    } else if (strcmp(command.name, "join") == 0) {
+        // print join
+        return join;
+    } else if (strcmp(command.name, "start") == 0) {
+        return start;
+    } else if (strcmp(command.name, "next_round") == 0) {
+        return next_round;
+    } else if (strcmp(command.name, "end_game") == 0) {
+        return end_game;
     }
 }
 
@@ -117,16 +129,20 @@ void help() {
  * Receive message to the client
  * Join a party
  */
-void join();
+void join() {
+    printf("\n=================================\n");
+    printf("|\t\tJoin\t\t\t\t|\n");
+    printf("=================================\n\n");
+}
 /**
  * Send message to the client
  * Start a party
  * @param party_id
  */
-void start(int party_id) {
+void start(char * party_id) {
     printf("\n=================================\n");
     printf("|\t\tStart Party\t\t\t|\n");
-    printf("|\t\tParty id: %d\t\t\t\t|\n", party_id);
+    printf("|\t\tParty id: %d\t\t\t\t|\n", atoi(party_id));
     printf("=================================\n\n");
 }
 /**
@@ -153,10 +169,33 @@ void end_game() {
  * Interpret the answer of the player
  * @param answer
  */
-void answer(answer_struct answer) {
+void answer(char * answer_str) {
+    answer_struct client_answer;
+    parse_answer(answer_str, &client_answer);
+
     printf("\n=================================\n");
     printf("|\t\tAnswer\t\t\t\t|\n");
-    printf("|\t\tUser id: %d\t\t\t\t|\n", answer.player_id);
-    printf("|\t\tAnswer: %s\t\t\t\t|\n", answer.answer == 1 ? "betray" : "cooperate");
+    printf("|\t\tUser id: %d\t\t\t\t|\n", client_answer.player_id);
+    printf("|\t\tAnswer: %s\t\t\t\t|\n", client_answer.answer == 1 ? "betray" : "cooperate");
     printf("=================================\n\n");
+}
+
+/**
+ * Parse answer from string
+ * @brief Parse answer from string
+ * @param answer _str string of the answer
+ * @param answerStruct answer_struct struct
+ */
+void parse_answer(char * answer, answer_struct * answerStruct) {
+    char * token = strtok(answer, " ");
+    int i = 0;
+    while (token != NULL) {
+        if (i == 0) {
+            answerStruct->player_id = atoi(token);
+        } else if (i == 1) {
+            answerStruct->answer = atoi(token);
+        }
+        token = strtok(NULL, " ");
+        i++;
+    }
 }

@@ -43,6 +43,14 @@ int main(int argc, char **argv)
     party party0;
     init_party(&game0, &party0, player0, player1);
     
+    //init round;
+    round round0;
+    init_round(&round0, 2, 4, 0.125, 0.145);
+    
+    //add_round_to_party
+    add_round_to_party(&party0, round0);
+    
+
     // TEST
     /*
     printf("Test: %d\n", game->parties_count);

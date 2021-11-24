@@ -66,3 +66,43 @@ void init_party(game *game0, party * party0, player player1, player player2)
     game0->parties[count] = *party0;
 }
 
+/**
+ * Initialize round struct
+ * @param round round to initialize
+ * @param p1_result (0 or 1)
+ * @param p1_decision_time time of p1 decision (timestamp)
+ * @param p2_result (0 or 1)
+ * @param p2_decision_time time of p2 decision (timestamp)
+ */
+void init_round(round * round, int p1_result, int p1_decision_time, int p2_result,  int p2_decision_time)
+{
+    round->p1_result = p1_result;
+    round->p2_result = p2_result;
+    round->p1_decision_time = p1_decision_time;
+    round->p2_decision_time = p2_decision_time;
+    round = malloc(sizeof(round)*20);
+}
+
+/**
+ * Add round to lparty
+ * @param party party to update
+ * @param round round to add
+ */
+void add_round_to_party(party * party, round round)
+{
+    party->round_count +=1;
+    int count = party->round_count;
+    party->round = malloc(sizeof(round)*20);
+    party->round[count] = round;
+}
+
+/**
+ * Destroy player struct when player is leaving
+ * Remove player from game struct
+ * Remove player struct
+ * @param player player who is leaving
+ */
+void destroy_player(game * game0, player * player)
+{
+    game0->player[player->id];
+}

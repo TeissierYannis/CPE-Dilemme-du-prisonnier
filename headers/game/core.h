@@ -104,7 +104,7 @@ void add_round_to_party(party * party, round round);
  * Remove player struct
  * @param player player who is leaving
  */
-void destroy_player(player * player);
+void destroy_player(game * game, player * player);
 
 /**
  * Destroy party struct when party is finished

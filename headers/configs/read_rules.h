@@ -8,5 +8,6 @@
  * @copyright Copyright (c) 2021
  * 
  */
+#include "../../headers/game/core.h"
 
-void read_rules();
+void read_rules(rules * rules);

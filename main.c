@@ -16,25 +16,42 @@
 int main(int argc, char **argv)
 {
     //Initialize game
-    game *game;
-    init_game(game);
+    game game0;
+    init_game(&game0);
     
     // Initialize the configuration
     server_config server_config = readconfig();
 
     // Read rules
-    read_rules();
+    rules rules0;
+    read_rules(&rules0);
+
+    //rules0.default_wallet = 50;
 
     //add player
-    player *player0;
+    player player0;
     char *ip = malloc(sizeof(char) * 20);
     ip = "127.0.0.1";
-    init_player(game, player0, ip);
+    init_player(&game0, &player0, ip, &rules0);
 
-/*     printf("Test: %d\n", game->parties_count);
-    printf("Test: %d\n", game->players_count); */
-    free(player0);
-  
+    player player1;
+    char *ip1 = malloc(sizeof(char) * 20);
+    ip1 = "192.168.0.1";
+    init_player(&game0, &player1, ip1, &rules0);
+
+    //add party
+    party party0;
+    init_party(&game0, &party0, player0, player1);
+    
+    // TEST
+    /*
+    printf("Test: %d\n", game->parties_count);
+    printf("Test: %d\n", game->players_count); 
+    printf("ip0:%s\n",game0.player[1].ip);
+    printf("ip1:%s\n",game0.player[2].ip);
+    printf("j1:%s - j2:%s\n", party0.player_game[0].ip, party0.player_game[1].ip);
+    */
+
     // Initialize the server commands
     setup_commands();
 
@@ -71,6 +88,6 @@ int main(int argc, char **argv)
         }
     }
 
-    free(game);
+    //free(game0);
     return EXIT_SUCCESS;
 }

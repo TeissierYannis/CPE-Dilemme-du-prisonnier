@@ -364,7 +364,7 @@ Round create_round(int socketClient){
     // TODO ATTENDRE LE DEBUT DU ROUND
 	// Tant que le round n'a pas commencé on attend
 	do{
-		round_status = get_round_status(socket);
+		round_status = get_round_status(socketClient);
 	}while(!are_equal(round_status, start));
 	
 	// Status de départ

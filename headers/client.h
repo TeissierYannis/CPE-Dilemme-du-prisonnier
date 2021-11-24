@@ -36,7 +36,7 @@ typedef struct {
 
 // Contient les informations avec reponses du clients
 typedef struct {
-    Game game;
+    // Game game;
     int choice;
     int time;
 } Answer;
@@ -45,10 +45,11 @@ typedef struct {
 // Contient les informations du round
 typedef struct {
     // Resultat de chaque joueur
-    int J1_result;
-    int J2_result;
+    int j1_result;
+    int j2_result;
     // Numero du round
-    char number[20];
+    int round_number;
+    char status[20];
 } Round;
 
 // Récapitule la partie

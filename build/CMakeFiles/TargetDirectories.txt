@@ -1,3 +1,0 @@
-/home/student/Documents/langage_C/Projet/CPE-Dilemme-du-prisonnier/build/CMakeFiles/rebuild_cache.dir
-/home/student/Documents/langage_C/Projet/CPE-Dilemme-du-prisonnier/build/CMakeFiles/edit_cache.dir
-/home/student/Documents/langage_C/Projet/CPE-Dilemme-du-prisonnier/build/CMakeFiles/gtk_test.dir

@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h> // a voir si obligatoire
-#include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
 
@@ -44,7 +42,7 @@ int client_connexion()
 
 	// IP et Port du serveur
 	char *adresse_serv = "127.0.0.1";
-	int port_serveur = 30000;
+	int port_serveur = 3000;
 
 	// stockaddr_in correspond à une adresse internet (IP et un port)
 	struct sockaddr_in addrClient = create_serv_adrr(adresse_serv, port_serveur);
@@ -65,7 +63,19 @@ int client_connexion()
 // Le client reçoit un id
 int client_recevoir_id(int socketClient){
 	int id;
-	recv(socketClient, &id, sizeof(id), 0);
+    char buffer_in[2048];
+
+    recv(socketClient, &buffer_in, 2048, 0);
+    char * prefix = strtok(buffer_in, " ");
+
+    if (strcmp(prefix, "id") == 0) {
+        id = atoi(strtok(NULL, " "));
+        printf("ID de joueur : %d\n", id);
+    } else if (strcmp(prefix, "party") == 0) {
+        id = atoi(strtok(NULL, " "));
+        printf("ID de partie : %d\n", id);
+    }
+
 	return id;
 }
 
@@ -97,7 +107,7 @@ Answer get_answer(Game game){
 	Answer answer;
 	printf("Recuperation reponse du joueur... \n");
 	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie + le choix du joueur + son temps de reponse
-	answer.game = game;
+	// answer.game = game;
 	answer.choice = get_clique();
 	answer.time = get_time_clique();
 	return answer;
@@ -110,6 +120,10 @@ void send_answer(int socketClient, Game game){
 
 	// Recuperer la reponse du joueur
 	answer = get_answer(game);
+    printf("====================\n");
+    printf("Answer : %i\n", answer.choice);
+    printf("Time : %i\n", answer.time);
+    printf("====================\n");
 
 	printf("Envoie de donnees au serveur...\n");
 	// On envoie la reponse du joueur
@@ -140,9 +154,11 @@ Round get_round(int socketClient){
 
 // Permet de jouer en communicant avec le serveur (envoie du choix + reception resultat)
 void jouer(int socket, Game game){
+
 	// Contient les informations d'un round
-    Round round;
-    strcpy(round.number, "012");
+    Round round = {0, 0, 0, "ingame"};
+
+    // TODO : Afficher le round depuis la com serv
 	// Tant que le nombre de round n'est pas terminé on continue
 	while(game_end(round) == false){
 		//printf("game end = %s\n", game_end(round) ? "true" : "false");
@@ -159,11 +175,15 @@ void jouer(int socket, Game game){
 // Indique si la partie est fini ou continue
 bool game_end(Round round){
 	bool result = false;
-	printf("round n° %s \n", round.number);
-	int len = sizeof(round.number)/sizeof(round.number[0]);
-	int compteur = 0;
+    printf("==================\n");
+    printf("Round N°%d\n", round.round_number);
+    printf("Result J1 : %d\n", round.j1_result);
+    printf("Result J2 : %d\n", round.j2_result);
+    printf("Status : %s\n", round.status);
+    printf("==================\n");
+
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
-	if(are_equal(round.number, "end_game")){
+	if(strcmp(round.status, "finished") == 0){
 		result = true;
 	}
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
@@ -203,10 +223,10 @@ void print_recap(Answer answer[]){
 	// Mettre dans recap le nombre de round pour connaitre la taille ?
 	int len = sizeof(*answer)/sizeof(answer[0]); // PAS OK
 	printf("len recap = %d\n", len);
-	int id_player = answer[0].game.player_id;
-
+	// int id_player = answer[0].game.player_id;
+// TODO
 	// Afficher chaque choix du joueur avec le temps qu'il a mis pour faire ce choix
-	printf("Recap du joueur %d\n", id_player);
+	// printf("Recap du joueur %d\n", id_player);
 	for(int i = 0; i<len; i++){
 		printf("choix = %d et temps = %d\n", answer[i].choice, answer[i].time);
 	}
@@ -247,6 +267,8 @@ void send_player_status(int socketClient, Joueur player){
 // Recuperer le numero du carre cliqué
 int get_clique(){
 	int clique = 1;
+    printf("Entrez la réponse : \n");
+    scanf("%d", &clique);
 	return clique;
 }
 

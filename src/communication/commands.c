@@ -17,13 +17,11 @@ command_list COMMAND_LIST;
  * @param name
  * @param args
  */
-void add_command(command_list *cmd_list, char *name, char *args) {
+void add_command(command_list *cmd_list, char *name) {
     // init command
     command new_command;
     // init command name
     new_command.name = name;
-    // init command args
-    new_command.args = args;
 
     // add command to the list
     cmd_list->commands[cmd_list->size] = new_command;
@@ -72,8 +70,9 @@ void setup_commands() {
     // init command list
     init_command_list(&COMMAND_LIST);
     // register commands
-    add_command(&COMMAND_LIST, "help", NULL);
-    add_command(&COMMAND_LIST, "answer", "userid answer");
+    add_command(&COMMAND_LIST, "help");
+    add_command(&COMMAND_LIST, "answer");
+    add_command(&COMMAND_LIST, "join");
 }
 
 /**
@@ -82,14 +81,14 @@ void setup_commands() {
  * @param command command struct
  * @param arguments arguments of the command
  */
-void call_command(command command, char * arguments) {
+void call_command(command command) {
     // if command is help
     if (strcmp(command.name, "help") == 0) {
         // print help
         help();
     } else if (strcmp(command.name, "answer") == 0) {
         // print answer
-        answer(arguments);
+        answer();
     }
 }
 
@@ -115,33 +114,49 @@ void help() {
 // results <partyId> <result>
 
 /**
- * TODO Comment and method body
- * Parse command
- * @brief Parse command
- * @param command_name
- * @param arguments
+ * Receive message to the client
+ * Join a party
  */
-void answer(char * arguments) {
-
-    printf("\n[COMMAND][DEBUG] AnswerFunction : %s\n", arguments);
-
-    // split arguments
-    char * token = strtok(arguments, " ");
-    int user_id = atoi(token);
-
-    // get answer
-    token = strtok(NULL, " ");
-    char * user_answer = token;
-
-    printf("[COMMAND][DEBUG] User id : %d\n", user_id);
-    printf("[COMMAND][DEBUG] Answer : %s\n", user_answer);
+void join();
+/**
+ * Send message to the client
+ * Start a party
+ * @param party_id
+ */
+void start(int party_id) {
+    printf("\n=================================\n");
+    printf("|\t\tStart Party\t\t\t|\n");
+    printf("|\t\tParty id: %d\t\t\t\t|\n", party_id);
+    printf("=================================\n\n");
+}
+/**
+ * Send message to the client
+ * Launch next round
+ */
+void next_round() {
+    printf("\n=================================\n");
+    printf("|\t\tNext Round\t\t\t|\n");
+    printf("=================================\n\n");
+}
+/**
+ * Send message to the client
+ * End the game
+ */
+void end_game() {
+    printf("\n=================================\n");
+    printf("|\t\tEnd Game\t\t\t|\n");
+    printf("=================================\n\n");
 }
 
-void logout(char * arguments) {
-    printf("[COMMAND][DEBUG] LogoutFunction : %s", arguments);
-
-    char * token = strtok(arguments, " ");
-    int user_id = atoi(token);
-
-    printf("[COMMAND][DEBUG] User id : %d", user_id);
+/**
+ * Receive message to the client
+ * Interpret the answer of the player
+ * @param answer
+ */
+void answer(answer_struct answer) {
+    printf("\n=================================\n");
+    printf("|\t\tAnswer\t\t\t\t|\n");
+    printf("|\t\tUser id: %d\t\t\t\t|\n", answer.player_id);
+    printf("|\t\tAnswer: %s\t\t\t\t|\n", answer.answer == 1 ? "betray" : "cooperate");
+    printf("=================================\n\n");
 }

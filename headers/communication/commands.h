@@ -7,6 +7,23 @@
 #ifndef SERVER_COMMANDS_H
 #define SERVER_COMMANDS_H
 
+typedef struct {
+    int player_id;
+    int party_id;
+    int answer;
+    int time;
+} answer_struct;
+
+typedef struct {
+
+} round_struct;
+
+struct {
+    round_struct * round;
+    int j1_score;
+    int j2_score;
+} final_result;
+
 /**
  * Max commands that can be define in the command_list structure
  * @brief Maximum commands in command_list
@@ -19,7 +36,6 @@
  */
 typedef struct {
     char *name;
-    char *args;
 } command;
 
 /**
@@ -42,7 +58,7 @@ void init_command_list(command_list *list);
  * @param cmd_list command_list struct
  * @param cmd command struct
  */
-void add_command(command_list *cmd_list, char *name, char *args);
+void add_command(command_list *cmd_list, char *name);
 
 /**
  * Return command from name
@@ -64,7 +80,7 @@ void setup_commands();
  * @param command command struct
  * @param arguments arguments of the command
  */
-void call_command(command command, char *arguments);
+void call_command(command command, void **arguments);
 
 /**
  * Debug method to print the command list
@@ -72,6 +88,33 @@ void call_command(command command, char *arguments);
  */
 void help();
 
-void answer(char * arguments);
+/**
+ * Receive message to the client
+ * Join a party
+ */
+void join();
+/**
+ * Send message to the client
+ * Start a party
+ * @param party_id
+ */
+void start(int party_id);
+/**
+ * Send message to the client
+ * Launch next round
+ */
+void next_round();
+/**
+ * Send message to the client
+ * End the game
+ */
+void end_game();
+
+/**
+ * Receive message to the client
+ * Interpret the answer of the player
+ * @param answer
+ */
+void answer(answer_struct answer);
 
 #endif //SERVER_COMMANDS_H

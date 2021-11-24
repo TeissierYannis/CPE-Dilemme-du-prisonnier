@@ -36,8 +36,7 @@ struct sockaddr_in create_serv_adrr(char *adresse_serv, int port_serveur){
 }
 
 // Partie client
-int client_connexion()
-{
+int client_connexion(){
 	int socketClient = create_socket();
 
 	// IP et Port du serveur
@@ -61,33 +60,51 @@ int client_connexion()
 }
 
 // Le client reçoit un id
-int client_recevoir_id(int socketClient){
+int client_recevoir_id(int socketClient, char *title){
 	int id;
-    char buffer_in[2048];
+    char message[2048]; // stock le message que le serveur a envoyé
+	char *key;	// titre du message
+	char *separateur = " "; // separateur entre les champs du message
 
-    recv(socketClient, &buffer_in, 2048, 0);
-    char * prefix = strtok(buffer_in, " ");
-
-    if (strcmp(prefix, "id") == 0) {
-        id = atoi(strtok(NULL, " "));
-        printf("ID de joueur : %d\n", id);
-    } else if (strcmp(prefix, "party") == 0) {
-        id = atoi(strtok(NULL, " "));
-        printf("ID de partie : %d\n", id);
+	// Recevoir message du serveur contenant un identifiant et le nom de ce à quoi correspond l'ID
+	// (id du joueur ou id de la partie)
+    recv(socketClient, &message, sizeof(message), 0);
+	// Récupérer le titre de l'identifiant
+    key = strtok(message, separateur);
+	
+    // Si l'ID correspond au type d'ID demandé on l'enregistre
+	if (are_equal(key,title)) {
+        // Récuperer la deuxième partie du message (l'id) et le convertir en identifiant
+		id = atoi(strtok(NULL, " "));
+    } 
+	// Sinon on passe sans utiliser l'ID
+	else {
+		id = -1;
     }
-
+	
 	return id;
 }
 
 // Initialiser le joueur avec id reçu
 Joueur create_player(int socketClient){
 	Joueur player;
-	printf("Reception id du joueur...\n");
-	int identifiant = client_recevoir_id(socketClient);
-	player.id = identifiant;
-	// Status du joueur "en ligne"
-	strcpy(player.status, "online");
+	char *type_id = "id"; // A modifier selon valeur du serveur
 
+	printf("Reception id du joueur...\n");
+	// On récupère l'id du joueur
+	int identifiant = client_recevoir_id(socketClient, type_id);
+	// Si l'ID récupérer est valide on l'affecte au joueur
+	if(is_id_valide(identifiant)){
+		player.id = identifiant;
+		// Status du joueur "en ligne"
+		strcpy(player.status, "online");
+	}
+	// Si l'id récupéré n'est pas valide on quitte le jeu
+	else{
+		printf("Erreur récupération id du joueur...\n");
+		exit(EXIT_FAILURE);
+	}
+	// Renvoyer le joueur créé
 	return player;
 }
 
@@ -95,9 +112,28 @@ Joueur create_player(int socketClient){
 // Recevoir l'identifiant de la partie et créer la partie
 Game create_game(int socketClient, Joueur player){
 	Game game;
-	game.id = client_recevoir_id(socketClient);
-	game.player_id = player.id;
-	printf("Creation partie...\n");
+	int id;
+	char *type_id;
+	// Récupérer l'identifiant de la partie
+	type_id = "party";
+	id = client_recevoir_id(socketClient, type_id);
+
+	// Si l'identifiant est valide
+	if(is_id_valide(id)){
+		game.id = id;
+		game.player_id = player.id;
+	}
+	else{
+		printf("Erreur réception id de la partie...\n");
+		exit(EXIT_FAILURE);
+	}
+	// Affichage
+	printf("\nInfos sur la partie...\n");
+	printf("==========================\n");
+    printf("Game ID : %d\n", game.id);
+    printf("Player ID : %d\n", game.player_id);
+    printf("==========================\n");
+
 	return game;
 }
 
@@ -105,11 +141,17 @@ Game create_game(int socketClient, Joueur player){
 Answer get_answer(Game game){
 	int time_clique;
 	Answer answer;
+	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie 
+	// + le choix du joueur + son temps de reponse
 	printf("Recuperation reponse du joueur... \n");
-	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie + le choix du joueur + son temps de reponse
-	// answer.game = game;
+
+	// Infos sur le joueur et la partie
+	answer.party_id = game.id;
+	answer.player_id = game.player_id;
+	// Valeurs jouées par le joueur
 	answer.choice = get_clique();
 	answer.time = get_time_clique();
+
 	return answer;
 }
 
@@ -120,9 +162,13 @@ void send_answer(int socketClient, Game game){
 
 	// Recuperer la reponse du joueur
 	answer = get_answer(game);
+
+	// Affichage
     printf("====================\n");
     printf("Answer : %i\n", answer.choice);
     printf("Time : %i\n", answer.time);
+	printf("Game ID : %i\n", answer.party_id);
+    printf("Player ID : %i\n", answer.player_id);
     printf("====================\n");
 
 	printf("Envoie de donnees au serveur...\n");
@@ -132,9 +178,9 @@ void send_answer(int socketClient, Game game){
 	// Si envoie echoue
 	if(envoie == -1){
 		printf("Erreur envoie des données\n");
+		exit(EXIT_FAILURE);
 	}
 }
-
 
 // Recuperer les informations du round (resultats J1 et J2 + n° du round)
 Round get_round(int socketClient){
@@ -155,12 +201,13 @@ Round get_round(int socketClient){
 // Permet de jouer en communicant avec le serveur (envoie du choix + reception resultat)
 void jouer(int socket, Game game){
 
-	// Contient les informations d'un round
-    Round round = {0, 0, 0, "ingame"};
+	// Contient les informations d'un round de départ
+    Round round = create_round(socket);
 
-    // TODO : Afficher le round depuis la com serv
+    // TODO : Afficher le round depuis la com serv ??
+
 	// Tant que le nombre de round n'est pas terminé on continue
-	while(game_end(round) == false){
+	while(!game_end(round)){
 		//printf("game end = %s\n", game_end(round) ? "true" : "false");
 		// Envoyer le choix du joueur au serveur
     	send_answer(socket, game);
@@ -175,6 +222,9 @@ void jouer(int socket, Game game){
 // Indique si la partie est fini ou continue
 bool game_end(Round round){
 	bool result = false;
+	char *finish = "finished";
+	
+	// Affichage infos du round
     printf("==================\n");
     printf("Round N°%d\n", round.round_number);
     printf("Result J1 : %d\n", round.j1_result);
@@ -183,13 +233,9 @@ bool game_end(Round round){
     printf("==================\n");
 
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
-	if(strcmp(round.status, "finished") == 0){
+	if(are_equal(round.status, finish)){
 		result = true;
 	}
-	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
-	//if(round.number == "end_game"){
-	//	result = true;
-	//}
 	return result;
 }
 
@@ -287,12 +333,49 @@ int continue_game(){
 }
 
 
-// Envoyer un message de deconnexion du joueur au serveur
-/*void disconnect_player(int socketClient, Joueur player){
-	// Envoyer un message de fermeture au serveur ? 
-	player.connected = false;
-	client_envoyer(socketClient, player);
-}*/
+// Indiquer si un identifiant est valide ou non
+bool is_id_valide(int id){
+	if(id == -1){
+		return false;
+	}
+	else return true;
+}
+
+// Récupérer le status de départ du round
+char *get_round_status(int socketClient){
+	char *status_round;
+	int recevoir;
+	// Recevoir le status du round
+	recevoir = recv(socketClient, status_round, sizeof(status_round), 0);
+	// Retourne -1 en cas d'erreur
+	if(recevoir == -1){
+		printf("Erreur reception status round...\n");
+		exit(EXIT_FAILURE);
+	} 
+	return status_round;
+
+}
+
+// Créer le round de depart
+Round create_round(int socketClient){
+	Round round;
+	char *round_status;
+	char *start = "start";
+    // TODO ATTENDRE LE DEBUT DU ROUND
+	// Tant que le round n'a pas commencé on attend
+	do{
+		round_status = get_round_status(socket);
+	}while(!are_equal(round_status, start));
+	
+	// Status de départ
+	strcpy(round.status, start);
+	// Score de départ
+	round.j1_result = 0;
+	round.j2_result = 0;
+	round.round_number = 1;
+
+	return round;
+}
 
 // On ferme le client
 void client_fermer(int * socketClient, Joueur player){
@@ -310,28 +393,11 @@ void client_fermer(int * socketClient, Joueur player){
 
 
 // Comparer 2 chaine de caracteres
-bool are_equal(char *a, char *b){
-	int len_a, len_b, len;
-	int compteur = 0;
+bool are_equal(char *key, char *name){
 	bool result = false;
-	// Connaitre la longueur
-	len_a = strlen(a);
-	len_b = strlen(b);
-	len = len_a;
-	// Si ils ne font pas la même taille alors ils ne sont pas egaux
-	if(len_a != len_b){
-		return result;
+	// Si la clé correspond au nom indiqué
+	if(strcmp(key, name) == 0){
+		result = true;
 	}
-	// Comparer chaque element de la chaine
-	for(int i = 0; i<len; i++){
-		// Si un des elements est pas identique les chaines ne sont pas egales
-		if(a[i] != b[i]){
-			return result;
-		}
-		
-	}
-	// Si chaine identiques
-	result = true;
 	return result;
-	
 }

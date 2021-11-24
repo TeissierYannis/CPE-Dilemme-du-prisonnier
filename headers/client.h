@@ -36,7 +36,8 @@ typedef struct {
 
 // Contient les informations avec reponses du clients
 typedef struct {
-    // Game game;
+    int party_id;
+    int player_id;
     int choice;
     int time;
 } Answer;
@@ -69,8 +70,8 @@ void client_fermer(int * socketClient, Joueur player);
 void disconnect_player(int socketClient, Joueur player);
 // Creer une socket client
 int create_socket();
-// Recevoir id du joueur pour initialiser le joueur
-int client_recevoir_id(int socketClient);
+// Recevoir un identifiant (du joueur ou de la partie selon le choix)
+int client_recevoir_id(int socketClient, char *title);
 // Initialiser le joueur lorsqu'il reçoit un id
 Joueur create_player(int socketClient);
 // Indiquer le début de la partie avec un identifiant
@@ -98,6 +99,11 @@ void send_player_status(int socketClient, Joueur player);
 // Creer structure adresse serveur
 struct sockaddr_in create_serv_adrr();
 
+// Récupérer le status de départ du round
+char *get_round_status(int socketClient);
+// Créer le round de depart
+Round create_round(int socketClient);
+
 // Recuperer le numero du carre cliqué
 int get_clique();
 // Recuperer le temps que le joueur a pris pour faire un choix
@@ -106,5 +112,7 @@ int get_time_clique();
 int continue_game();
 
 // Comparer 2 chaine de caracteres
-bool are_equal(char *c, char *b);
+bool are_equal(char *a, char *b);
+// Indiquer si un identifiant est valide ou non
+bool is_id_valide(int id);
 #endif

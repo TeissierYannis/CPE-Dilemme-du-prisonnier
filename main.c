@@ -20,18 +20,6 @@ int main(int argc, char **argv)
     // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
     game = create_game(socket, player);
 
-    printf("==========================\n");
-    printf("Game ID : %d\n", game.id);
-    printf("Player ID : %d\n", game.player_id);
-    printf("==========================\n");
-
-    char round_status[2048];
-    // TODO ATTENDRE LE DEBUT DU ROUND
-    // wait for start to launch game
-    while (strcmp(round_status, "start") != 0) {
-        recv(socket, round_status, 2048, 0);
-    }
-
      // Continuer à jouer ou quitter ?
     // Tant que le client veut continuer à jouer on informe le serveur
     do{

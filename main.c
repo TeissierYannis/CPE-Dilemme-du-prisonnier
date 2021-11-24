@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     // Connexion au serveur et création de la socket client (sert à la communication)
     socket = client_connexion();
     // Creation du joueur avec son identifiant
-    player = initialise_player(socket);
+    player = create_player(socket);
     // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
     game = create_game(socket, player);
 

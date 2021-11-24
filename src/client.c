@@ -70,7 +70,7 @@ int client_recevoir_id(int socketClient){
 }
 
 // Initialiser le joueur avec id reçu
-Joueur initialise_player(int socketClient){
+Joueur create_player(int socketClient){
 	Joueur player;
 	printf("Reception id du joueur...\n");
 	int identifiant = client_recevoir_id(socketClient);

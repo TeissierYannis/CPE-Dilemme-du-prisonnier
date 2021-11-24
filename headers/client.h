@@ -71,7 +71,7 @@ int create_socket();
 // Recevoir id du joueur pour initialiser le joueur
 int client_recevoir_id(int socketClient);
 // Initialiser le joueur lorsqu'il reçoit un id
-Joueur initialise_player(int socketClient);
+Joueur create_player(int socketClient);
 // Indiquer le début de la partie avec un identifiant
 Game create_game(int socketClient, Joueur player);
 // Recupérer le choix du joueur

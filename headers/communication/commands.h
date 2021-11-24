@@ -7,6 +7,8 @@
 #ifndef SERVER_COMMANDS_H
 #define SERVER_COMMANDS_H
 
+typedef void (*command_function)(char *);
+
 typedef struct {
     int player_id;
     int party_id;
@@ -80,7 +82,15 @@ void setup_commands();
  * @param command command struct
  * @param arguments arguments of the command
  */
-void call_command(command command, void **arguments);
+command_function call_command(command command);
+
+/**
+ * Parse answer from string
+ * @brief Parse answer from string
+ * @param answer _str string of the answer
+ * @param answerStruct answer_struct struct
+ */
+void parse_answer(char * answer, answer_struct * answerStruct);
 
 /**
  * Debug method to print the command list
@@ -98,7 +108,7 @@ void join();
  * Start a party
  * @param party_id
  */
-void start(int party_id);
+void start(char * party_id);
 /**
  * Send message to the client
  * Launch next round
@@ -115,6 +125,6 @@ void end_game();
  * Interpret the answer of the player
  * @param answer
  */
-void answer(answer_struct answer);
+void answer(char * answer);
 
 #endif //SERVER_COMMANDS_H

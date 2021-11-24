@@ -29,7 +29,8 @@ void decrypting_incoming_message(char *message) {
 
     // if command exists
     if (cmd.name != NULL) {
-        call_command(cmd, args);
+        // Dynamically call the command
+        call_command(cmd)(args);
     } else {
         // if command does not exist
         printf("[ERROR] Command not found\n");

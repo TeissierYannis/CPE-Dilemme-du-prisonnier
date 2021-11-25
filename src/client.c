@@ -128,8 +128,7 @@ Game create_game(int socketClient, Joueur player){
 		exit(EXIT_FAILURE);
 	}
 	// Affichage
-	printf("\nInfos sur la partie...\n");
-	printf("==========================\n");
+	printf("\n=========== Infos partie ===============\n");
     printf("Game ID : %d\n", game.id);
     printf("Player ID : %d\n", game.player_id);
     printf("==========================\n");
@@ -192,6 +191,7 @@ Round get_round(int socketClient){
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
 		printf("Erreur reception round\n");
+		exit(EXIT_FAILURE);
 	} 
 
 	return round;
@@ -213,9 +213,9 @@ void jouer(int socket, Game game){
     	send_answer(socket, game);
     	// Le serveur nous renvois les resultat du round
     	round = get_round(socket);
-		printf("\n");
+		// Afficher sur l'interface graphique le resultat du round
+		show_round_result(round);
 	}
-	printf("Fin de partie ! \n");
 }
 
 
@@ -223,18 +223,11 @@ void jouer(int socket, Game game){
 bool game_end(Round round){
 	bool result = false;
 	char *finish = "finished";
-	
-	// Affichage infos du round
-    printf("==================\n");
-    printf("Round N°%d\n", round.round_number);
-    printf("Result J1 : %d\n", round.j1_result);
-    printf("Result J2 : %d\n", round.j2_result);
-    printf("Status : %s\n", round.status);
-    printf("==================\n");
 
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
 	if(are_equal(round.status, finish)){
 		result = true;
+		printf("Fin de partie ! \n");
 	}
 	return result;
 }
@@ -244,12 +237,13 @@ Recap get_recap(int socketClient){
 	Recap recap;
 	int recevoir;
 	printf("Reception recap du serveur...\n");
-	// Recevoir des données du serveur et les stock dans le round
+	// Recevoir recapitulatif des choix de chaque joueur a chaque round
 	recevoir = recv(socketClient, &recap, sizeof(recap), 0);
 	
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
-		printf("Erreur reception recap\n");
+		printf("Erreur reception recap...\n");
+		exit(EXIT_FAILURE);
 	} 
 
 	return recap;
@@ -266,13 +260,14 @@ void game_recap(int socketClient){
 
 // Afficher la recapitulation de la partie pour le joueur indiqué
 void print_recap(Answer answer[]){
+	// TODO
 	// Mettre dans recap le nombre de round pour connaitre la taille ?
 	int len = sizeof(*answer)/sizeof(answer[0]); // PAS OK
 	printf("len recap = %d\n", len);
 	// int id_player = answer[0].game.player_id;
-// TODO
+
 	// Afficher chaque choix du joueur avec le temps qu'il a mis pour faire ce choix
-	// printf("Recap du joueur %d\n", id_player);
+	printf("Recap du joueur %d\n", answer->player_id);
 	for(int i = 0; i<len; i++){
 		printf("choix = %d et temps = %d\n", answer[i].choice, answer[i].time);
 	}
@@ -306,6 +301,7 @@ void send_player_status(int socketClient, Joueur player){
 	// Si envoie echoue
 	if(envoie == -1){
 		printf("Erreur envoie du status du joueur \n");
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -327,9 +323,16 @@ int get_time_clique(){
 
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
 // Recuperer le choix si le joueur relance ou pas une partie
-int continue_game(){
-	int choice = 0;
-	return choice;
+bool continue_game(){
+	int choice;
+	bool result = false;
+	printf("Voulez vous jouer une nouvelle partie ? [No->0 and Yes->1]\n");
+	scanf("%d", choice);
+	// Si le joueur indique qu'il souhaite faire une nouvelle partie
+	if(choice == 1){
+		result = true;
+	}
+	return result;
 }
 
 
@@ -377,6 +380,18 @@ Round create_round(int socketClient){
 	return round;
 }
 
+
+// Afficher le résultat du round
+void show_round_result(Round round){
+	// Affichage infos du round
+    printf("======= Resultat du round ===========\n");
+    printf("Round N°%d\n", round.round_number);
+    printf("Result J1 : %d\n", round.j1_result);
+    printf("Result J2 : %d\n", round.j2_result);
+    printf("Status : %s\n", round.status);
+    printf("==================\n\n");
+}
+
 // On ferme le client
 void client_fermer(int * socketClient, Joueur player){
 	int fermeture;
@@ -388,6 +403,7 @@ void client_fermer(int * socketClient, Joueur player){
 	}
 	else if(fermeture == -1){
 		printf("Erreur fermeture client !\n");
+		exit(EXIT_FAILURE);
 	}
 }
 

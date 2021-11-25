@@ -103,13 +103,15 @@ struct sockaddr_in create_serv_adrr();
 char *get_round_status(int socketClient);
 // Créer le round de depart
 Round create_round(int socketClient);
+// Afficher le résultat du round
+void show_round_result(Round round);
 
 // Recuperer le numero du carre cliqué
 int get_clique();
 // Recuperer le temps que le joueur a pris pour faire un choix
 int get_time_clique();
 // Recuperer le choix si le joueur relance ou pas une partie
-int continue_game();
+bool continue_game();
 
 // Comparer 2 chaine de caracteres
 bool are_equal(char *a, char *b);

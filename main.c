@@ -17,17 +17,18 @@ int main(int argc, char **argv)
 
     // Creation du joueur avec son identifiant
     player = create_player(socket);
-    // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
-    game = create_game(socket, player);
+    
 
      // Continuer à jouer ou quitter ?
     // Tant que le client veut continuer à jouer on informe le serveur
     do{
+        // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
+        game = create_game(socket, player);
         // Jouer a la partie
         jouer(socket, game);
         // Recapituler la partie
         game_recap(socket);
-    }while(restart_game(socket, player));
+    }while(restart_game(socket, player)); // Tant que le joueur veut faire une nouvelle partie
 
 
     // Fermer le client lorsqu'il ne joue plus

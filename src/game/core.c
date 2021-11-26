@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include "../../headers/game/core.h"
+#include "../../headers/configs/read_rules.h"
 
 // Methods
 
@@ -12,13 +13,14 @@
  * set players_count to 0
  * set parties_count to 0
  */
-void init_game(game * game0)
+void init_game()
 {
-    game0->parties_count = 0;
-    game0->players_count = 0;
-    game0->player = malloc(sizeof(player) *20);
-    game0->parties = malloc(sizeof(party) * 20);
+    game0.parties_count = 0;
+    game0.players_count = 0;
+    game0.player = malloc(sizeof(player) *20);
+    game0.parties = malloc(sizeof(party) * 20);
 
+    read_rules(&rules0);
 }
 
 
@@ -31,15 +33,15 @@ void init_game(game * game0)
  * @param p structure player
  * @param ip ip of the client
  */
-void init_player(game *game0, player *player0, char *ip0, rules * rules0)
+void init_player(player *player0, int socket)
 {
-    game0->players_count += 1;
-    int count = game0->players_count;
+    game0.players_count += 1;
+    int count = game0.players_count;
     player0->id = count;
     player0->status = 0;
-    player0->wallet = rules0->default_wallet;
-    player0->ip = ip0;
-    game0->player[count] = *player0;
+    player0->wallet = rules0.default_wallet;
+    player0->socket = socket;
+    game0.player[count] = *player0;
 }
 
 /**

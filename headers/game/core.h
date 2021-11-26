@@ -20,12 +20,11 @@ typedef struct
 
 } rules;
 
-
 typedef struct {
     int id;
     int status;
     int wallet;
-    char * ip;
+    int socket;
 } player;
 
 typedef struct {
@@ -49,6 +48,8 @@ typedef struct {
     int parties_count;
 } game;
 
+rules rules0;
+game game0;
 
 
 /**
@@ -56,7 +57,7 @@ typedef struct {
  * set players_count to 0
  * set parties_count to 0
  */
-void init_game(game *game);
+void init_game();
 
 /**
  * Initialize player struct
@@ -67,7 +68,7 @@ void init_game(game *game);
  * @param p structure player
  * @param ip ip of the client
  */
-void init_player(game *game, player *player, char * ip, rules * rules);
+void init_player(player *player, int socket);
 
 /**
  * Initialize party struct

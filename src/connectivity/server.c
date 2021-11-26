@@ -8,7 +8,9 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "../../headers/connectivity/server.h"
+#include "../../headers/communication/commands.h"
 
 int create_server(char *ip, int port) {
 
@@ -49,7 +51,7 @@ int create_server(char *ip, int port) {
     return socketfd;
 }
 
-void *listening(void * socketfd) {
+void *listening(void *socketfd) {
 
     socketfd = *(int *) socketfd;
     // Listen on port
@@ -66,7 +68,7 @@ void *listening(void * socketfd) {
         socklen_t client_addr_len = sizeof(client_addr);
         // Accept connection
         int client_sock = accept(socketfd, (struct sockaddr *) &client_addr, &client_addr_len);
-        printf("User connected");
+        printf("User connected\n");
         // check if connection is accepted
         if (client_sock < 0) {
             fprintf(stderr, "Error accepting connection\n");
@@ -80,8 +82,8 @@ void *listening(void * socketfd) {
     pthread_exit(0);
 }
 
-void * handle_clients() {
-    int * pair;
+void *handle_clients() {
+    int *pair;
 
     while (1) {
         if (clientsList.client_count >= 2) {
@@ -98,19 +100,123 @@ void * handle_clients() {
                 players[0] = clientsList.clients[pair[0]];
                 players[1] = clientsList.clients[pair[1]];
 
-                pthread_create(&thread, 0, handle_clients, players);
-            }
+                printf("Running thread for party\n");
 
+                pthread_create(&thread, 0, thread_party, players);
+                pthread_detach(thread);
+            }
         }
+    }
+    pthread_exit(0);
+}
+
+void *thread_party(void *ptr) {
+
+    char buffer_out[BUFFERSIZE];
+
+    //temp
+    int Nb_Round_Max = rules0.nb_round;
+
+    //Player
+    //player p1, player p2
+    //player *p2 = (player *)ptr;
+    player *players = (player *) ptr;
+    player p1 = players[0];
+    player p2 = players[1];
+
+    printf("Send user id to client\n");
+    sprintf(buffer_out, "id %i", p1.id);
+    write(p1.socket, buffer_out, strlen(buffer_out));
+    sprintf(buffer_out, "id %i", p2.id);
+    write(p2.socket, buffer_out, strlen(buffer_out));
+
+    //Création de la partie
+    party party;
+    init_party(&party, p1, p2);
+    sleep(5);
+
+    printf("Send party id to client\n");
+    sprintf(buffer_out, "party %i", party.id);
+    write(p1.socket, buffer_out, strlen(buffer_out));
+    write(p2.socket, buffer_out, strlen(buffer_out));
+
+    //int round = 1;
+
+    sleep(5);
+
+    printf("Send start to client\n");
+    sprintf(buffer_out, "start");
+    write(p1.socket, buffer_out, strlen(buffer_out));
+    write(p2.socket, buffer_out, strlen(buffer_out));
+
+    /* p1.status = 1;
+    p2.status = 1; */
+
+    int p1Result = 0;
+    int p2Result = 0;
+    int p1Time = 0;
+    int p2Time = 0;
+    int nbRound;
+
+    //Gestion des rounds
+    for (nbRound = 1; nbRound <= Nb_Round_Max; nbRound++) {
+        printf("Round %i\n", nbRound);
+        answer_struct buffer_answer1, buffer_answer2;
+
+        printf("Reading response from clients\n");
+        read(p1.socket, &buffer_answer1, BUFFERSIZE);
+        read(p2.socket, &buffer_answer2, BUFFERSIZE);
+
+        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p1.id,
+               buffer_answer1.choice, buffer_answer1.time);
+        p1Result = buffer_answer1.choice;
+        p1Time = buffer_answer1.time;
+
+        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p2.id,
+               buffer_answer2.choice, buffer_answer2.time);
+        p2Result = buffer_answer2.choice;
+        p2Time = buffer_answer2.time;
+
+        round round;
+        init_round(&round, p1Result, p1Time, p2Result, p2Time);
+
+        sleep(5);
+
+        //TODO : Update wallet
+        //win round
+
+        printf("Send round result to client...\n");
+        sprintf(buffer_out, "round %d,P1: %d, P2: %d ", nbRound, p1Result, p2Result);
+        write(p1.socket, buffer_out, strlen(buffer_out));
+        write(p2.socket, buffer_out, strlen(buffer_out));
+        printf("Round result sent\n");
+    }
+
+    //Fin de partie
+    if (nbRound == Nb_Round_Max) {
+        printf("Fin de la partie\n");
+        p1.status = 0;
+        p2.status = 0;
+        int win = 1;
+        //TODO win = winner(j1, j2)
+        sprintf("Le gagnant est %i", win);
+
+        //TODO write results.csv
+        sleep(5);
     }
 
     pthread_exit(0);
 }
 
-int * randomize_pairs() {
-    int * pair = malloc(sizeof(int) * 2);
+
+int *randomize_pairs() {
+    int *pair = malloc(sizeof(int) * 2);
     pair[0] = rand() % clientsList.client_count;
     pair[1] = rand() % clientsList.client_count;
+
+    while (pair[0] == pair[1]) {
+        pair[1] = rand() % clientsList.client_count;
+    }
     return pair;
 }
 

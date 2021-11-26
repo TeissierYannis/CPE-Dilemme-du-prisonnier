@@ -80,7 +80,7 @@ void init_player(player *player, int socket);
  * @param player1 p1
  * @param player2 p2
  */
-void init_party(game * game, party * party, player player1, player player2);
+void init_party(party * party0, player player1, player player2);
 
 /**
  * Initialize round struct

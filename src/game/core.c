@@ -13,11 +13,10 @@
  * set players_count to 0
  * set parties_count to 0
  */
-void init_game()
-{
+void init_game() {
     game0.parties_count = 0;
     game0.players_count = 0;
-    game0.player = malloc(sizeof(player) *20);
+    game0.player = malloc(sizeof(player) * 20);
     game0.parties = malloc(sizeof(party) * 20);
 
     read_rules(&rules0);
@@ -33,8 +32,7 @@ void init_game()
  * @param p structure player
  * @param ip ip of the client
  */
-void init_player(player *player0, int socket)
-{
+void init_player(player *player0, int socket) {
     game0.players_count += 1;
     int count = game0.players_count;
     player0->id = count;
@@ -54,18 +52,17 @@ void init_player(player *player0, int socket)
  * @param player1 p1
  * @param player2 p2
  */
-void init_party(game *game0, party * party0, player player1, player player2)
-{
-    game0->parties_count +=1;
-    int count = game0->parties_count;
+void init_party(party *party0, player player1, player player2) {
+    game0.parties_count += 1;
+    int count = game0.parties_count;
 
     party0->id = count;
     party0->round_count = 0;
 
-    party0->player_game = malloc(sizeof(player)*20);
+    party0->player_game = malloc(sizeof(player) * 20);
     party0->player_game[0] = player1;
     party0->player_game[1] = player2;
-    game0->parties[count] = *party0;
+    game0.parties[count] = *party0;
 }
 
 /**
@@ -76,13 +73,12 @@ void init_party(game *game0, party * party0, player player1, player player2)
  * @param p2_result (0 or 1)
  * @param p2_decision_time time of p2 decision (timestamp)
  */
-void init_round(round * round, int p1_result, int p1_decision_time, int p2_result,  int p2_decision_time)
-{
+void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time) {
     round->p1_result = p1_result;
     round->p2_result = p2_result;
     round->p1_decision_time = p1_decision_time;
     round->p2_decision_time = p2_decision_time;
-    round = malloc(sizeof(round)*20);
+    round = malloc(sizeof(round) * 20);
 }
 
 /**
@@ -90,10 +86,9 @@ void init_round(round * round, int p1_result, int p1_decision_time, int p2_resul
  * @param party party to update
  * @param round round to add
  */
-void add_round_to_party(party * party, round round)
-{
-    party->round_count +=1;
+void add_round_to_party(party *party, round round) {
+    party->round_count += 1;
     int count = party->round_count;
-    party->round = malloc(sizeof(round)*20);
+    party->round = malloc(sizeof(round) * 20);
     party->round[count] = round;
 }

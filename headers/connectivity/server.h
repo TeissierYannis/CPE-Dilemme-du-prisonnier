@@ -28,4 +28,8 @@ void remove_client(clients_list *clients, int socket);
 
 int * randomize_pairs();
 
+void *handle_clients();
+
+void *thread_party(void *ptr);
+
 #endif //SERVER_SERVER_H

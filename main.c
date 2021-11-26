@@ -14,6 +14,7 @@
 int main(int argc, char **argv)
 {
     pthread_t server_listening_thread;
+    pthread_t user_handler_thread;
 
     // Initialize the configuration
     server_config server_config = readconfig();
@@ -31,6 +32,9 @@ int main(int argc, char **argv)
     while (1) {
         printf("--- user : %d ---- \n", clientsList.client_count);
         sleep(10);
+
+        pthread_create(&user_handler_thread, NULL, handle_clients, (void *) &sockfd);
+        pthread_detach(user_handler_thread);
     }
 
     close(sockfd);

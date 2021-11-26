@@ -6,7 +6,7 @@ com client:
 join
 
 // Serveur renvoi id client
-
+id <id>
 // Client recoit id client et attend pour adversaire.
 
 // Serveur, quand + de deux joueurs qui ont join

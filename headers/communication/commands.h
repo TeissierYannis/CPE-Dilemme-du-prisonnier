@@ -14,7 +14,7 @@ typedef struct {
     //int party_id;
     int choice;
     int time;
-} answer;
+} answer_struct;
 
 typedef struct {
     int j1_result;

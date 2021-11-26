@@ -10,6 +10,8 @@
 
 #include "../headers/srvcxnmanager.h"
 #include "../headers/communication/commands.h"
+#include "../headers/game/core.h"
+#include "../headers/configs/read_rules.h"
 
 connection_t *connections[MAXSIMULTANEOUSCLIENTS];
 
@@ -54,7 +56,17 @@ pthread_mutex_unlock(&lock);
 void *thread_process(void *ptr) {
     char buffer_in[BUFFERSIZE];
     char buffer_out[BUFFERSIZE];
-    int len;
+
+    // Lecture des règles
+    rules rules;
+    read_rules(&rules);
+
+    int MAX_ROUND = rules.nb_round;
+
+    // Création d'une partie
+    game game;
+    init_game(&game);
+
     connection_t *connection;
 
     if (!ptr)
@@ -71,16 +83,27 @@ void *thread_process(void *ptr) {
     write(connection->sockfd, buffer_out, strlen(buffer_out));
 
     // TODO Traitement des joueurs et début de la partie
+    player pl;
+    init_player(&game, &pl, "127.0.0.1", &rules);
+    pl.id = connection->index;
+
+    while (game.players_count < 2) {
+        sleep(1);
+    }
+
+    party party;
+    player p1 = game.player[0];
+    player p2 = game.player[1];
+
+    init_party(&game, &party, p1, p2);
 
     sleep(5);
 
     // TODO Envoyer ID party
 
     printf("Send party id to client\n");
-    sprintf(buffer_out, "party %i", 1);
+    sprintf(buffer_out, "party %i", party.id);
     write(connection->sockfd, buffer_out, strlen(buffer_out));
-
-    int MAX_ROUND = 1;
 
     int round = 1;
 
@@ -95,13 +118,14 @@ void *thread_process(void *ptr) {
     for (; round <= MAX_ROUND; round++) {
 
         // TODO ENVOYER ROUND
-        answer buffer_answer;
+        answer_struct buffer_answer;
 
         read(connection->sockfd, &buffer_answer, BUFFERSIZE);
         printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", connection->index,
                buffer_answer.choice, buffer_answer.time);
 
         // TODO Traitement des réponses
+
         sleep(5);
 
         printf("Send round result to client\n");
@@ -117,7 +141,7 @@ void *thread_process(void *ptr) {
         write(connection->sockfd, &rr, sizeof(round_result));
     }
 
-    printf("Fin de la partie");
+    printf("Fin de la partie\n");
 
     sleep(5);
 

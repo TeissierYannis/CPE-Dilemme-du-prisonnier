@@ -7,7 +7,7 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
-typedef struct 
+typedef struct
 {
     int nb_round;
     int default_wallet;
@@ -25,7 +25,7 @@ typedef struct {
     int id;
     int status;
     int wallet;
-    int ip;
+    char * ip;
 } player;
 
 typedef struct {
@@ -37,7 +37,7 @@ typedef struct {
 
 typedef struct {
     int id;
-    player * player;
+    player * player_game;
     round * round;
     int round_count;
 } party;
@@ -67,7 +67,7 @@ void init_game(game *game);
  * @param p structure player
  * @param ip ip of the client
  */
-void init_player(game *game, player *player, char * ip);
+void init_player(game *game, player *player, char * ip, rules * rules);
 
 /**
  * Initialize party struct
@@ -79,7 +79,7 @@ void init_player(game *game, player *player, char * ip);
  * @param player1 p1
  * @param player2 p2
  */
-void init_party(party * party, player player1, player player2);
+void init_party(game * game, party * party, player player1, player player2);
 
 /**
  * Initialize round struct
@@ -104,7 +104,7 @@ void add_round_to_party(party * party, round round);
  * Remove player struct
  * @param player player who is leaving
  */
-void destroy_player(player * player);
+void destroy_player(game * game, player * player);
 
 /**
  * Destroy party struct when party is finished

@@ -9,32 +9,15 @@
 #include "headers/srvcxnmanager.h"
 #include "headers/configs/configurator.h"
 #include "headers/configs/read_rules.h"
-#include "headers/game/core.h"
-
-
 
 int main(int argc, char **argv)
 {
-    //Initialize game
-    game *game;
-    init_game(game);
-    
     // Initialize the configuration
     server_config server_config = readconfig();
 
     // Read rules
     read_rules();
 
-    //add player
-    player *player0;
-    char *ip = malloc(sizeof(char) * 20);
-    ip = "127.0.0.1";
-    init_player(game, player0, ip);
-
-/*     printf("Test: %d\n", game->parties_count);
-    printf("Test: %d\n", game->players_count); */
-    free(player0);
-  
     // Initialize the server commands
     setup_commands();
 
@@ -70,7 +53,5 @@ int main(int argc, char **argv)
             pthread_detach(thread);
         }
     }
-
-    free(game);
     return EXIT_SUCCESS;
 }

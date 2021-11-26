@@ -176,7 +176,7 @@ void answer(char * answer_str) {
     printf("\n=================================\n");
     printf("|\t\tAnswer\t\t\t\t|\n");
     printf("|\t\tUser id: %d\t\t\t\t|\n", client_answer.player_id);
-    printf("|\t\tAnswer: %s\t\t\t\t|\n", client_answer.answer == 1 ? "betray" : "cooperate");
+    printf("|\t\tAnswer: %s\t\t\t\t|\n", client_answer.choice == 1 ? "betray" : "cooperate");
     printf("=================================\n\n");
 }
 
@@ -193,7 +193,7 @@ void parse_answer(char * answer, answer_struct * answerStruct) {
         if (i == 0) {
             answerStruct->player_id = atoi(token);
         } else if (i == 1) {
-            answerStruct->answer = atoi(token);
+            answerStruct->choice = atoi(token);
         }
         token = strtok(NULL, " ");
         i++;

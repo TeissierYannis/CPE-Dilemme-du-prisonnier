@@ -75,6 +75,7 @@ void *thread_process(void *ptr) {
     sleep(5);
 
     // TODO Envoyer ID party
+
     printf("Send party id to client\n");
     sprintf(buffer_out, "party %i", 1);
     write(connection->sockfd, buffer_out, strlen(buffer_out));

@@ -9,9 +9,9 @@
 #include <arpa/inet.h>
 
 #include "../headers/srvcxnmanager.h"
-#include "../headers/communication/communication.h"
+#include "../headers/communication/commands.h"
 
-connection_t* connections[MAXSIMULTANEOUSCLIENTS];
+connection_t *connections[MAXSIMULTANEOUSCLIENTS];
 
 void init_sockets_array() {
     for (int i = 0; i < MAXSIMULTANEOUSCLIENTS; i++) {
@@ -51,11 +51,11 @@ pthread_mutex_unlock(&lock);
  * @param ptr connection_t 
  * @return 
  */
-void * thread_process(void *ptr) {
+void *thread_process(void *ptr) {
     char buffer_in[BUFFERSIZE];
     char buffer_out[BUFFERSIZE];
     int len;
-    connection_t * connection;
+    connection_t *connection;
 
     if (!ptr)
         pthread_exit(0);
@@ -67,48 +67,59 @@ void * thread_process(void *ptr) {
 
     //Welcome the new client
     printf("[SERVER] Welcome #%i\n", connection->index);
-    sprintf(buffer_out, "[SERVER] Welcome #%i\n", connection->index);
+    sprintf(buffer_out, "id %i", connection->index);
     write(connection->sockfd, buffer_out, strlen(buffer_out));
 
-    while ((len = read(connection->sockfd, buffer_in, BUFFERSIZE)) > 0) {
+    // TODO Traitement des joueurs et début de la partie
 
-        // Interpret messages
-        decrypting_incoming_message(buffer_in);
+    sleep(5);
 
-        if (strncmp(buffer_in, "bye", 3) == 0) {
-            break;
+    // TODO Envoyer ID party
+    printf("Send party id to client\n");
+    sprintf(buffer_out, "party %i", 1);
+    write(connection->sockfd, buffer_out, strlen(buffer_out));
+
+    int MAX_ROUND = 1;
+
+    int round = 1;
+
+    sleep(5);
+
+    printf("Send start to client\n");
+    sprintf(buffer_out, "start");
+    write(connection->sockfd, buffer_out, strlen(buffer_out));
+
+    char * status = "ingame";
+
+    for (; round <= MAX_ROUND; round++) {
+
+        // TODO ENVOYER ROUND
+        answer buffer_answer;
+
+        read(connection->sockfd, &buffer_answer, BUFFERSIZE);
+        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", connection->index,
+               buffer_answer.choice, buffer_answer.time);
+
+        // TODO Traitement des réponses
+        sleep(5);
+
+        printf("Send round result to client\n");
+
+        if (round == MAX_ROUND) {
+            status = "finished";
         }
-#if DEBUG
-        printf("DEBUG-----------------------------------------------------------\n");
-        printf("len : %i\n", len);
-        printf("Buffer : %.*s\n", len, buffer_in);
-        printf("----------------------------------------------------------------\n");
-#endif
-        strcpy(buffer_out, "\n[SERVER] Echo : ");
-        strncat(buffer_out, buffer_in, len);
 
-        if (buffer_in[0] == '@') {
-            for (int i = 0; i < MAXSIMULTANEOUSCLIENTS; i++) {
-                if (connections[i] != NULL) {
-                    write(connections[i]->sockfd, buffer_out, strlen(buffer_out));
-                }
-            }
-        } else if (buffer_in[0] == '#') {
-            int client = 0;
-            int read = sscanf(buffer_in, "%*[^0123456789]%d ", &client);
-            for (int i = 0; i < MAXSIMULTANEOUSCLIENTS; i++) {
-                if (client == connections[i]->index) {
-                    write(connections[i]->sockfd, buffer_out, strlen(buffer_out));
-                    break;
-                } //no client found ? : we dont care !!
-            }
-        } else {
-            write(connection->sockfd, buffer_out, strlen(buffer_out));
-        }
+        round_result rr = {1, 2, round};
+        strcpy(rr.status, status);
 
-        //clear input buffer
-        memset(buffer_in, '\0', BUFFERSIZE);
+        // TODO Envoyer resultat round
+        write(connection->sockfd, &rr, sizeof(round_result));
     }
+
+    printf("Fin de la partie");
+
+    sleep(5);
+
     printf("[SERVER] Connection to client %i ended \n", connection->index);
     close(connection->sockfd);
     del(connection);
@@ -117,7 +128,7 @@ void * thread_process(void *ptr) {
 
 }
 
-int create_server_socket(char * ip_address, int port) {
+int create_server_socket(char *ip_address, int port) {
     int sockfd = -1;
     struct sockaddr_in address;
 
@@ -140,10 +151,10 @@ int create_server_socket(char * ip_address, int port) {
 
     /* prevent the 60 secs timeout */
     int reuse = 1;
-    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char*) &reuse, sizeof (reuse));
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char *) &reuse, sizeof(reuse));
 
     /* bind */
-    if (bind(sockfd, (struct sockaddr *) &address, sizeof (struct sockaddr_in)) < 0) {
+    if (bind(sockfd, (struct sockaddr *) &address, sizeof(struct sockaddr_in)) < 0) {
         fprintf(stderr, "[SERVER] error: cannot bind socket to port %d\n", port);
         return -4;
     }

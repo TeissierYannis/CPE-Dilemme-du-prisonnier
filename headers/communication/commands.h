@@ -11,17 +11,20 @@ typedef void (*command_function)(char *);
 
 typedef struct {
     int player_id;
-    int party_id;
-    int answer;
+    //int party_id;
+    int choice;
     int time;
-} answer_struct;
+} answer;
 
 typedef struct {
-
-} round_struct;
+    int j1_result;
+    int j2_result;
+    int round_number;
+    char status[20];
+} round_result;
 
 struct {
-    round_struct * round;
+    round_result * round;
     int j1_score;
     int j2_score;
 } final_result;

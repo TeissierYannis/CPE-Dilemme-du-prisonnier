@@ -22,45 +22,45 @@
  * @brief initialize struct rules with rules_config.json
  * 
  */
-void read_rules()
+void read_rules(rules * rules0)
 {
     //printf("Read rules:\n");
     if( access( "../config/rules_config.json", F_OK ) != -1)
     {
-        rules rules;
+        //rules rules;
         FILE * file_rule = fopen("../config/rules_config.json", "r");
         
         char * nb_round = malloc(sizeof(char) * 20);
         parse_json("nb_round", nb_round, file_rule);
-        rules.nb_round = atoi(nb_round);
+        rules0->nb_round = atoi(nb_round);
 
         char * default_wallet = malloc(sizeof(char) * 20);
         parse_json("default_wallet", default_wallet, file_rule);
-        rules.default_wallet = atoi(default_wallet);
+        rules0->default_wallet = atoi(default_wallet);
 
         char * trahison_win = malloc(sizeof(char) * 20);
         parse_json("trahison_win", trahison_win, file_rule);
-        rules.trahison_win = atoi(trahison_win);
+        rules0->trahison_win = atoi(trahison_win);
 
         char * trahison_loose = malloc(sizeof(char) * 20);
         parse_json("trahison_loose", trahison_loose, file_rule);
-        rules.trahison_loose = atoi(trahison_loose);
+        rules0->trahison_loose = atoi(trahison_loose);
 
         char * collab_win = malloc(sizeof(char) * 20);
         parse_json("collab_win", collab_win, file_rule);
-        rules.collab_win = atoi(collab_win);
+        rules0->collab_win = atoi(collab_win);
 
         char * collab_loose = malloc(sizeof(char) * 20);
         parse_json("collab_loose", collab_loose, file_rule);
-        rules.collab_loose = atoi(collab_loose);
+        rules0->collab_loose = atoi(collab_loose);
 
         char * trahison_collab_win = malloc(sizeof(char) * 20);
         parse_json("trahison_collab_win", trahison_collab_win, file_rule);
-        rules.trahison_collab_win = atoi(trahison_collab_win);
+        rules0->trahison_collab_win = atoi(trahison_collab_win);
 
         char * trahison_collab_loose = malloc(sizeof(char) * 20);
         parse_json("trahison_collab_loose", trahison_collab_loose, file_rule);
-        rules.trahison_collab_loose = atoi(trahison_collab_loose);
+        rules0->trahison_collab_loose = atoi(trahison_collab_loose);
 
         /*
         printf("1 : %d\n", rules.nb_round);

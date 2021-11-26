@@ -42,6 +42,13 @@ void init_command_list(command_list *command_list) {
     // init size
     command_list->size = 0;
 }
+
+void init_answer(answer_struct *answer) {
+    answer->player_id = 0;
+    answer->choice = 0;
+    answer->time = 0;
+}
+
 /**
  * Return command from name
  * @brief Return command from name

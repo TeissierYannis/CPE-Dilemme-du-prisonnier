@@ -58,6 +58,8 @@ typedef struct {
  */
 void init_command_list(command_list *list);
 
+void init_answer(answer_struct *answer);
+
 /**
  * Add command to the list
  * @param cmd_list command_list struct

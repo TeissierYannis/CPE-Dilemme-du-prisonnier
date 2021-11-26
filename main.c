@@ -11,8 +11,7 @@
 #include "headers/connectivity/server.h"
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     pthread_t server_listening_thread;
     pthread_t user_handler_thread;
 
@@ -29,13 +28,8 @@ int main(int argc, char **argv)
     pthread_create(&server_listening_thread, NULL, listening, (void *) &sockfd);
     pthread_detach(server_listening_thread);
 
-    while (1) {
-        printf("--- user : %d ---- \n", clientsList.client_count);
-        sleep(10);
-
-        pthread_create(&user_handler_thread, NULL, handle_clients, (void *) &sockfd);
-        pthread_detach(user_handler_thread);
-    }
+    pthread_create(&user_handler_thread, NULL, handle_clients, (void *) &sockfd);
+    pthread_join(user_handler_thread, NULL);
 
     close(sockfd);
 

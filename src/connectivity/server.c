@@ -110,7 +110,11 @@ void *handle_clients() {
     pthread_exit(0);
 }
 
+
 void *thread_party(void *ptr) {
+
+    //pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
 
     char buffer_out[BUFFERSIZE];
 
@@ -156,16 +160,20 @@ void *thread_party(void *ptr) {
     int p2Result = 0;
     int p1Time = 0;
     int p2Time = 0;
-    int nbRound;
+    int nbRound = 1;
 
     //Gestion des rounds
-    for (nbRound = 1; nbRound <= Nb_Round_Max; nbRound++) {
+    while (nbRound <= Nb_Round_Max) {
+        size_t p1_t = 0, p2_t = 0;
+
         printf("Round %i\n", nbRound);
         answer_struct buffer_answer1, buffer_answer2;
+        init_answer(&buffer_answer1);
+        init_answer(&buffer_answer2);
 
         printf("Reading response from clients\n");
-        read(p1.socket, &buffer_answer1, BUFFERSIZE);
-        read(p2.socket, &buffer_answer2, BUFFERSIZE);
+        p1_t = recv(p1.socket, &buffer_answer1, BUFFERSIZE, 0);
+        p2_t = recv(p2.socket, &buffer_answer2, BUFFERSIZE, 0);
 
         printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p1.id,
                buffer_answer1.choice, buffer_answer1.time);
@@ -177,8 +185,8 @@ void *thread_party(void *ptr) {
         p2Result = buffer_answer2.choice;
         p2Time = buffer_answer2.time;
 
-        round round;
-        init_round(&round, p1Result, p1Time, p2Result, p2Time);
+        round round_struct;
+        init_round(&round_struct, p1Result, p1Time, p2Result, p2Time);
 
         sleep(5);
 
@@ -186,11 +194,19 @@ void *thread_party(void *ptr) {
         //win round
 
         printf("Send round result to client...\n");
-        sprintf(buffer_out, "round %d,P1: %d, P2: %d ", nbRound, p1Result, p2Result);
-        write(p1.socket, buffer_out, strlen(buffer_out));
-        write(p2.socket, buffer_out, strlen(buffer_out));
+
+        // TODO : Send round result to client SET status to finished
+        write(p1.socket, (void *)round_struct, sizeof(round));
+        write(p2.socket, (void *)round_struct, sizeof(round));
         printf("Round result sent\n");
+        //pthread_mutex_lock(&mutex);
+        //pthread_mutex_unlock(&mutex);
+
+        if (p1_t > 0 || p2_t > 0) {
+            nbRound += 1;
+        }
     }
+    printf("BLABLA\n");
 
     //Fin de partie
     if (nbRound == Nb_Round_Max) {

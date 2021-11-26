@@ -8,3 +8,5 @@
  * 
  */
 void writefile();
+
+//void addData(int partie, int round, int ChoixJ1, int ChoixJ2, T);

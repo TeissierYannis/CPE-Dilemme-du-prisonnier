@@ -13,6 +13,7 @@
 #include "../headers/game/core.h"
 #include "../headers/configs/read_rules.h"
 
+
 connection_t *connections[MAXSIMULTANEOUSCLIENTS];
 
 void init_sockets_array() {
@@ -185,4 +186,109 @@ int create_server_socket(char *ip_address, int port) {
     }
 
     return sockfd;
+}
+
+void *thread_party(void *ptr)
+{
+
+    char buffer_in[BUFFERSIZE];
+    char buffer_out[BUFFERSIZE];
+
+    //temp
+    game game; 
+    rules rules;
+    int Nb_Round_Max = rules.nb_round;
+
+    //Player
+    //player p1, player p2
+    //player *p2 = (player *)ptr;
+    player *players[] = (player *)ptr;
+    player p1 = *players[0];
+    player p2 = *players[1];
+
+    //Création de la partie
+    party party;
+    init_party(&game, &party, p1, p2 );
+    sleep(5);
+
+    printf("Send party id to client\n");
+    sprintf(buffer_out, "party %i", party.id);
+    write(p1.connection.sockfd, buffer_out, strlen(buffer_out));
+    write(p2.connection.sockfd, buffer_out, strlen(buffer_out));
+
+    //int round = 1;
+
+    sleep(5);
+
+    printf("Send start to client\n");
+    sprintf(buffer_out, "start");
+    write(p1.connection.sockfd, buffer_out, strlen(buffer_out));
+    write(p2.connection.sockfd, buffer_out, strlen(buffer_out));
+
+    /* p1.status = 1;
+    p2.status = 1; */
+    
+    int p1Result=0;
+    int p2Result=0;
+    int p1Time=0;
+    int p2Time=0;
+
+    int nbRound=0;
+    //Gestion des rounds
+    for(; nbRound <= Nb_Round_Max; nbRound++)
+    {
+        answer_struct buffer_answer1, buffer_answer2;
+        
+        
+        read(p1.connection.sockfd, &buffer_answer1, BUFFERSIZE);
+        read(p2.connection.sockfd, &buffer_answer2, BUFFERSIZE);
+        
+        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p1.connection.index,
+               buffer_answer1.choice, buffer_answer1.time);
+        p1Result = buffer_answer1.choice;
+        p1Time = buffer_answer1.time;
+
+        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p2.connection.index,
+               buffer_answer2.choice, buffer_answer2.time);
+        p2Result = buffer_answer2.choice;
+        p2Time = buffer_answer2.time;
+        
+        
+        round round;
+        init_round(&round, p1Result, p1Time, p2Result, p2Time);
+        
+        sleep(5);
+
+        //TODO : Update wallet
+        //win round
+
+        printf("Send round result to client\n");
+        sprintf(buffer_out, "round %i,P1: %i, P2: %i ", nbRound, p1Result, p2Result);
+        write(p1.connection.sockfd, buffer_out, strlen(buffer_out));
+        write(p2.connection.sockfd, buffer_out, strlen(buffer_out));
+
+        sleep(5);
+
+
+    }
+
+    //Fin de partie
+    if(nbRound == Nb_Round_Max) 
+    {
+        printf("Fin de la partie\n");
+        p1.status = 0;
+        p2.status = 0;
+        int win = 1;
+        //TODO win = winner(j1, j2)
+        sprintf("Le gagnant est %i", win);
+
+        //TODO write results.csv
+        sleep(5);
+    }
+
+    pthread_exit(0);
+    
+
+
+
 }

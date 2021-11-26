@@ -10,6 +10,7 @@
  *
  */
 
+#include "../headers/game/core.h"
 #pragma once
 
 #ifndef SRVCXNMANAGER_H
@@ -17,6 +18,7 @@
 
 #define BUFFERSIZE 2048
 #define MAXSIMULTANEOUSCLIENTS 100
+
 
 typedef struct {
     int sockfd;
@@ -30,6 +32,7 @@ void add(connection_t *connection);
 void del(connection_t *connection);
 void *thread_process(void *ptr);
 int create_server_socket() ;
+void *thread_party(void *ptr);
 
 #endif /* SRVCXNMANAGER_H */
 

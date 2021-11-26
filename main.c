@@ -9,11 +9,6 @@
 #include "headers/srvcxnmanager.h"
 #include "headers/configs/configurator.h"
 #include "headers/configs/read_rules.h"
-<<<<<<< HEAD
-
-int main(int argc, char **argv)
-{
-=======
 #include "headers/game/core.h"
 #include "headers/results/writefile.h"
 

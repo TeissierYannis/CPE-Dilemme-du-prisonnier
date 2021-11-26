@@ -7,6 +7,8 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
+#include "../srvcxnmanager.h"
+
 typedef struct
 {
     int nb_round;
@@ -26,6 +28,7 @@ typedef struct {
     int status;
     int wallet;
     char * ip;
+    connection_t connection;
 } player;
 
 typedef struct {

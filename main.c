@@ -19,6 +19,12 @@ GtkWidget *score1;
 GtkWidget *score2;
 GtkBuilder *builder;
 
+void on_trahison_clicked(GtkButton *b)
+{
+    char *numeroRound = "oui";
+    gtk_label_set_text(GTK_LABEL(rounde), numeroRound);
+}
+
 int main(int argc, char **argv)
 {
     gtk_init(&argc, &argv); // init Gtk
@@ -34,25 +40,14 @@ int main(int argc, char **argv)
     titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
     score1 = GTK_WIDGET(gtk_builder_get_object(builder, "score1"));
     score2 = GTK_WIDGET(gtk_builder_get_object(builder, "score2"));
+    g_signal_connect(G_OBJECT(trahison), "clicked", G_CALLBACK(on_trahison_clicked), NULL);
 
     gtk_widget_show(window);
     gtk_main();
     return (EXIT_SUCCESS);
 }
 
-void on_trahison_clicked(GtkButton *b)
-{
-    int point = 1;
-    int nbround = 10;
-    char str_count[30] = {0};
-    for(int i = 0 ; i<nbround; i++){
-        point =+ i;
-    }
 
-    sprintf(str_count, "%d", point);
-
-    gtk_label_set_text(GTK_LABEL(rounde), str_count);
-}
 
 void on_collaboration_clicked() {}
 

@@ -7,10 +7,25 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
+typedef struct 
+{
+    int nb_round;
+    int default_wallet;
+    int trahison_win;
+    int trahison_loose;
+    int collab_win;
+    int collab_loose;
+    int trahison_collab_win;
+    int trahison_collab_loose;
+
+} rules;
+
+
 typedef struct {
     int id;
     int status;
     int wallet;
+    int ip;
 } player;
 
 typedef struct {
@@ -34,12 +49,14 @@ typedef struct {
     int parties_count;
 } game;
 
+
+
 /**
  * Initialize game struct
  * set players_count to 0
  * set parties_count to 0
  */
-void init_game();
+void init_game(game *game);
 
 /**
  * Initialize player struct
@@ -50,7 +67,7 @@ void init_game();
  * @param p structure player
  * @param ip ip of the client
  */
-void init_player(player * player, char * ip);
+void init_player(game *game, player *player, char * ip);
 
 /**
  * Initialize party struct

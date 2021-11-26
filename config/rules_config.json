@@ -1,25 +1,13 @@
 {
-    "ip_address": "127.0.0.1",
-    "port": "3000",
     "nb_round": "3",
-    "penalties": 
-    {
-        "2_betrayals":
-        {
-            "win": "-5",
-            "loose": "-5"
-        },
-        "2_collab":
-        {
-            "win": "-0.5",
-            "loose": "-0.5"
-        },
-        "betrayals_collab":
-        {
-            "win": "0",
-            "loose": "-10"
-        }
-        
-    }
+    "default_wallet": "0",
+
+    "trahison_win": "-5",
+    "trahison_loose": "-5",
+
+    "collab_win": "-1",
+    "collab_loose": "-1",
     
+    "trahison_collab_win": "0",
+    "trahison_collab_loose": "-10"    
 }

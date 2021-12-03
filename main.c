@@ -15,6 +15,7 @@ GtkWidget *fixed1;
 GtkWidget *trahison;
 GtkWidget *collaboration;
 GtkWidget *quitter;
+GtkWidget *choix_adversaire;
 GtkWidget *rounde;
 GtkWidget *titre;
 GtkWidget *score1;
@@ -23,16 +24,17 @@ GtkBuilder *builder;
 
 void afficher_result();
 void create_link();
-Bool are_equals(const char*,char*);
-void on_clicked_choice();
+Bool are_equals(const char *, char *);
+void on_clicked_choice(GtkButton *);
 void afficher_score();
 void afficher_round();
 void on_quitter_clicked();
-
+void afficher_choix_adversaire();
 
 void create_link()
 {
-    lien.choix = -1;
+    lien.choix_j1 = -1;
+    lien.choix_j2 = 0;
     lien.score_j1 = 0;
     lien.score_j2 = 0;
     lien.nb_round = 0;
@@ -52,6 +54,7 @@ int main(int argc, char **argv)
     trahison = GTK_WIDGET(gtk_builder_get_object(builder, "trahison"));
     collaboration = GTK_WIDGET(gtk_builder_get_object(builder, "collaboration"));
     quitter = GTK_WIDGET(gtk_builder_get_object(builder, "quitter"));
+    choix_adversaire = GTK_WIDGET(gtk_builder_get_object(builder, "choix_adversaire"));
     rounde = GTK_WIDGET(gtk_builder_get_object(builder, "rounde"));
     titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
     score1 = GTK_WIDGET(gtk_builder_get_object(builder, "score1"));
@@ -79,53 +82,84 @@ Bool are_equals(const char *message, char *nom)
 void on_clicked_choice(GtkButton *b)
 {
     const char *message = gtk_button_get_label(b);
-    //gtk_label_set_text(GTK_LABEL(rounde), message);
     if (are_equals(message, "Trahison"))
     {
-        lien.choix = 0;
+        lien.choix_j1 = 0;
         lien.is_choice_ok = true;
         afficher_result();
-        //gtk_label_set_text(GTK_LABEL(rounde), "0");
     }
     else if (are_equals(message, "Collaboration"))
     {
-        lien.choix = 1;
+        lien.choix_j1 = 1;
         lien.is_choice_ok = true;
         afficher_result();
-        //gtk_label_set_text(GTK_LABEL(rounde), "1");
     }
+}
+
+void afficher_choix_adversaire()
+{
+    char* my_choice;
+    char *ad_choice;
+    char message[100];
+    
+    // Choix adversaire
+    if (lien.choix_j2 == 0)
+    {
+        ad_choice = "trahi";
+      //  strcpy(ad_choice, "trahi"); // Meme chose que ad_choice = "trahi"
+    }
+    else if (lien.choix_j2 == 1)
+    {
+        ad_choice = "collaborés";
+        //(ad_choice, "collaboré"); // Meme chose que ad_choice = "collaboré"
+    }
+
+    // Mon choix
+    if (lien.choix_j1 == 0)
+    {
+            my_choice = "trahi";
+    //    strcpy(my_choice, "trahi"); // Meme chose que ad_choice = "trahi"
+    }
+    else if (lien.choix_j1 == 1)
+    {
+            my_choice = "collaboré";
+      //  strcpy(my_choice, "collaboré"); // Meme chose que ad_choice = "collaboré"
+    }
+    
+    // Phrase a afficher
+    sprintf(message, "Vous avez %s et l'adevrse vous a %s",my_choice, ad_choice);
+    // Affichage
+    gtk_label_set_text(GTK_LABEL(choix_adversaire), message);
 }
 
 void afficher_score()
 {
-    char score_j1[100] ;
+    char score_j1[100];
     char score_j2[100];
-    sprintf(score_j1, "%d",lien.score_j1);
-    sprintf(score_j2, "%d",lien.score_j2);
-   // char j1 = lien.score_j1 + '0';
-   // char j2 = lien.score_j2 + '0';
-  //  strncat(score_j1, &j1, 1);
-  //  strncat(score_j2, &j2, 1);
+    sprintf(score_j1, "%d", lien.score_j1);
+    sprintf(score_j2, "%d", lien.score_j2);
     gtk_label_set_text(GTK_LABEL(score1), score_j1);
     gtk_label_set_text(GTK_LABEL(score2), score_j2);
 }
 
-void afficher_round(){
+void afficher_round()
+{
     char nb_round[10];
 
-    
-    sprintf(nb_round, "%d",lien.nb_round);
+    sprintf(nb_round, "%d", lien.nb_round);
 
     gtk_label_set_text(GTK_LABEL(rounde), nb_round);
 }
 
-void afficher_result(){
+void afficher_result()
+{
     while (lien.is_answer_ok != true)
     {
         sleep(1);
     }
     afficher_round();
     afficher_score();
+    afficher_choix_adversaire();
 }
 
 void on_quitter_clicked()

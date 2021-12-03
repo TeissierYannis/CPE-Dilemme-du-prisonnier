@@ -17,7 +17,8 @@
 
 // Contient les informations d'un Joueur
 typedef struct{
-    int choix;
+    int choix_j1;
+    int choix_j2;
     int score_j1;
     int score_j2;
     int nb_round;

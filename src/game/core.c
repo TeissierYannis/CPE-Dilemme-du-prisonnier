@@ -73,12 +73,13 @@ void init_party(party *party0, player player1, player player2) {
  * @param p2_result (0 or 1)
  * @param p2_decision_time time of p2 decision (timestamp)
  */
-void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time) {
+void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time, char * status, int round_count) {
     round->p1_result = p1_result;
     round->p2_result = p2_result;
     round->p1_decision_time = p1_decision_time;
     round->p2_decision_time = p2_decision_time;
-    round = malloc(sizeof(round) * 20);
+    round->status = status;
+    round->round_number = round_count;
 }
 
 /**

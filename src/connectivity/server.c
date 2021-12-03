@@ -149,7 +149,9 @@ void *thread_party(void *ptr) {
     sleep(5);
 
     printf("Send start to client\n");
-    sprintf(buffer_out, "start");
+    char * status = "start";
+
+    sprintf(buffer_out, "%s", status);
     write(p1.socket, buffer_out, strlen(buffer_out));
     write(p2.socket, buffer_out, strlen(buffer_out));
 
@@ -185,8 +187,12 @@ void *thread_party(void *ptr) {
         p2Result = buffer_answer2.choice;
         p2Time = buffer_answer2.time;
 
+        if (nbRound == Nb_Round_Max) {
+            status = "finished";
+        }
+
         round round_struct;
-        init_round(&round_struct, p1Result, p1Time, p2Result, p2Time);
+        init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound);
 
         sleep(5);
 
@@ -196,8 +202,8 @@ void *thread_party(void *ptr) {
         printf("Send round result to client...\n");
 
         // TODO : Send round result to client SET status to finished
-        write(p1.socket, (void *)round_struct, sizeof(round));
-        write(p2.socket, (void *)round_struct, sizeof(round));
+        write(p1.socket, &round_struct, sizeof(round));
+        write(p2.socket, &round_struct, sizeof(round) + sizeof(char) * 20);
         printf("Round result sent\n");
         //pthread_mutex_lock(&mutex);
         //pthread_mutex_unlock(&mutex);

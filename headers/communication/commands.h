@@ -10,8 +10,8 @@
 typedef void (*command_function)(char *);
 
 typedef struct {
+    int party_id;
     int player_id;
-    //int party_id;
     int choice;
     int time;
 } answer_struct;

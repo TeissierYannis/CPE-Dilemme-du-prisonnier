@@ -19,8 +19,13 @@
 #include <arpa/inet.h>
 #include <string.h>
 
+// Le lien entre GUI et sockets Client
+//#include "lien.h"
+
 #ifndef CLIENT_H
 #define CLIENT_H
+
+
 
 // Contient les informations d'un Joueur
 typedef struct{
@@ -50,7 +55,7 @@ typedef struct {
     int j2_result;
     // Numero du round
     int round_number;
-    char status[20];
+    char status[2048];
 } Round;
 
 // Récapitule la partie
@@ -60,6 +65,15 @@ typedef struct {
     Answer list_answer_J2[10];
 } Recap;
 
+// Contient les informations d'un Joueur
+typedef struct{
+    int socket;
+    Joueur player;
+} ClientParameter;
+
+
+// Programme principal du client
+void startGame(void *param);
 // Se connecte au serveur et retourne la socket client
 int client_connexion();
 // Envoyer des données au serveur

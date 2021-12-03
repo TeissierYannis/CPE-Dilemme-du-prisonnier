@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "../headers/client.h"
+#include "../headers/lien.h"
 
 // Créer une socket
 int create_socket(){
@@ -188,6 +189,13 @@ Round get_round(int socketClient){
 	printf("Reception round du serveur...\n");
 	// Recevoir des données du serveur et les stock dans le round
 	recevoir = recv(socketClient, &round, sizeof(round), 0);
+	
+	// On met à jour les infos a transmettre au GUI
+	lien.score = round.j1_result;
+	lien.is_choice_ok = false;
+	lien.choix = -1;
+	lien.is_answer_ok = true;
+
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
 		printf("Erreur reception round\n");
@@ -200,14 +208,14 @@ Round get_round(int socketClient){
 
 // Permet de jouer en communicant avec le serveur (envoie du choix + reception resultat)
 void jouer(int socket, Game game){
-
+	printf("on joue !\n");
 	// Contient les informations d'un round de départ
     Round round = create_round(socket);
-
+	printf("Debut du round : %s", round.status);
     // TODO : Afficher le round depuis la com serv ??
 
 	// Tant que le nombre de round n'est pas terminé on continue
-	while(!game_end(round)){
+	while(game_end(round) != true){
 		//printf("game end = %s\n", game_end(round) ? "true" : "false");
 		// Envoyer le choix du joueur au serveur
     	send_answer(socket, game);
@@ -225,6 +233,7 @@ bool game_end(Round round){
 	char *finish = "finished";
 
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
+//	if(strcmp(round.status, finish) == 0){
 	if(are_equal(round.status, finish)){
 		result = true;
 		printf("Fin de partie ! \n");
@@ -308,9 +317,27 @@ void send_player_status(int socketClient, Joueur player){
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
 // Recuperer le numero du carre cliqué
 int get_clique(){
-	int clique = 1;
+	int clique = -1;
     printf("Entrez la réponse : \n");
-    scanf("%d", &clique);
+    //scanf("%d", &clique);
+	while(lien.is_choice_ok != true){
+		sleep(1);
+	}
+	clique = lien.choix;
+	printf("Reponse choisie = %d\n", clique);
+	//sleep(2);
+//	printf("lien choix : %d\n", lien.is_choice_ok);
+	// On patiente tant que le joueur n'a pas joué
+	/*while(lien.is_choice_ok != true){
+		sleep(1);
+		printf("On patiente ...\n");
+	}*/
+	// Récupérer le choix du joueur
+//	clique = lien.choix;
+	//clique = 5;
+	printf("Fin de la patience choix = %d\n", clique);
+
+	// Afficher le message
 	return clique;
 }
 
@@ -324,10 +351,10 @@ int get_time_clique(){
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
 // Recuperer le choix si le joueur relance ou pas une partie
 bool continue_game(){
-	int choice;
+	int choice = 0;
 	bool result = false;
 	printf("Voulez vous jouer une nouvelle partie ? [No->0 and Yes->1]\n");
-	scanf("%d", choice);
+	//scanf("%d", choice);
 	// Si le joueur indique qu'il souhaite faire une nouvelle partie
 	if(choice == 1){
 		result = true;
@@ -346,21 +373,26 @@ bool is_id_valide(int id){
 
 // Récupérer le status de départ du round
 char *get_round_status(int socketClient){
-	char *status_round;
+	char *status;
+	char status_round[2048];
 	int recevoir;
 	// Recevoir le status du round
 	recevoir = recv(socketClient, status_round, sizeof(status_round), 0);
+	printf("round récup = %s\n", status_round);
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
 		printf("Erreur reception status round...\n");
 		exit(EXIT_FAILURE);
 	} 
-	return status_round;
+	strcpy(status, status_round);
+	printf("round récupéré status : %s\n", status);
+	return status;
 
 }
 
 // Créer le round de depart
 Round create_round(int socketClient){
+	printf("Création du round...\n");
 	Round round;
 	char *round_status;
 	char *start = "start";
@@ -370,11 +402,11 @@ Round create_round(int socketClient){
 		round_status = get_round_status(socketClient);
 	}while(!are_equal(round_status, start));
 	
-	// Status de départ
-	strcpy(round.status, start);
 	// Score de départ
 	round.j1_result = 0;
 	round.j2_result = 0;
+	// Status de départ
+	strcpy(round.status, start);
 	round.round_number = 1;
 
 	return round;
@@ -384,7 +416,7 @@ Round create_round(int socketClient){
 // Afficher le résultat du round
 void show_round_result(Round round){
 	// Affichage infos du round
-    printf("======= Resultat du round ===========\n");
+    printf("\n======= Resultat du round ===========\n");
     printf("Round N°%d\n", round.round_number);
     printf("Result J1 : %d\n", round.j1_result);
     printf("Result J2 : %d\n", round.j2_result);
@@ -416,4 +448,38 @@ bool are_equal(char *key, char *name){
 		result = true;
 	}
 	return result;
+}
+
+
+// Programme principal du client
+void startGame(void *param){
+	printf("Thread client en cours !\n");
+    // Lire les parametres récupérés via le thread
+    ClientParameter *client;
+    int socket;
+    Joueur player;
+    // Contient les informations de la partie
+    Game game;
+    // Lire les parametres du client
+    client = (ClientParameter *)param;
+    socket = client->socket;
+    player = client->player;
+
+    // Contenue du jeu
+    // Continuer à jouer ou quitter ?
+    // Tant que le client veut continuer à jouer on informe le serveur
+    do{
+        // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
+        game = create_game(socket, player);
+		printf("Partie créée ! \n");
+        // Jouer a la partie
+        jouer(socket, game);
+        // Recapituler la partie
+        game_recap(socket);
+    }while(restart_game(socket, player)); // Tant que le joueur veut faire une nouvelle partie
+
+
+    // Fermer le client lorsqu'il ne joue plus
+    client_fermer(&socket, player);
+    free(client);
 }

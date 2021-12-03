@@ -149,11 +149,12 @@ void *thread_party(void *ptr) {
     sleep(5);
 
     printf("Send start to client\n");
-    char * status = "start";
+    int status = 0;
 
-    sprintf(buffer_out, "%s", status);
-    write(p1.socket, buffer_out, strlen(buffer_out));
-    write(p2.socket, buffer_out, strlen(buffer_out));
+    sprintf(buffer_out, "status %d", status);
+
+    write(p1.socket, buffer_out, strlen(buffer_out) + 1);
+    write(p2.socket, buffer_out, strlen(buffer_out) + 1);
 
     /* p1.status = 1;
     p2.status = 1; */
@@ -174,58 +175,60 @@ void *thread_party(void *ptr) {
         init_answer(&buffer_answer2);
 
         printf("Reading response from clients\n");
-        p1_t = recv(p1.socket, &buffer_answer1, BUFFERSIZE, 0);
-        p2_t = recv(p2.socket, &buffer_answer2, BUFFERSIZE, 0);
-
-        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p1.id,
-               buffer_answer1.choice, buffer_answer1.time);
-        p1Result = buffer_answer1.choice;
-        p1Time = buffer_answer1.time;
-
-        printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p2.id,
-               buffer_answer2.choice, buffer_answer2.time);
-        p2Result = buffer_answer2.choice;
-        p2Time = buffer_answer2.time;
-
-        if (nbRound == Nb_Round_Max) {
-            status = "finished";
+        while (p1_t <= 0 || p2_t <= 0) {
+            p1_t = read(p1.socket, &buffer_answer1, BUFFERSIZE);
+            p2_t = read(p2.socket, &buffer_answer2, BUFFERSIZE);
         }
 
-        round round_struct;
-        init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound);
-
-        sleep(5);
-
-        //TODO : Update wallet
-        //win round
-
-        printf("Send round result to client...\n");
-
-        // TODO : Send round result to client SET status to finished
-        write(p1.socket, &round_struct, sizeof(round));
-        write(p2.socket, &round_struct, sizeof(round) + sizeof(char) * 20);
-        printf("Round result sent\n");
-        //pthread_mutex_lock(&mutex);
-        //pthread_mutex_unlock(&mutex);
-
         if (p1_t > 0 || p2_t > 0) {
+
+            printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p1.id,
+                   buffer_answer1.choice, buffer_answer1.time);
+            p1Result = buffer_answer1.choice;
+            p1Time = buffer_answer1.time;
+
+            printf("[SERVER] Received answer from #%i: \n Answer : %i\n Time : %i\n", p2.id,
+                   buffer_answer2.choice, buffer_answer2.time);
+            p2Result = buffer_answer2.choice;
+            p2Time = buffer_answer2.time;
+
+            if (nbRound == Nb_Round_Max) {
+                status = 1;
+            }
+
+            round round_struct;
+            init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound);
+
+            sleep(5);
+
+            //TODO : Update wallet
+            //win round
+
+            printf("Send round result to client...\n");
+
+            // TODO : Send round result to client SET status to finished
+            write(p1.socket, &round_struct, sizeof(round));
+            write(p2.socket, &round_struct, sizeof(round));
+            printf("Round result sent\n");
+            //pthread_mutex_lock(&mutex);
+            //pthread_mutex_unlock(&mutex);
+
             nbRound += 1;
         }
     }
     printf("BLABLA\n");
 
-    //Fin de partie
-    if (nbRound == Nb_Round_Max) {
-        printf("Fin de la partie\n");
-        p1.status = 0;
-        p2.status = 0;
-        int win = 1;
-        //TODO win = winner(j1, j2)
-        sprintf("Le gagnant est %i", win);
+    // TODO : Send end to client the recap
 
-        //TODO write results.csv
-        sleep(5);
-    }
+    //Fin de partie
+    printf("Fin de la partie\n");
+    int win = 1;
+    //TODO win = winner(j1, j2)
+    sprintf("Le gagnant est %i", win);
+
+    //TODO write results.csv
+    sleep(5);
+
 
     pthread_exit(0);
 }

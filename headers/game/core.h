@@ -33,7 +33,7 @@ typedef struct {
     int p2_result;
     int p2_decision_time;
     int round_number;
-    char * status;
+    int status;
 } round;
 
 typedef struct {
@@ -92,7 +92,7 @@ void init_party(party * party0, player player1, player player2);
  * @param p2_result (0 or 1)
  * @param p2_decision_time time of p2 decision (timestamp)
  */
-void init_round(round * round, int p1_result, int p1_decision_time, int p2_result,  int p2_decision_time, char * status, int round_number);
+void init_round(round * round, int p1_result, int p1_decision_time, int p2_result,  int p2_decision_time, int status, int round_number);
 
 /**
  * Add round to party

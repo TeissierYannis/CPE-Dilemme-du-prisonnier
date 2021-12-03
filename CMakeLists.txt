@@ -13,6 +13,6 @@ include_directories(${GTK3_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -rdynamic")
 add_definitions(${GTK3_CFLAGS_OTHER})
-add_executable(${CMAKE_PROJECT_NAME} main.c src/test.c headers/test.h)
+add_executable(${CMAKE_PROJECT_NAME} main.c src/lien.c headers/lien.h)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GTK3_LIBRARIES})

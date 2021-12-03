@@ -41,7 +41,7 @@ int client_connexion(){
 
 	// IP et Port du serveur
 	char *adresse_serv = "127.0.0.1";
-	int port_serveur = 3000;
+	int port_serveur = 30000;
 
 	// stockaddr_in correspond à une adresse internet (IP et un port)
 	struct sockaddr_in addrClient = create_serv_adrr(adresse_serv, port_serveur);
@@ -138,7 +138,7 @@ Game create_game(int socketClient, Joueur player){
 
 // Recupérer le choix du joueur (trahier ->0 ou colaborer -> 1 ?)
 Answer get_answer(Game game){
-	int time_clique;
+	int time_clique; // TODO TIMER
 	Answer answer;
 	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie 
 	// + le choix du joueur + son temps de reponse
@@ -184,12 +184,13 @@ void send_answer(int socketClient, Game game){
 // Recuperer les informations du round (resultats J1 et J2 + n° du round)
 Round get_round(int socketClient){
 	Round round;
-	int recevoir;
+
+	int receive;
 	printf("Reception round du serveur...\n");
 	// Recevoir des données du serveur et les stock dans le round
-	recevoir = recv(socketClient, &round, sizeof(round), 0);
+	receive = read(socketClient, &round, sizeof(round));
 	// Retourne -1 en cas d'erreur
-	if(recevoir == -1){
+	if(receive == -1){
 		printf("Erreur reception round\n");
 		exit(EXIT_FAILURE);
 	} 
@@ -222,10 +223,9 @@ void jouer(int socket, Game game){
 // Indique si la partie est fini ou continue
 bool game_end(Round round){
 	bool result = false;
-	char *finish = "finished";
 
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
-	if(are_equal(round.status, finish)){
+	if(round.status == 1){
 		result = true;
 		printf("Fin de partie ! \n");
 	}
@@ -345,36 +345,36 @@ bool is_id_valide(int id){
 }
 
 // Récupérer le status de départ du round
-char *get_round_status(int socketClient){
-	char *status_round;
-	int recevoir;
+int get_round_status(int socketClient){
+	int status_round = -1;
+	int receive;
 	// Recevoir le status du round
-	recevoir = recv(socketClient, status_round, sizeof(status_round), 0);
+	receive = read(socketClient, &status_round, sizeof(status_round));
 	// Retourne -1 en cas d'erreur
-	if(recevoir == -1){
+	if(receive == -1){
 		printf("Erreur reception status round...\n");
 		exit(EXIT_FAILURE);
 	} 
 	return status_round;
-
 }
 
 // Créer le round de depart
 Round create_round(int socketClient){
 	Round round;
-	char *round_status;
-	char *start = "start";
+	int round_status;
     // TODO ATTENDRE LE DEBUT DU ROUND
 	// Tant que le round n'a pas commencé on attend
-	do{
+    do{
 		round_status = get_round_status(socketClient);
-	}while(!are_equal(round_status, start));
-	
-	// Status de départ
-	strcpy(round.status, start);
+	}while(round.status != 0);
+
+    round.status = round_status;
+
 	// Score de départ
-	round.j1_result = 0;
-	round.j2_result = 0;
+	round.p1_result = 0;
+    round.p1_decision_time = 0;
+	round.p2_result = 0;
+    round.p2_decision_time = 0;
 	round.round_number = 1;
 
 	return round;
@@ -386,14 +386,14 @@ void show_round_result(Round round){
 	// Affichage infos du round
     printf("======= Resultat du round ===========\n");
     printf("Round N°%d\n", round.round_number);
-    printf("Result J1 : %d\n", round.j1_result);
-    printf("Result J2 : %d\n", round.j2_result);
-    printf("Status : %s\n", round.status);
+    printf("Result J1 : %d\n", round.p1_result);
+    printf("Result J2 : %d\n", round.p2_result);
+    printf("Status : %d\n", round.status);
     printf("==================\n\n");
 }
 
 // On ferme le client
-void client_fermer(int * socketClient, Joueur player){
+void client_fermer(const int * socketClient, Joueur player){
 	int fermeture;
 	// Fermeture de la socket client
 	fermeture = close(*socketClient);

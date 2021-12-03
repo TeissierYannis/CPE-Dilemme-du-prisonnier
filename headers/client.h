@@ -46,11 +46,13 @@ typedef struct {
 // Contient les informations du round
 typedef struct {
     // Resultat de chaque joueur
-    int j1_result;
-    int j2_result;
-    // Numero du round
+    int p2_result;
+    int p2_decision_time;
+    int p1_result;
+    int p1_decision_time;
+    // Numero du round TODO Décision time ?
     int round_number;
-    char status[20];
+    int status; // 0 ok 1 finished
 } Round;
 
 // Récapitule la partie
@@ -65,7 +67,7 @@ int client_connexion();
 // Envoyer des données au serveur
 void send_answer(int socketClient, Game game);
 // On ferme le client
-void client_fermer(int * socketClient, Joueur player);
+void client_fermer(const int * socketClient, Joueur player);
 // Deconnecter le joueur
 void disconnect_player(int socketClient, Joueur player);
 // Creer une socket client
@@ -100,7 +102,7 @@ void send_player_status(int socketClient, Joueur player);
 struct sockaddr_in create_serv_adrr();
 
 // Récupérer le status de départ du round
-char *get_round_status(int socketClient);
+int get_round_status(int socketClient);
 // Créer le round de depart
 Round create_round(int socketClient);
 // Afficher le résultat du round

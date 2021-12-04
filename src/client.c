@@ -113,7 +113,7 @@ Joueur create_player(int socketClient){
 Game create_game(int socketClient, Joueur player){
 	Game game;
 	int id;
-	char *type_id;
+	char * type_id;
 	// Récupérer l'identifiant de la partie
 	type_id = "party";
 	id = client_recevoir_id(socketClient, type_id);
@@ -157,7 +157,7 @@ Answer get_answer(Game game){
 // Envoyer des données (reponses du joueur) au serveur 
 void send_answer(int socketClient, Game game){
 	Answer answer;
-	int envoie;
+	int envoie = -2;
 
 	// Recuperer la reponse du joueur
 	answer = get_answer(game);
@@ -172,7 +172,7 @@ void send_answer(int socketClient, Game game){
 
 	printf("Envoie de donnees au serveur...\n");
 	// On envoie la reponse du joueur
-	envoie = send(socketClient, &answer, sizeof(answer), 0);
+	envoie = write(socketClient, &answer, sizeof(answer));
 
 	// Si envoie echoue
 	if(envoie == -1){
@@ -183,40 +183,60 @@ void send_answer(int socketClient, Game game){
 
 // Recuperer les informations du round (resultats J1 et J2 + n° du round)
 Round get_round(int socketClient){
-	Round round;
+	Round round1;
 
-	int receive;
+    // Score de départ
+    round1.p1_result = 0;
+    round1.p1_decision_time = 0;
+    round1.p2_result = 0;
+    round1.p2_decision_time = 0;
+    round1.round_number = 1;
+    round1.status = -1;
+
+    int receive = -2;
+
+    void *buffer = malloc(sizeof(Round));
+
 	printf("Reception round du serveur...\n");
 	// Recevoir des données du serveur et les stock dans le round
-	receive = read(socketClient, &round, sizeof(round));
+	receive = recv(socketClient, buffer, sizeof(Round), 0);
+    memcpy(&round1, buffer, sizeof(Round));
+
+    printf("\n=========== Infos round ===============\n");
+    printf("receive : %d\n", receive);
+
 	// Retourne -1 en cas d'erreur
 	if(receive == -1){
 		printf("Erreur reception round\n");
-		exit(EXIT_FAILURE);
-	} 
+	}
 
-	return round;
+	return round1;
 }
 
 
 // Permet de jouer en communicant avec le serveur (envoie du choix + reception resultat)
 void jouer(int socket, Game game){
 
-	// Contient les informations d'un round de départ
-    Round round = create_round(socket);
+    int round_status;
+    // TODO ATTENDRE LE DEBUT DU ROUND
+    // Tant que le round n'a pas commencé on attend
+    do{
+        round_status = get_round_status(socket);
+    }while(round_status != 0);
 
-    // TODO : Afficher le round depuis la com serv ??
+    Round rnd;
+    do {
+        // TODO : Afficher le round depuis la com serv ??
+        // Tant que le nombre de round n'est pas terminé on continue
+        //printf("game end = %s\n", game_end(round) ? "true" : "false");
+        // Envoyer le choix du joueur au serveur
+        send_answer(socket, game);
+        // Le serveur nous renvois les resultat du round
+        rnd = get_round(socket);
+        // Afficher sur l'interface graphique le resultat du round
+        show_round_result(rnd);
+    } while (!game_end(rnd));
 
-	// Tant que le nombre de round n'est pas terminé on continue
-	while(!game_end(round)){
-		//printf("game end = %s\n", game_end(round) ? "true" : "false");
-		// Envoyer le choix du joueur au serveur
-    	send_answer(socket, game);
-    	// Le serveur nous renvois les resultat du round
-    	round = get_round(socket);
-		// Afficher sur l'interface graphique le resultat du round
-		show_round_result(round);
-	}
 }
 
 
@@ -346,16 +366,20 @@ bool is_id_valide(int id){
 
 // Récupérer le status de départ du round
 int get_round_status(int socketClient){
-	int status_round = -1;
+	char status_round[100];
 	int receive;
 	// Recevoir le status du round
-	receive = read(socketClient, &status_round, sizeof(status_round));
+	receive = recv(socketClient, status_round, sizeof(char) * 100, 0);
 	// Retourne -1 en cas d'erreur
 	if(receive == -1){
 		printf("Erreur reception status round...\n");
 		exit(EXIT_FAILURE);
-	} 
-	return status_round;
+	}
+
+    strtok(status_round, " ");
+    int status = atoi(strtok(NULL, " "));
+
+	return status;
 }
 
 // Créer le round de depart
@@ -366,7 +390,7 @@ Round create_round(int socketClient){
 	// Tant que le round n'a pas commencé on attend
     do{
 		round_status = get_round_status(socketClient);
-	}while(round.status != 0);
+	}while(round_status != 0);
 
     round.status = round_status;
 

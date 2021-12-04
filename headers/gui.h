@@ -33,11 +33,15 @@ typedef struct{
 } GuiParameter;
 
 // Créer l'interface graphique
-void createGui(void* param);
-void on_button_clicked(GtkButton *b);
+void createGui(int argc, char **argv);
 //void createGui(int argc, char **argv);
 // Action lors d'un clic
+
+Bool are_equals(const char*,char*);
+void on_clicked_choice(GtkButton *);
+void afficher_score();
+void afficher_round();
+void result();
 void on_quitter_clicked();
-void test();
 
 #endif

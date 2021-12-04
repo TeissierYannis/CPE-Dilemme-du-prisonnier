@@ -25,18 +25,24 @@ GtkWidget *score1;
 GtkWidget *score2;
 GtkBuilder *builder;*/
 
+void create_link();
 
-
-
+// Creer le lien entre GUI et communication Socket
+void create_link()
+{
+    lien.choix = -1;
+    lien.score_j1 = 0;
+    lien.score_j2 = 0;
+    lien.nb_round = 0;
+    lien.is_answer_ok = false;
+    lien.is_choice_ok = false;
+}
 
 int main(int argc, char **argv)
 {
-    lien.choix = -1;
-    lien.score = -1;
-    lien.is_choice_ok = false;
-    lien.is_answer_ok = false;
+    // Creation du lien entre GUI et communication SOCKET
+    create_link();
 
-   // createGui(argc, argv);
     // Contient les parametres de la communication Client
     ClientParameter *clientParam;
     clientParam = malloc(sizeof(ClientParameter));
@@ -66,22 +72,8 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-   // Lancer le gui sous forme de thread
-    GuiParameter *guiParam;
-    guiParam = malloc(sizeof(GuiParameter));
-    guiParam->argc = argc;
-    guiParam->argv = argv;
-
-    pthread_t threads;
-    int res = 0;
-    res = pthread_create(&threads, NULL, createGui,(void *) guiParam);
-    pthread_join(threads, NULL); // Le programme se fermera lorsque le joueur fermera l'interface
-    printf("Apres thread GUI \n");
-    if (res){
-        printf("ERROR; return code from pthread_create() GUI is %d\n", res);
-        exit(-1);
-    } 
-
+    // Lancer le GUI pour jouer
+    createGui(argc,argv);
  
    return 0;
 }

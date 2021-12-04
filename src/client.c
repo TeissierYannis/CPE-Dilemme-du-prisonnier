@@ -144,7 +144,8 @@ Answer get_answer(Game game){
 	// Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie 
 	// + le choix du joueur + son temps de reponse
 	printf("Recuperation reponse du joueur... \n");
-
+	// Indiquer que la reponse n'a pas encore etait reçue
+	//lien.is_answer_ok = false;
 	// Infos sur le joueur et la partie
 	answer.party_id = game.id;
 	answer.player_id = game.player_id;
@@ -170,7 +171,7 @@ void send_answer(int socketClient, Game game){
 	printf("Game ID : %i\n", answer.party_id);
     printf("Player ID : %i\n", answer.player_id);
     printf("====================\n");
-
+	
 	printf("Envoie de donnees au serveur...\n");
 	// On envoie la reponse du joueur
 	envoie = send(socketClient, &answer, sizeof(answer), 0);
@@ -191,11 +192,15 @@ Round get_round(int socketClient){
 	recevoir = recv(socketClient, &round, sizeof(round), 0);
 	
 	// On met à jour les infos a transmettre au GUI
-	lien.score = round.j1_result;
+	lien.score_j1 = round.j1_result;
+	lien.score_j2 = round.j2_result;
+	lien.nb_round = round.round_number;
 	lien.is_choice_ok = false;
 	lien.choix = -1;
 	lien.is_answer_ok = true;
-
+	
+	printf("Round reçue !\n");
+	printf("Numero = %d\n", round.round_number);
 	// Retourne -1 en cas d'erreur
 	if(recevoir == -1){
 		printf("Erreur reception round\n");
@@ -319,24 +324,15 @@ void send_player_status(int socketClient, Joueur player){
 int get_clique(){
 	int clique = -1;
     printf("Entrez la réponse : \n");
-    //scanf("%d", &clique);
+    // Tant que le joueur n'a pas cliqué on attend
 	while(lien.is_choice_ok != true){
-		sleep(1);
+		sleep(0.3);
 	}
+	// On récupère le choix du joueur
 	clique = lien.choix;
 	printf("Reponse choisie = %d\n", clique);
-	//sleep(2);
-//	printf("lien choix : %d\n", lien.is_choice_ok);
-	// On patiente tant que le joueur n'a pas joué
-	/*while(lien.is_choice_ok != true){
-		sleep(1);
-		printf("On patiente ...\n");
-	}*/
-	// Récupérer le choix du joueur
-//	clique = lien.choix;
-	//clique = 5;
-	printf("Fin de la patience choix = %d\n", clique);
-
+	
+	//printf("Fin de la patience choix = %d\n", clique);
 	// Afficher le message
 	return clique;
 }

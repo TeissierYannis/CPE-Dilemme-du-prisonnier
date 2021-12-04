@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "../headers/gui.h"
 #include "../headers/lien.h"
 
@@ -12,16 +13,20 @@ GtkWidget *score1;
 GtkWidget *score2;
 GtkBuilder *builder;
 
+Bool are_equals(const char *message, char *nom){
 
+    if (strcmp(message, nom) == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 // Créer l'interface graphique
-void createGui(void* param){
-//void createGui(int argc, char **argv){ 
-    // Lire les parametres récupérés via le thread
-    GuiParameter *gui;
-    gui = (GuiParameter *)param;
-    int argc = gui->argc;
-    char **argv = gui->argv;
+void createGui(int argc, char **argv){ 
     gtk_init(&argc, &argv); // init Gtk
     
     builder = gtk_builder_new_from_file("../glade/glade.glade");
@@ -36,58 +41,77 @@ void createGui(void* param){
     titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
     score1 = GTK_WIDGET(gtk_builder_get_object(builder, "score1"));
     score2 = GTK_WIDGET(gtk_builder_get_object(builder, "score2"));
-
+    
     printf("GUI OK\n");
-    gtk_widget_show_all(window);
+    gtk_widget_show(window);
     gtk_main();
-    free(param);
 }
 
-
-void on_button_clicked(GtkButton *b)
+// Lors d'un clic sur bouton
+void on_clicked_choice(GtkButton *b)
 {
-    int choix;
-    char message[50];
-    char *mssgScore = "Votre score :";
-    strcpy(message, mssgScore);
-
-    // Récupérer texte du bouton
-    const char *text = gtk_button_get_label (b);
-
-    // Valeur du message selon bouton cliqué
-    if(strcmp(text, "Trahison") == 0){
-      //  strcpy(message, "Vous avez trahi !");
-        choix = 0;
+    // Récuperer nom du bouton cliqué
+    const char *message = gtk_button_get_label(b);
+    // Si on a cliqué sur Trahison
+    if (are_equals(message, "Trahison"))
+    {
+        // Valeur du choix  = 0
+        lien.choix = 0;
+        lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
+        // Afficher resultat du round
+        afficher_result();
     }
-    else if (strcmp(text, "Collaboration") == 0){
-        // strcpy(message, "Vous avez collaboré !");
-         choix = 1;
+    // Si on a cliqué sur collaboré
+    else if (are_equals(message, "Collaboration"))
+    {
+        // Valeur du choix  = 1
+        lien.choix = 1;
+        lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
+        // Afficher resultat du round
+        afficher_result();
     }
-
-    // On indique que le joueur a fait son choix
-    lien.choix = choix;
-    lien.is_choice_ok = true;
-    printf("Choix OK\n");
-    printf("Gui link = %d \n",lien.choix);
-    
-    // Si le joueur a joué on attent le resultat
-    while(lien.is_answer_ok != true){
-        sleep(1);
-    }
-    
-    char score = lien.score + '0';
-    // Ajouter le score à la fin du message à afficher
-    strncat(message, &score, 1);
-    // strcpy(message, "Vous avez collaboré !");
-    // Afficher le message
-    gtk_label_set_text(GTK_LABEL(rounde), message);
-
-    // Afficher le message
-    //gtk_label_set_text(GTK_LABEL(rounde), message);
 }
 
-void on_collaboration_clicked() {}
+// Afficher informations score des joueurs
+void afficher_score()
+{
+    char score_j1[100] ;
+    char score_j2[100];
+    // Placer entier dans chaine caractere
+    sprintf(score_j1, "%d",lien.score_j1);
+    sprintf(score_j2, "%d",lien.score_j2);
+    // Afficher score des 2 joueurs
+    gtk_label_set_text(GTK_LABEL(score1), score_j1);
+    gtk_label_set_text(GTK_LABEL(score2), score_j2);
+}
 
+// Afficher informations du round
+void afficher_round(){
+    char nb_round[10];
+    // Placer int dans une chaine de caracteres
+    sprintf(nb_round, "%d",lien.nb_round);
+    printf("numero round GUI = %d\n", lien.nb_round);
+    // Mettre le numero du round dans son label
+    gtk_label_set_text(GTK_LABEL(rounde), nb_round);
+}
+
+// Afficher resultat du round
+void afficher_result(){
+    // Tant qu'on a pas les resultats du round on attend
+    while (lien.is_answer_ok != true)
+    {
+        sleep(0.3);
+        printf("Pas de réponse\n");
+    }
+    // Afficher informations round
+    afficher_round();
+    // Afficher informations score
+    afficher_score();
+    // On passe la reponse suivante a faux pour commencer nouveau round
+    lien.is_answer_ok = false;
+}
+
+// Quitter la partie
 void on_quitter_clicked()
 {
     gtk_main_quit();

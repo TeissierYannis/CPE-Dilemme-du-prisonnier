@@ -18,7 +18,9 @@
 // Contient les informations d'un Joueur
 typedef struct{
     int choix;
-    int score;
+    int score_j1;
+    int score_j2;
+    int nb_round;
     bool is_choice_ok;
     bool is_answer_ok;
 } Lien;

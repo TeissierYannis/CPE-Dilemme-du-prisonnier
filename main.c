@@ -14,37 +14,8 @@
 #include "headers/gui.h"
 #include "headers/lien.h"
 
-/*GtkWidget *window;
-GtkWidget *fixed1;
-GtkWidget *trahison;
-GtkWidget *collaboration;
-GtkWidget *quitter;
-GtkWidget *rounde;
-GtkWidget *titre;
-GtkWidget *score1;
-GtkWidget *score2;
-GtkBuilder *builder;*/
 
-void create_link();
-
-// Creer le lien entre GUI et communication Socket
-void create_link(){
-    lien.choix_j1 = -1;
-    lien.choix_j2 = -1;
-    lien.score_j1 = 0;
-    lien.score_j2 = 0;
-    lien.nb_round = 0;
-    lien.is_answer_ok = false;
-    lien.is_choice_ok = false;
-    lien.is_game_end = false;
-    lien.restart_choice = false;
-}
-
-int main(int argc, char **argv)
-{
-    // Creation du lien entre GUI et communication SOCKET
-    create_link();
-
+int main(int argc, char **argv){
     // Contient les parametres de la communication Client
     ClientParameter *clientParam;
     clientParam = malloc(sizeof(ClientParameter));
@@ -62,7 +33,6 @@ int main(int argc, char **argv)
     clientParam->socket = socket;
     clientParam->player = player;
 
-    
     // Lancer la communication client sous forme de thread
     pthread_t threadClient;
     int result = 0;

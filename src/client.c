@@ -115,6 +115,8 @@ Game create_game(int socketClient, Joueur player){
 	Game game;
 	int id;
 	char *type_id;
+	// Creation du lien entre GUI et communication SOCKET
+    create_link();
 	// Récupérer l'identifiant de la partie
 	type_id = "party";
 	id = client_recevoir_id(socketClient, type_id);
@@ -134,6 +136,7 @@ Game create_game(int socketClient, Joueur player){
     printf("Player ID : %d\n", game.player_id);
     printf("==========================\n");
 
+	// A faire creer le lien entre joueur et GUI
 	return game;
 }
 
@@ -243,7 +246,6 @@ bool game_end(Round round){
 	char *finish = "finished";
 
 	// Si on reçoit l'indiquateur de fin de partie (via le serveur)
-//	if(strcmp(round.status, finish) == 0){
 	if(are_equal(round.status, finish)){
 		result = true;
 		lien.is_game_end = true;
@@ -355,11 +357,15 @@ int get_time_clique(){
 bool continue_game(){
 	
 	bool result = false;
-	// A FAIRE PATIENTER JUSQU'A CHOIX RESTART ou QUITTER OK
-	printf("Voulez vous jouer une nouvelle partie ? [No->0 and Yes->1]\n");
+	// Patienter jusqu'a ce que le joueur est choisie de rejouer ou quitter
+	while(lien.is_restart_clicked == false){
+		sleep(0.3);
+	}
+	result = lien.restart_choice;
+	// printf("Voulez vous jouer une nouvelle partie ? [No->0 and Yes->1]\n");
 	//scanf("%d", choice);
 	// Si le joueur indique qu'il souhaite faire une nouvelle partie ou non
-	return lien.restart_choice;
+	return result;
 }
 
 

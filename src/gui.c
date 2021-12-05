@@ -14,6 +14,7 @@ GtkWidget *score2;
 GtkBuilder *builder;
 GtkWidget *choix_adversaire;
 GtkWidget *rejouer;
+GtkWidget *label_rejouer;
 
 Bool are_equals(const char *message, char *nom){
 
@@ -36,16 +37,16 @@ void createGui(int argc, char **argv){
     gtk_builder_connect_signals(builder, NULL);
 
     fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
-    trahison = GTK_WIDGET(gtk_builder_get_object(builder, "trahison"));
-    collaboration = GTK_WIDGET(gtk_builder_get_object(builder, "collaboration"));
+    trahison = GTK_WIDGET(gtk_builder_get_object(builder, "Trahison"));
+    collaboration = GTK_WIDGET(gtk_builder_get_object(builder, "Collaboration"));
     quitter = GTK_WIDGET(gtk_builder_get_object(builder, "quitter"));
     rounde = GTK_WIDGET(gtk_builder_get_object(builder, "rounde"));
     titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
     score1 = GTK_WIDGET(gtk_builder_get_object(builder, "score1"));
     score2 = GTK_WIDGET(gtk_builder_get_object(builder, "score2"));
     choix_adversaire = GTK_WIDGET(gtk_builder_get_object(builder, "choix_adversaire"));
-    rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "rejouer"));
-    
+    rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "Rejouer"));
+    label_rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "labelRejouer"));
     printf("GUI OK\n");
     gtk_widget_show(window);
     gtk_main();
@@ -148,21 +149,47 @@ void afficher_result(){
 
 // On montre le bouton REJOUER quand la partie est finie
 void show_restart_button(){
+    // Si la partie est finie
     if(lien.is_game_end){
+        // On montre le bouton pour rejouer au joueur
         gtk_widget_show(rejouer);
+        gtk_widget_show(label_rejouer);
+        gtk_widget_hide(trahison);
+        gtk_widget_hide(collaboration);
+        gtk_widget_hide(choix_adversaire);
+        gtk_widget_hide(score1);
+        gtk_widget_hide(score2);
     }
 }
 
 // Lors d'un clic sur bouton REJOUER
 void on_restart_click(GtkButton *b){
+    // Indiquer qu'il souhaite rejouer
     lien.restart_choice = true;
+    // Indiquer que le joueur a fait son choix
+    lien.is_restart_clicked = true;
+    // Si le choix est rejouer on raffrait les informations de partie en réinitialisant
+    // Mettre une fonction pour initialiser tout ça automatiquement au depart ?
+    gtk_label_set_text(GTK_LABEL(score1), 0);
+    gtk_label_set_text(GTK_LABEL(score2), 0);
+    gtk_label_set_text(GTK_LABEL(choix_adversaire), "");
+    // On remontre les boutons de jeu et cache les boutons pour rejouer
+    gtk_widget_hide(rejouer);
+    gtk_widget_hide(label_rejouer);
+    gtk_widget_show(trahison);
+    gtk_widget_show(collaboration);
+    gtk_widget_show(choix_adversaire);
+    gtk_widget_show(score1);
+    gtk_widget_show(score2);
+
     printf("RESTART OK ! \n");
 }
 
 
 // Quitter la partie (INDIQUER AU SERVEUR QUE LE JOUEUR EST PARTI)
-void on_quitter_clicked()
-{   
+void on_quitter_clicked(){   
     lien.restart_choice = false;
+    // Indiquer que le joueur a fait son choix
+    lien.is_restart_clicked = true;
     gtk_main_quit();
 }

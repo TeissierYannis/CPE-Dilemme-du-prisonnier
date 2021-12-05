@@ -23,14 +23,18 @@ typedef struct{
     int score_j2;
     int nb_round;
     
-    bool is_choice_ok;
-    bool is_answer_ok;
-    bool is_game_end;
-    bool restart_choice;
+    bool is_choice_ok; // choix du joueur Fait / en Attente
+    bool is_answer_ok; // Resultat du round Reçue / en Attente
+    bool is_game_end; // Partie terminée Oui / Non
+    bool restart_choice; // choix de find de partie Recommencer / Quitter
+    bool is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
 } Lien;
 
+// Lien global entre GUI et Socket contenant les informations sur le jeu
 extern Lien lien;
 
+// Creer le lien entre GUI et communication Socket
+void create_link();
 
 
 #endif

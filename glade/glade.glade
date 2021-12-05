@@ -188,18 +188,34 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="rejouer">
-            <property name="label" translatable="yes">button</property>
-            <property name="name">rejouer</property>
+          <object class="GtkButton" id="Rejouer">
+            <property name="label" translatable="yes">Rejouer</property>
+            <property name="name">Rejouer</property>
             <property name="width-request">100</property>
             <property name="height-request">80</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="margin-right">92</property>
+            <property name="margin-bottom">71</property>
             <signal name="clicked" handler="on_restart_click" swapped="no"/>
           </object>
           <packing>
-            <property name="x">569</property>
-            <property name="y">35</property>
+            <property name="x">293</property>
+            <property name="y">163</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="labelRejouer">
+            <property name="name">labelRejouer</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">La partie est finie ! 
+Souhaitez vous rejouer ?</property>
+          </object>
+          <packing>
+            <property name="x">279</property>
+            <property name="y">73</property>
           </packing>
         </child>
       </object>

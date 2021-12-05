@@ -53,6 +53,8 @@ typedef struct {
     // Resultat de chaque joueur
     int j1_result;
     int j2_result;
+    int j1_choice;
+    int j2_choice;
     // Numero du round
     int round_number;
     char status[2048];

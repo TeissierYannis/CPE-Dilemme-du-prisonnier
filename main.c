@@ -28,14 +28,16 @@ GtkBuilder *builder;*/
 void create_link();
 
 // Creer le lien entre GUI et communication Socket
-void create_link()
-{
-    lien.choix = -1;
+void create_link(){
+    lien.choix_j1 = -1;
+    lien.choix_j2 = -1;
     lien.score_j1 = 0;
     lien.score_j2 = 0;
     lien.nb_round = 0;
     lien.is_answer_ok = false;
     lien.is_choice_ok = false;
+    lien.is_game_end = false;
+    lien.restart_choice = false;
 }
 
 int main(int argc, char **argv)

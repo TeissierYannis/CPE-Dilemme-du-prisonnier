@@ -17,12 +17,16 @@
 
 // Contient les informations d'un Joueur
 typedef struct{
-    int choix;
+    int choix_j1;
+    int choix_j2;
     int score_j1;
     int score_j2;
     int nb_round;
+    
     bool is_choice_ok;
     bool is_answer_ok;
+    bool is_game_end;
+    bool restart_choice;
 } Lien;
 
 extern Lien lien;

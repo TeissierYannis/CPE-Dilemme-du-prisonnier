@@ -12,6 +12,8 @@ GtkWidget *titre;
 GtkWidget *score1;
 GtkWidget *score2;
 GtkBuilder *builder;
+GtkWidget *choix_adversaire;
+GtkWidget *rejouer;
 
 Bool are_equals(const char *message, char *nom){
 
@@ -41,6 +43,8 @@ void createGui(int argc, char **argv){
     titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
     score1 = GTK_WIDGET(gtk_builder_get_object(builder, "score1"));
     score2 = GTK_WIDGET(gtk_builder_get_object(builder, "score2"));
+    choix_adversaire = GTK_WIDGET(gtk_builder_get_object(builder, "choix_adversaire"));
+    rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "rejouer"));
     
     printf("GUI OK\n");
     gtk_widget_show(window);
@@ -56,7 +60,7 @@ void on_clicked_choice(GtkButton *b)
     if (are_equals(message, "Trahison"))
     {
         // Valeur du choix  = 0
-        lien.choix = 0;
+        lien.choix_j1 = 0;
         lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
         // Afficher resultat du round
         afficher_result();
@@ -65,7 +69,7 @@ void on_clicked_choice(GtkButton *b)
     else if (are_equals(message, "Collaboration"))
     {
         // Valeur du choix  = 1
-        lien.choix = 1;
+        lien.choix_j1 = 1;
         lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
         // Afficher resultat du round
         afficher_result();
@@ -95,24 +99,70 @@ void afficher_round(){
     gtk_label_set_text(GTK_LABEL(rounde), nb_round);
 }
 
+void afficher_choix_adversaire(){
+    char* my_choice;
+    char *ad_choice;
+    char message[100];
+    
+    // Choix adversaire
+    if (lien.choix_j2 == 0){
+        ad_choice = "trahi";
+    }
+    else if (lien.choix_j2 == 1){
+        ad_choice = "collaboré";
+    }
+
+    // Mon choix
+    if (lien.choix_j1 == 0){
+            my_choice = "trahi";
+    }
+    else if (lien.choix_j1 == 1){
+            my_choice = "collaboré";
+    }
+    
+    // Phrase a afficher
+    sprintf(message, "Vous avez %s et l'adeversaire a %s",my_choice, ad_choice);
+    // Affichage
+    gtk_label_set_text(GTK_LABEL(choix_adversaire), message);
+}
+
+
 // Afficher resultat du round
 void afficher_result(){
     // Tant qu'on a pas les resultats du round on attend
     while (lien.is_answer_ok != true)
     {
         sleep(0.3);
-        printf("Pas de réponse\n");
     }
     // Afficher informations round
     afficher_round();
     // Afficher informations score
     afficher_score();
+    // Afficher informations sur le choix de l'adversaire
+    afficher_choix_adversaire();
+    // Montrer le bouton pour recommencer une partie
+    show_restart_button();
     // On passe la reponse suivante a faux pour commencer nouveau round
     lien.is_answer_ok = false;
 }
 
-// Quitter la partie
+// On montre le bouton REJOUER quand la partie est finie
+void show_restart_button(){
+    if(lien.is_game_end){
+        gtk_widget_show(rejouer);
+    }
+}
+
+// Lors d'un clic sur bouton REJOUER
+void on_restart_click(GtkButton *b){
+    lien.restart_choice = true;
+    printf("RESTART OK ! \n");
+}
+
+
+// Quitter la partie (INDIQUER AU SERVEUR QUE LE JOUEUR EST PARTI)
 void on_quitter_clicked()
-{
+{   
+    lien.restart_choice = false;
     gtk_main_quit();
 }

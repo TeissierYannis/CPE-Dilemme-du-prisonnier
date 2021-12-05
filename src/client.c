@@ -191,12 +191,17 @@ Round get_round(int socketClient){
 	// Recevoir des données du serveur et les stock dans le round
 	recevoir = recv(socketClient, &round, sizeof(round), 0);
 	
+	// A SEPARER DANS UNE AUTRE FONCTION
 	// On met à jour les infos a transmettre au GUI
+	lien.is_choice_ok = false;
+	// Le score des deux joueurs
 	lien.score_j1 = round.j1_result;
 	lien.score_j2 = round.j2_result;
 	lien.nb_round = round.round_number;
-	lien.is_choice_ok = false;
-	lien.choix = -1;
+	// Le choix des deux joueurs
+	lien.choix_j1 = round.j1_choice;
+	lien.choix_j2 = round.j2_choice;
+	printf("Choix J1 = %d et Choix J2 = %d\n", lien.choix_j1, lien.choix_j2);
 	lien.is_answer_ok = true;
 	
 	printf("Round reçue !\n");
@@ -241,6 +246,7 @@ bool game_end(Round round){
 //	if(strcmp(round.status, finish) == 0){
 	if(are_equal(round.status, finish)){
 		result = true;
+		lien.is_game_end = true;
 		printf("Fin de partie ! \n");
 	}
 	return result;
@@ -329,7 +335,7 @@ int get_clique(){
 		sleep(0.3);
 	}
 	// On récupère le choix du joueur
-	clique = lien.choix;
+	clique = lien.choix_j1;
 	printf("Reponse choisie = %d\n", clique);
 	
 	//printf("Fin de la patience choix = %d\n", clique);
@@ -347,15 +353,13 @@ int get_time_clique(){
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
 // Recuperer le choix si le joueur relance ou pas une partie
 bool continue_game(){
-	int choice = 0;
+	
 	bool result = false;
+	// A FAIRE PATIENTER JUSQU'A CHOIX RESTART ou QUITTER OK
 	printf("Voulez vous jouer une nouvelle partie ? [No->0 and Yes->1]\n");
 	//scanf("%d", choice);
-	// Si le joueur indique qu'il souhaite faire une nouvelle partie
-	if(choice == 1){
-		result = true;
-	}
-	return result;
+	// Si le joueur indique qu'il souhaite faire une nouvelle partie ou non
+	return lien.restart_choice;
 }
 
 
@@ -401,6 +405,9 @@ Round create_round(int socketClient){
 	// Score de départ
 	round.j1_result = 0;
 	round.j2_result = 0;
+	// Choix par défaut des joueurs
+	round.j1_choice = -1;
+	round.j2_choice = -1;
 	// Status de départ
 	strcpy(round.status, start);
 	round.round_number = 1;

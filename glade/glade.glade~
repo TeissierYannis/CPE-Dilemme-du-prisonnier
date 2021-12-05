@@ -81,15 +81,15 @@
             <property name="height-request">50</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Round number : </property>
+            <property name="label" translatable="yes">Round n° : </property>
             <attributes>
               <attribute name="foreground" value="#1a1a5f5fb4b4"/>
               <attribute name="size" value="13000"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">210</property>
-            <property name="y">85</property>
+            <property name="x">-15</property>
+            <property name="y">16</property>
           </packing>
         </child>
         <child>
@@ -103,7 +103,7 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">285</property>
+            <property name="x">300</property>
             <property name="y">260</property>
           </packing>
         </child>
@@ -118,7 +118,7 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">285</property>
+            <property name="x">300</property>
             <property name="y">320</property>
           </packing>
         </child>
@@ -135,8 +135,8 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">367</property>
-            <property name="y">85</property>
+            <property name="x">100</property>
+            <property name="y">16</property>
           </packing>
         </child>
         <child>
@@ -151,7 +151,7 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">225</property>
+            <property name="x">240</property>
             <property name="y">260</property>
           </packing>
         </child>
@@ -167,8 +167,39 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">225</property>
+            <property name="x">240</property>
             <property name="y">320</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="choix_adversaire">
+            <property name="width-request">150</property>
+            <property name="height-request">50</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#2626a2a26969"/>
+              <attribute name="size" value="13000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">130</property>
+            <property name="y">95</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="rejouer">
+            <property name="label" translatable="yes">button</property>
+            <property name="name">rejouer</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <signal name="activate" handler="on_restart_click" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">569</property>
+            <property name="y">35</property>
           </packing>
         </child>
       </object>

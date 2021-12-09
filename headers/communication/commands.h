@@ -2,12 +2,15 @@
 // Created by Yannis Teissier on 13/11/2021.
 //
 
+// TODO REMOVE THIS FILE
+
 #pragma once
 
 #ifndef SERVER_COMMANDS_H
 #define SERVER_COMMANDS_H
 
 typedef void (*command_function)(char *);
+
 
 typedef struct {
     int party_id;
@@ -58,7 +61,6 @@ typedef struct {
  */
 void init_command_list(command_list *list);
 
-void init_answer(answer_struct *answer);
 
 /**
  * Add command to the list

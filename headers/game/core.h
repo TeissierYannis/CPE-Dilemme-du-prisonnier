@@ -7,8 +7,12 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
-typedef struct
-{
+#pragma once
+
+
+#include "../communication/commands.h"
+
+typedef struct {
     int nb_round;
     int default_wallet;
     int trahison_win;
@@ -17,7 +21,6 @@ typedef struct
     int collab_loose;
     int trahison_collab_win;
     int trahison_collab_loose;
-
 } rules;
 
 typedef struct {
@@ -38,17 +41,22 @@ typedef struct {
 
 typedef struct {
     int id;
-    player * player_game;
-    round * round;
+    player *player_game;
+    round round[100];
     int round_count;
 } party;
 
 typedef struct {
-    player * player;
+    player *player;
     int players_count;
-    party * parties;
+    party *parties;
     int parties_count;
 } game;
+
+typedef struct {
+    answer_struct list_answer_J1[10];
+    answer_struct list_answer_J2[10];
+} recap;
 
 rules rules0;
 game game0;
@@ -82,7 +90,7 @@ void init_player(player *player, int socket);
  * @param player1 p1
  * @param player2 p2
  */
-void init_party(party * party0, player player1, player player2);
+void init_party(party *party0, player player1, player player2);
 
 /**
  * Initialize round struct
@@ -92,14 +100,15 @@ void init_party(party * party0, player player1, player player2);
  * @param p2_result (0 or 1)
  * @param p2_decision_time time of p2 decision (timestamp)
  */
-void init_round(round * round, int p1_result, int p1_decision_time, int p2_result,  int p2_decision_time, int status, int round_number);
+void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time, int status,
+                int round_number);
 
 /**
  * Add round to party
  * @param party party to update
  * @param round round to add
  */
-void add_round_to_party(party * party, round round);
+void add_round_to_party(party *party, round * round);
 
 /**
  * Destroy player struct when player is leaving
@@ -107,17 +116,27 @@ void add_round_to_party(party * party, round round);
  * Remove player struct
  * @param player player who is leaving
  */
-void destroy_player(game * game, player * player);
+void destroy_player(game *game, player *player);
 
 /**
  * Destroy party struct when party is finished
  * @param party party to remove
  */
-void destroy_party(party * party);
+void destroy_party(party *party);
 
 /**
  * Destroy game struct when server will be closed
  */
 void destroy_game();
+
+void init_answer(answer_struct *answer);
+
+/**
+ * Generating recapitulation of the party
+ * @brief Generating recapitulation of the party
+ * @param party party to generate recap
+ * @return recap of the party
+ */
+recap generating_recap(party *party);
 
 #endif //SERVER_CORE_H

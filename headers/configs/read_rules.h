@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2021
  * 
  */
+#pragma once
+
 #include "../../headers/game/core.h"
 
 void read_rules(rules * rules);

@@ -2,6 +2,8 @@
 // Created by Yannis Teissier on 12/11/2021.
 //
 
+// TODO REMOVE THIS FILE
+
 #pragma once
 
 #ifndef CLIENT_COMMUNICATION_TRANSLATER_H

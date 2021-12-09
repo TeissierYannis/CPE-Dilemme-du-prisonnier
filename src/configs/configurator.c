@@ -14,17 +14,20 @@ server_config readconfig() {
      // Read config file
     FILE * file_p = fopen("../config/server_config.json", "r");
 
+    // Initialize server config struct
     server_config server_config;
     init_config(&server_config);
 
     // Check if file exists
     if (file_p == NULL) {
-        printf("Error opening configuration file!\n");
+        printf("[CONFIGURATOR] Error opening configuration file!\n");
         exit(1);
     }
 
-    printf("\nReading configuration file...\n\n");
+    // Trace
+    printf("\n[CONFIGURATOR] Reading configuration file...\n\n");
 
+    // Read file
     parse_json("ip_address", server_config.ip, file_p);
     parse_json("port", server_config.port, file_p);
 
@@ -34,7 +37,8 @@ server_config readconfig() {
     printf("\tServer ip: \t\t%s\n", server_config.ip);
     printf("===================================\n\n");
 
-    printf("Configuration file read!\n\n");
+    // Trace
+    printf("[CONFIGURATOR] Configuration file read!\n\n");
 
     // Close file
     fclose(file_p);

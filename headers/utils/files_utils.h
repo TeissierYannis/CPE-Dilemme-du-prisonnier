@@ -5,6 +5,8 @@
 #ifndef SERVER_FILES_UTILS_H
 #define SERVER_FILES_UTILS_H
 
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

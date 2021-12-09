@@ -1,9 +1,10 @@
 //
 // Created by Yannis Teissier on 26/11/2021.
 //
-
 #ifndef SERVER_SERVER_H
 #define SERVER_SERVER_H
+
+#pragma once
 
 #include "../game/core.h"
 

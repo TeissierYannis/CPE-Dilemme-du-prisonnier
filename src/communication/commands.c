@@ -8,6 +8,8 @@
 
 #include "../../headers/communication/commands.h"
 
+// TODO REMOVE THIS FILE
+
 command_list COMMAND_LIST;
 
 /**

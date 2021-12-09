@@ -5,6 +5,7 @@
 #include "../../headers/utils/string_utils.h"
 #include "../../headers/communication/commands.h"
 
+// TODO REMOVE THIS FILE
 /**
  * Interpret incoming messages from the client
  * @param message

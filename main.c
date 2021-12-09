@@ -5,6 +5,7 @@
 
 int main(int argc, char **argv)
 {
+    printf("[MAIN] Initializing client...\n");
     // Contient les informations du joueur
     Joueur player;
     // Sert a la communication
@@ -17,7 +18,7 @@ int main(int argc, char **argv)
 
     // Creation du joueur avec son identifiant
     player = create_player(socket);
-    
+    printf("[MAIN] Player UP\n");
 
      // Continuer à jouer ou quitter ?
     // Tant que le client veut continuer à jouer on informe le serveur

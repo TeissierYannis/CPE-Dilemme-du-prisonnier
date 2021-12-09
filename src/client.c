@@ -50,10 +50,10 @@ int client_connexion(){
 	int connexion;
 	connexion = connect(socketClient, (const struct sockaddr *)& addrClient, sizeof(addrClient));
 	if(connexion == 0){
-		printf("Connexion réussie !\n");
-	}
+        printf("[CONNEXION] Connexion UP\n");
+    }
 	else if (connexion == -1){
-		printf("Erreur connexion client \n");
+		printf("[CONNEXION] Connexion failed \n");
 		exit(EXIT_FAILURE);
 	}	
 	return socketClient;

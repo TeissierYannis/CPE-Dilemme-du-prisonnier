@@ -16,22 +16,19 @@ GtkWidget *choix_adversaire;
 GtkWidget *rejouer;
 GtkWidget *label_rejouer;
 
-Bool are_equals(const char *message, char *nom){
+int are_equals(const char *message, char *nom) {
 
-    if (strcmp(message, nom) == 0)
-    {
+    if (strcmp(message, nom) == 0) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
 // Créer l'interface graphique
-void createGui(int argc, char **argv){ 
+void createGui(int argc, char **argv) {
     gtk_init(&argc, &argv); // init Gtk
-    
+
     builder = gtk_builder_new_from_file("../glade/glade.glade");
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     gtk_builder_connect_signals(builder, NULL);
@@ -53,22 +50,22 @@ void createGui(int argc, char **argv){
 }
 
 // Lors d'un clic sur bouton
-void on_clicked_choice(GtkButton *b)
-{
+void on_clicked_choice(GtkButton *b) {
     // Récuperer nom du bouton cliqué
     const char *message = gtk_button_get_label(b);
+
+    printf("[GUI] choice : %s\n", message);
+
     // Si on a cliqué sur Trahison
-    if (are_equals(message, "Trahison"))
-    {
+    if (are_equals(message, "Trahison")) {
         // Valeur du choix  = 0
         lien.choix_j1 = 0;
         lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
         // Afficher resultat du round
         afficher_result();
     }
-    // Si on a cliqué sur collaboré
-    else if (are_equals(message, "Collaboration"))
-    {
+        // Si on a cliqué sur collaboré
+    else if (are_equals(message, "Collaboration")) {
         // Valeur du choix  = 1
         lien.choix_j1 = 1;
         lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
@@ -78,61 +75,46 @@ void on_clicked_choice(GtkButton *b)
 }
 
 // Afficher informations score des joueurs
-void afficher_score()
-{
-    char score_j1[100] ;
+void afficher_score() {
+    char score_j1[100];
     char score_j2[100];
     // Placer entier dans chaine caractere
-    sprintf(score_j1, "%d",lien.score_j1);
-    sprintf(score_j2, "%d",lien.score_j2);
+    sprintf(score_j1, "%d", lien.score_j1);
+    sprintf(score_j2, "%d", lien.score_j2);
     // Afficher score des 2 joueurs
     gtk_label_set_text(GTK_LABEL(score1), score_j1);
     gtk_label_set_text(GTK_LABEL(score2), score_j2);
 }
 
 // Afficher informations du round
-void afficher_round(){
+void afficher_round() {
     char nb_round[10];
     // Placer int dans une chaine de caracteres
-    sprintf(nb_round, "%d",lien.nb_round);
+    sprintf(nb_round, "%d", lien.nb_round);
     printf("numero round GUI = %d\n", lien.nb_round);
     // Mettre le numero du round dans son label
     gtk_label_set_text(GTK_LABEL(rounde), nb_round);
 }
 
-void afficher_choix_adversaire(){
-    char* my_choice;
-    char *ad_choice;
+void afficher_choix_adversaire() {
+    char *my_choice = malloc(sizeof(char) * 20);
+    char *ad_choice = malloc(sizeof(char) * 20);
     char message[100];
-    
-    // Choix adversaire
-    if (lien.choix_j2 == 0){
-        ad_choice = "trahi";
-    }
-    else if (lien.choix_j2 == 1){
-        ad_choice = "collaboré";
-    }
 
-    // Mon choix
-    if (lien.choix_j1 == 0){
-            my_choice = "trahi";
-    }
-    else if (lien.choix_j1 == 1){
-            my_choice = "collaboré";
-    }
-    
+    memcpy(ad_choice, lien.choix_j2 == 0 ? "trahi" : "collabore", strlen(lien.choix_j2 == 0 ? "trahi" : "collabore"));
+    memcpy(my_choice, lien.choix_j1 == 0 ? "trahi" : "collabore", strlen(lien.choix_j1 == 0 ? "trahi" : "collabore"));
+
     // Phrase a afficher
-    sprintf(message, "Vous avez %s et l'adeversaire a %s",my_choice, ad_choice);
+    sprintf(message, "Vous avez %s et l'adversaire a %s", my_choice, ad_choice);
     // Affichage
     gtk_label_set_text(GTK_LABEL(choix_adversaire), message);
 }
 
 
 // Afficher resultat du round
-void afficher_result(){
+void afficher_result() {
     // Tant qu'on a pas les resultats du round on attend
-    while (lien.is_answer_ok != true)
-    {
+    while (lien.is_answer_ok != true) {
         sleep(0.3);
     }
     // Afficher informations round
@@ -142,15 +124,15 @@ void afficher_result(){
     // Afficher informations sur le choix de l'adversaire
     afficher_choix_adversaire();
     // Montrer le bouton pour recommencer une partie
-    show_restart_button();
+    //show_restart_button();
     // On passe la reponse suivante a faux pour commencer nouveau round
     lien.is_answer_ok = false;
 }
 
 // On montre le bouton REJOUER quand la partie est finie
-void show_restart_button(){
+void show_restart_button() {
     // Si la partie est finie
-    if(lien.is_game_end){
+    if (lien.is_game_end) {
         // On montre le bouton pour rejouer au joueur
         gtk_widget_show(rejouer);
         gtk_widget_show(label_rejouer);
@@ -163,7 +145,7 @@ void show_restart_button(){
 }
 
 // Lors d'un clic sur bouton REJOUER
-void on_restart_click(GtkButton *b){
+void on_restart_click(GtkButton *b) {
     // Indiquer qu'il souhaite rejouer
     lien.restart_choice = true;
     // Indiquer que le joueur a fait son choix
@@ -182,12 +164,13 @@ void on_restart_click(GtkButton *b){
     gtk_widget_show(score1);
     gtk_widget_show(score2);
 
-    printf("RESTART OK ! \n");
+    printf("[GUI] Restart game\n");
 }
 
 
 // Quitter la partie (INDIQUER AU SERVEUR QUE LE JOUEUR EST PARTI)
-void on_quitter_clicked(){   
+void on_quitter_clicked() {
+    printf("[GUI] Leaving GUI\n");
     lien.restart_choice = false;
     // Indiquer que le joueur a fait son choix
     lien.is_restart_clicked = true;

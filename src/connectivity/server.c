@@ -226,8 +226,10 @@ void *thread_party(void *ptr) {
             }
 
             printf("[PARTY #%d] Generating round result\n", party.id);
-            round round_struct;
+            round round_struct, round_party;
             init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound);
+            init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound);
+            add_round_to_party(&party, &round_party);
 
             sleep(5);
 

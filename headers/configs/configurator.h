@@ -2,7 +2,6 @@
 // Created by Yannis Teissier on 12/11/2021.
 //
 
-#pragma once
 
 #ifndef CLIENT_CONFIGURATOR_H
 #define CLIENT_CONFIGURATOR_H

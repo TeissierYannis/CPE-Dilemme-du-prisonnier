@@ -7,7 +7,6 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
-#pragma once
 
 typedef struct {
     int nb_round;

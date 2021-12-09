@@ -1,7 +1,6 @@
 //
 // Created by Yannis Teissier on 13/11/2021.
 //
-#pragma once
 
 #ifndef SERVER_STRING_UTILS_H
 #define SERVER_STRING_UTILS_H

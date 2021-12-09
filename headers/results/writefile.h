@@ -3,7 +3,6 @@
  */
 #include <stdlib.h>
 
-#pragma once
 
 /**
  * @brief Store result data in the file result.csv

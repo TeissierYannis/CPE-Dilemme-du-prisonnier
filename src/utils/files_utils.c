@@ -50,8 +50,4 @@ void parse_json(char * search_key, char * to_assign, FILE * config_file) {
     }
     // Reset file pointer
     rewind(config_file);
-    // Free memory
-/*     free(buffer);
-    free(key);
-    free(value); */
 }

@@ -4,7 +4,6 @@
 #ifndef SERVER_SERVER_H
 #define SERVER_SERVER_H
 
-
 #include "../game/core.h"
 
 #define BUFFERSIZE 2048
@@ -14,7 +13,7 @@ typedef struct {
     int client_count;
 } clients_list;
 
-clients_list clientsList;
+extern clients_list clientsList;
 
 int create_server(char *ip, int port);
 

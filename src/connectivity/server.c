@@ -11,6 +11,8 @@
 #include <string.h>
 #include "../../headers/connectivity/server.h"
 
+clients_list clientsList;
+
 int is_running = 1;
 
 /**
@@ -146,9 +148,6 @@ void *thread_party(void *ptr) {
     //temp
     int Nb_Round_Max = rules0.nb_round;
 
-    //Player
-    //player p1, player p2
-    //player *p2 = (player *)ptr;
     player *players = (player *) ptr;
     player p1 = players[0];
     player p2 = players[1];

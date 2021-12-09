@@ -4,7 +4,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "../../headers/game/core.h"
 #include "../../headers/configs/read_rules.h"
 
@@ -24,6 +23,7 @@ void init_game() {
 
     read_rules(&rules0);
 }
+
 
 
 /**

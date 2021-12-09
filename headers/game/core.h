@@ -7,6 +7,7 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
+#pragma once
 
 typedef struct {
     int nb_round;
@@ -61,9 +62,8 @@ typedef struct {
     answer_struct list_answer_J2[10];
 } recap;
 
-rules rules0;
-game game0;
-
+extern rules rules0;
+extern game game0;
 
 /**
  * Initialize game struct

@@ -7,6 +7,9 @@
 #include "headers/game/core.h"
 #include "headers/connectivity/server.h"
 
+rules rules0;
+game game0;
+
 int main(int argc, char **argv) {
     // Initialize base variables
     pthread_t server_listening_thread;

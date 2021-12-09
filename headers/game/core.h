@@ -9,9 +9,6 @@
 
 #pragma once
 
-
-#include "../communication/commands.h"
-
 typedef struct {
     int nb_round;
     int default_wallet;
@@ -52,6 +49,13 @@ typedef struct {
     party *parties;
     int parties_count;
 } game;
+
+typedef struct {
+    int party_id;
+    int player_id;
+    int choice;
+    int time;
+} answer_struct;
 
 typedef struct {
     answer_struct list_answer_J1[10];
@@ -138,5 +142,15 @@ void init_answer(answer_struct *answer);
  * @return recap of the party
  */
 recap generating_recap(party *party);
+
+/**
+ * Parse answer from string
+ * @brief Parse answer from string
+ * @param answer _str string of the answer
+ * @param answerStruct answer_struct struct
+ */
+void parse_answer(char * answer, answer_struct * answerStruct);
+
+void init_answer(answer_struct *answer);
 
 #endif //SERVER_CORE_H

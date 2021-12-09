@@ -126,3 +126,9 @@ recap generating_recap(party *party) {
     printf("========================================================\n");
     return recap;
 }
+
+void init_answer(answer_struct *answer) {
+    answer->player_id = 0;
+    answer->choice = 0;
+    answer->time = 0;
+}

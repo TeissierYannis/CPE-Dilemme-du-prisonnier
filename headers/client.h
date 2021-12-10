@@ -51,10 +51,14 @@ typedef struct {
 // Contient les informations du round
 typedef struct {
     // Resultat de chaque joueur
-    int j1_result;
-    int j1_choice;
-    int j2_result;
-    int j2_choice;
+    int p1_result; // choix
+    int p1_wallet; // score
+    int p2_result; // choix
+    int p2_wallet; // score
+    // Le temps
+    int p1_decision_time;
+    int p2_decision_time;
+  //  int p2_choice;
     // Numero du round
     int round_number;
     int status;

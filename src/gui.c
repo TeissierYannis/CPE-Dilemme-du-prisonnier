@@ -15,6 +15,7 @@ GtkBuilder *builder;
 GtkWidget *choix_adversaire;
 GtkWidget *rejouer;
 GtkWidget *label_rejouer;
+GtkWidget *info;
 
 int are_equals(const char *message, char *nom) {
 
@@ -44,6 +45,7 @@ void createGui(int argc, char **argv) {
     choix_adversaire = GTK_WIDGET(gtk_builder_get_object(builder, "choix_adversaire"));
     rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "Rejouer"));
     label_rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "labelRejouer"));
+    info = GTK_WIDGET(gtk_builder_get_object(builder, "Info"));
     printf("GUI OK\n");
     gtk_widget_show(window);
     gtk_main();
@@ -51,27 +53,38 @@ void createGui(int argc, char **argv) {
 
 // Lors d'un clic sur bouton
 void on_clicked_choice(GtkButton *b) {
-    // Récuperer nom du bouton cliqué
-    const char *message = gtk_button_get_label(b);
+    // Si le clique est autorisé
+    if(lien.able_click == 1){
+        printf("Clique autorisé !\n ");
+        lien.able_click = 0; // bloquer le clique suivant
+        gtk_label_set_text(GTK_LABEL(info), "Vous pouvez jouer !");
+        // Récuperer nom du bouton cliqué
+        const char *message = gtk_button_get_label(b);
 
-    printf("[GUI] choice : %s\n", message);
+        printf("[GUI] choice : %s\n", message);
 
-    // Si on a cliqué sur Trahison
-    if (are_equals(message, "Trahison")) {
-        // Valeur du choix  = 0
-        lien.choix_j1 = 0;
-        lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
-        // Afficher resultat du round
-        afficher_result();
+        // Si on a cliqué sur Trahison
+        if (are_equals(message, "Trahison")) {
+            // Valeur du choix  = 0
+            lien.choix_j1 = 0;
+            lien.is_choice_ok = true; // indiqquer que le joueur a fait son choix
+            // Afficher resultat du round
+            afficher_result();
+        }
+            // Si on a cliqué sur collaboré
+        else if (are_equals(message, "Collaboration")) {
+            // Valeur du choix  = 1
+            lien.choix_j1 = 1;
+            lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
+            // Afficher resultat du round
+            afficher_result();
+        }
     }
-        // Si on a cliqué sur collaboré
-    else if (are_equals(message, "Collaboration")) {
-        // Valeur du choix  = 1
-        lien.choix_j1 = 1;
-        lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
-        // Afficher resultat du round
-        afficher_result();
+    else if(lien.able_click == 0){
+        printf("Attendre pour clique !\n ");
+        gtk_label_set_text(GTK_LABEL(info), "Patientez un peu...");
     }
+    
 }
 
 // Afficher informations score des joueurs
@@ -97,15 +110,34 @@ void afficher_round() {
 }
 
 void afficher_choix_adversaire() {
-    char *my_choice = malloc(sizeof(char) * 20);
-    char *ad_choice = malloc(sizeof(char) * 20);
+    char* my_choice;
+    char *ad_choice;
     char message[100];
+    // Choix adversaire
+    if (lien.choix_j2 == 0)
+    {
+        ad_choice = "trahi";
+      //  strcpy(ad_choice, "trahi"); // Meme chose que ad_choice = "trahi"
+    }
+    else if (lien.choix_j2 == 1)
+    {
+        ad_choice = "collaborés";
+        //(ad_choice, "collaboré"); // Meme chose que ad_choice = "collaboré"
+    }
 
-    memcpy(ad_choice, lien.choix_j2 == 0 ? "trahi" : "collabore", strlen(lien.choix_j2 == 0 ? "trahi" : "collabore"));
-    memcpy(my_choice, lien.choix_j1 == 0 ? "trahi" : "collabore", strlen(lien.choix_j1 == 0 ? "trahi" : "collabore"));
-
+    // Mon choix
+    if (lien.choix_j1 == 0)
+    {
+            my_choice = "trahi";
+    //    strcpy(my_choice, "trahi"); // Meme chose que ad_choice = "trahi"
+    }
+    else if (lien.choix_j1 == 1)
+    {
+            my_choice = "collaboré";
+      //  strcpy(my_choice, "collaboré"); // Meme chose que ad_choice = "collaboré"
+    }
     // Phrase a afficher
-    sprintf(message, "Vous avez %s et l'adversaire a %s", my_choice, ad_choice);
+    sprintf(message, "Vous avez %s et l'adevrse vous a %s",my_choice, ad_choice);
     // Affichage
     gtk_label_set_text(GTK_LABEL(choix_adversaire), message);
 }

@@ -14,6 +14,9 @@ void create_link(){
     lien.score_j2 = 0;
     // Numero du round
     lien.nb_round = 0;
+    // Si le clique est autorisé
+    lien.able_click = 0;
+    
     // Resultat du round reçue Oui / Non
     lien.is_answer_ok = 0;
     // Joueur a appuyé sur un bouton Oui / Non

@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     pthread_detach(threadClient);
     printf("Apres thread client \n");
     if (result) {
-        printf("ERROR; return code from pthread_create() Client is %d\n", result);
+        printf("ERROR; retuurn code from pthread_create() Client is %d\n", result);
         exit(-1);
     }
 

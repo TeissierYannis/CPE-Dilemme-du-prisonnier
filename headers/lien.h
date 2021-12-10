@@ -22,10 +22,14 @@ typedef struct{
     int score_j1;
     int score_j2;
     int nb_round;
+
+    int able_click;
     
     int is_choice_ok; // choix du joueur Fait / en Attente
     int is_answer_ok; // Resultat du round Reçue / en Attente
+
     int is_game_end; // Partie terminée Oui / Non
+   
     int restart_choice; // choix de find de partie Recommencer / Quitter
     int is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
 } Lien;

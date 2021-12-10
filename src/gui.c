@@ -55,6 +55,7 @@ void createGui(int argc, char **argv) {
 void on_clicked_choice(GtkButton *b) {
     // Si le clique est autorisé
     if(lien.able_click == 1){
+        printf("Clique autorisé !\n ");
         lien.able_click = 0; // bloquer le clique suivant
         gtk_label_set_text(GTK_LABEL(info), "Vous pouvez jouer !");
         // Récuperer nom du bouton cliqué
@@ -80,6 +81,7 @@ void on_clicked_choice(GtkButton *b) {
         }
     }
     else if(lien.able_click == 0){
+        printf("Attendre pour clique !\n ");
         gtk_label_set_text(GTK_LABEL(info), "Patientez un peu...");
     }
     

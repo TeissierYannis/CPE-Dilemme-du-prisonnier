@@ -76,7 +76,7 @@ int client_recevoir_id(int socketClient, char *title) {
     // Recevoir message du serveur contenant un identifiant et le nom de ce à quoi correspond l'ID
     // (id du joueur ou id de la partie)
     printf("[RECEIVE] Receiving id from server...\n");
-    recv(socketClient, &message, sizeof(message), 0);
+    recv(socketClient, &message, strlen(message), 0);
     printf("[RECEIVE] id received.\n");
     // Récupérer le titre de l'identifiant
     key = strtok(message, separateur);
@@ -400,18 +400,18 @@ int get_round_status(int socketClient) {
     int recevoir;
     printf("Reception status du round...\n");
     // Recevoir le status du round
-    recevoir = recv(socketClient, status_round, sizeof(status_round), 0);
-
+    recevoir = recv(socketClient, &status_round, strlen(status_round), 0);
+ 
     strtok(status_round, " ");
     status = atoi(strtok(NULL, " "));
-
+    printf("Avant round = %s\n", status_round);
     // Retourne -1 en cas d'erreur
     if (recevoir == -1) {
         printf("Erreur reception status round...\n");
         exit(EXIT_FAILURE);
     }
 
-    printf("round récupéré status : %s\n", status);
+    printf("round récupéré status : %d\n", status);
     return status;
 }
 

@@ -37,7 +37,8 @@ void afficher_score();
 void afficher_round();
 void on_quitter_clicked();
 void afficher_choix_adversaire();
-void nouveau_round();
+void end_game();
+Bool end_round();
 
 void create_link()
 {
@@ -45,11 +46,11 @@ void create_link()
     lien.choix_j2 = 0;
     lien.score_j1 = 0;
     lien.score_j2 = 0;
-    lien.nb_round = 6;
+    lien.nb_round = 0;
     lien.is_answer_ok = true;
     lien.is_choice_ok = false;
     lien.is_game_end = false;
-    lien.le_gagnant = -1;
+    lien.le_gagnant = 0;
 }
 
 int main(int argc, char **argv)
@@ -77,8 +78,9 @@ int main(int argc, char **argv)
     perdu = GTK_WIDGET(gtk_builder_get_object(builder, "perdu"));
     egalite = GTK_WIDGET(gtk_builder_get_object(builder, "egalite"));
 
-    //g_signal_connect(G_OBJECT(trahison), "clicked", G_CALLBACK(on_trahison_clicked), NULL);
-    nouveau_round();
+    //g_signal_connect(G_OBJECT(trahison), "clicked", G_CALLBACK(on_clicked_choice), NULL);
+
+
     gtk_widget_show(window);
     gtk_main();
     return (EXIT_SUCCESS);
@@ -112,6 +114,8 @@ void on_clicked_choice(GtkButton *b)
         lien.is_choice_ok = true;
         afficher_result();
     }
+    lien.nb_round++;
+    end_game();
 }
 
 void afficher_choix_adversaire()
@@ -169,7 +173,7 @@ void afficher_round()
     gtk_label_set_text(GTK_LABEL(rounde), nb_round);
 }
 
-Bool end_game()
+Bool end_round()
 {
     if (lien.nb_round > 5)
     {
@@ -181,13 +185,14 @@ Bool end_game()
     }
 }
 
-void nouveau_round()
+void end_game()
 {
-    if (lien.is_game_end = end_game())
+    if (lien.is_game_end = end_round())
     {
         gtk_widget_show(new_round);
-        gtk_widget_hide(trahison);
-        gtk_widget_hide(collaboration);
+        
+        gtk_widget_set_sensitive (trahison, FALSE);        // Erreur
+        gtk_widget_set_sensitive (collaboration, FALSE);  // Erreur
         gtk_widget_hide(rounde);
         gtk_widget_hide(score1);
         gtk_widget_hide(score2);

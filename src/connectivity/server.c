@@ -181,13 +181,13 @@ void *thread_party(void *ptr) {
     write(p1.socket, buffer_out, strlen(buffer_out) + 1);
     write(p2.socket, buffer_out, strlen(buffer_out) + 1);
 
-    sleep(3);
+   // sleep(3);
 
     int nbRound = 1;
 
     //Gestion des rounds
     while (nbRound <= Nb_Round_Max) {
-        int p1Result, p2Result, p1Time, p2Time;
+        int p1Result, p2Result, p1Time, p2Time, p1Wallet, p2Wallet;
         size_t p1_t, p2_t;
 
         printf("[PARTY #%d] Round %i\n", nbRound, party.id);
@@ -198,7 +198,7 @@ void *thread_party(void *ptr) {
         printf("[PARTY #%d] Reading response from clients\n", party.id);
         p1_t = read(p1.socket, &buffer_answer1, BUFFERSIZE);
         p2_t = read(p2.socket, &buffer_answer2, BUFFERSIZE);
-
+        printf("Réponse J1 reçue ... = %d\n", buffer_answer1.choice);
         if (p1_t > 0 || p2_t > 0) {
 
             printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",
@@ -210,6 +210,8 @@ void *thread_party(void *ptr) {
             // fill answer struct
             p1Result = buffer_answer1.choice;
             p1Time = buffer_answer1.time;
+
+         
 
             printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",
                    party.id,
@@ -223,22 +225,29 @@ void *thread_party(void *ptr) {
 
             if (nbRound == Nb_Round_Max) {
                 status = 1;
+                printf("JEU FINI !!! \n");
             }
+
+            //TODO : Update wallet
+            // Les calcul de scores
+            updateWallet(p1Result, p2Result, &p1, &p2);
+            printf("Wallet: P1: %d - P2: %d\n", p1.wallet, p2.wallet);
+
+            p1Wallet = p1.wallet;
+            p2Wallet = p2.wallet; 
+
 
             printf("[PARTY #%d] Generating round result\n", party.id);
             round round_struct, round_party;
-            init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound);
-            init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound);
+            init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
+            init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
             add_round_to_party(&party, &round_party);
 
-            sleep(5);
-            
-            //Update wallet         
-            updateWallet(p1Result, p2Result, &p1, &p2);
-            printf("Wallet : P1: %d - P2: %d\n", p1.wallet, p2.wallet);
+           // sleep(5);
 
             printf("[PARTY #%d] Sending round result to clients... \n", party.id);
-
+            printf("Envoie du round ... avec numero = %d\n", round_struct.round_number);
+            printf("Envoie du round ... avec choix j1 = %d\n", round_struct.p1_result);
             write(p1.socket, &round_struct, sizeof(round));
             write(p2.socket, &round_struct, sizeof(round));
             printf("[PARTY #%d] Round result sent. \n", party.id);
@@ -246,32 +255,51 @@ void *thread_party(void *ptr) {
             add_round_to_party(&party, &round_struct);
 
             nbRound += 1;
+           //sleep(100);
         }
     }
     printf("[PARTY #%d] Every rounds was played \n", party.id);
 
     // TODO : Send end to client the recap
 
-    sleep(3);
+    //sleep(3);
 
     printf("[PARTY #%d] Generating recap...\n", party.id);
     recap party_recap = generating_recap(&party);
     printf("[PARTY #%d] Sending recap to clients... \n", party.id);
-    write(p1.socket, &party_recap, sizeof(recap));
-    write(p2.socket, &party_recap, sizeof(recap));
+   // write(p1.socket, &party_recap, sizeof(recap));
+  //  write(p2.socket, &party_recap, sizeof(recap));
     printf("[PARTY #%d] Recap sent. \n", party.id);
 
     //Fin de partie
     printf("[PARTY #%d] Fin de la partie\n", party.id);
     //TODO win = winner(j1, j2)
-    int win = winner(p1, p2);
-    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
+    printf("[PARTY #%d] Le gagnant est 1\n", party.id);
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv
     sleep(5);
     printf("[PARTY #%d] Results logged...\n", party.id);
     printf("[PARTY #%d] Leaving party...\n", party.id);
+
+    // Recupérer si le joueur veut rejouer ou quitter
+    char status_j1[11];
+    char status_j2[11];
+    read(p1.socket, &status_j1, sizeof(status_j1));
+    read(p1.socket, &status_j2, sizeof(status_j2));
+
+    sleep(500);
+   if((strcmp(status_j1, "online") == 0) || (strcmp(status_j2, "online") == 0)) {
+        printf("ON REJOUE \n");
+        // Mettre le joueur dans une nouvelle partie
+        sleep(1000);
+    }
+    else if(strcmp(status_j1, "disconnect") == 0){
+        printf("ON S'EN VAS \n");
+        // Faire quitter les parties
+        sleep(1);
+    }
+    
     pthread_exit(0);
 }
 

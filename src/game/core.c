@@ -76,13 +76,20 @@ void init_party(party *party0, player player1, player player2) {
  * @param p2_result (0 or 1)
  * @param p2_decision_time time of p2 decision (timestamp)
  */
-void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time, int status, int round_count) {
+void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time, int status, int round_count, int p1Wallet, int p2Wallet) {
     round->p1_result = p1_result;
     round->p2_result = p2_result;
+
     round->p1_decision_time = p1_decision_time;
     round->p2_decision_time = p2_decision_time;
+
+    round->p1_wallet = p1Wallet;
+    round->p2_wallet = p2Wallet;
+
+    // Pas besoin d'envoyer le temps de décision au client
     round->status = status;
     round->round_number = round_count;
+
 }
 
 /**
@@ -117,8 +124,8 @@ recap generating_recap(party *party) {
         printf("en %d secondes\n", party->round[i].p2_decision_time);
         printf("\n");
 
-        answer_struct answer_p1 = {party->id, party->player_game->id, party->round[i].p1_result, party->round[i].p1_decision_time};
-        answer_struct answer_p2 = {party->id, party->player_game->id, party->round[i].p2_result, party->round[i].p2_decision_time};
+        answer_struct answer_p1 = {party->id, party->player_game->id, party->round[i].p1_result, party->round[i].p1_wallet};
+        answer_struct answer_p2 = {party->id, party->player_game->id, party->round[i].p2_result, party->round[i].p2_wallet};
 
         recap.list_answer_J1[i] = answer_p1;
         recap.list_answer_J2[i] = answer_p2;

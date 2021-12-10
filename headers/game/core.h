@@ -28,10 +28,16 @@ typedef struct {
 } player;
 
 typedef struct {
-    int p1_result;
+    // Resultat de chaque joueur
+    int p1_result; // choix
+    int p1_wallet; // score
+    int p2_result; // choix
+    int p2_wallet; // score
+    // Le temps
     int p1_decision_time;
-    int p2_result;
     int p2_decision_time;
+  //  int p2_choice;
+    // Numero du round
     int round_number;
     int status;
 } round;
@@ -104,7 +110,7 @@ void init_party(party *party0, player player1, player player2);
  * @param p2_decision_time time of p2 decision (timestamp)
  */
 void init_round(round *round, int p1_result, int p1_decision_time, int p2_result, int p2_decision_time, int status,
-                int round_number);
+                int round_number, int p1Wallet, int p2Wallet);
 
 /**
  * Add round to party

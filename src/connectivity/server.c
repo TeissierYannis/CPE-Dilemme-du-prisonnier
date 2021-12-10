@@ -154,9 +154,11 @@ void *thread_party(void *ptr) {
     player p2 = players[1];
 
     printf("Send user id to client\n");
-    sprintf(buffer_out, "id %i", p1.id);
+    sprintf(buffer_out, "id %d", p1.id);
+    printf("%s\n", buffer_out);
     write(p1.socket, buffer_out, strlen(buffer_out));
-    sprintf(buffer_out, "id %i", p2.id);
+    sprintf(buffer_out, "id %d", p2.id);
+    printf("%s\n", buffer_out);
     write(p2.socket, buffer_out, strlen(buffer_out));
 
     sleep(3);
@@ -267,8 +269,8 @@ void *thread_party(void *ptr) {
     printf("[PARTY #%d] Generating recap...\n", party.id);
     recap party_recap = generating_recap(&party);
     printf("[PARTY #%d] Sending recap to clients... \n", party.id);
-   // write(p1.socket, &party_recap, sizeof(recap));
-  //  write(p2.socket, &party_recap, sizeof(recap));
+    write(p1.socket, &party_recap, sizeof(recap));
+    write(p2.socket, &party_recap, sizeof(recap));
     printf("[PARTY #%d] Recap sent. \n", party.id);
 
     //Fin de partie

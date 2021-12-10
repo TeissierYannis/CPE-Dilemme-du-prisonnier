@@ -19,8 +19,6 @@ int main(int argc, char **argv) {
     // Initialize the rules and game
     printf("[MAIN] Initializing the game...\n");
     init_game();
-    // Initialize the server commands
-    // setup_commands();
 
     // Create the server
     printf("[MAIN] Creating the server...\n");

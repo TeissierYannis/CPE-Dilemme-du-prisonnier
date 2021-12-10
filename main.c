@@ -1,19 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
-<<<<<<< HEAD
 #include <unistd.h>
 
 #include "headers/configs/configurator.h"
-=======
-#include <sys/socket.h>
-#include <stdbool.h>
-#include <string.h>
-#include "headers/communication/commands.h"
-#include "headers/srvcxnmanager.h"
-#include "headers/configs/configurator.h"
-#include "headers/configs/read_rules.h"
->>>>>>> 6eb9696f6a0d947d61e8b496fb9837da5c98e807
 #include "headers/game/core.h"
 #include "headers/connectivity/server.h"
 

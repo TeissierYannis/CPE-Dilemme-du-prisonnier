@@ -7,16 +7,9 @@
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
-<<<<<<< HEAD
 #pragma once
 
 typedef struct {
-=======
-#include "../srvcxnmanager.h"
-
-typedef struct
-{
->>>>>>> 6eb9696f6a0d947d61e8b496fb9837da5c98e807
     int nb_round;
     int default_wallet;
     int trahison_win;
@@ -31,12 +24,7 @@ typedef struct {
     int id;
     int status;
     int wallet;
-<<<<<<< HEAD
     int socket;
-=======
-    char * ip;
-    connection_t connection;
->>>>>>> 6eb9696f6a0d947d61e8b496fb9837da5c98e807
 } player;
 
 typedef struct {

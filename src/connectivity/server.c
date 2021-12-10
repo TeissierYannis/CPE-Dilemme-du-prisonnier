@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "../../headers/connectivity/server.h"
+#include "../../headers/game/rules.h"
 
 clients_list clientsList;
 
@@ -231,8 +232,10 @@ void *thread_party(void *ptr) {
             add_round_to_party(&party, &round_party);
 
             sleep(5);
-
-            //TODO : Update wallet
+            
+            //Update wallet         
+            updateWallet(p1Result, p2Result, &p1, &p2);
+            printf("Wallet : P1: %d - P2: %d\n", p1.wallet, p2.wallet);
 
             printf("[PARTY #%d] Sending round result to clients... \n", party.id);
 
@@ -261,7 +264,8 @@ void *thread_party(void *ptr) {
     //Fin de partie
     printf("[PARTY #%d] Fin de la partie\n", party.id);
     //TODO win = winner(j1, j2)
-    printf("[PARTY #%d] Le gagnant est 1\n", party.id);
+    int win = winner(p1, p2);
+    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv

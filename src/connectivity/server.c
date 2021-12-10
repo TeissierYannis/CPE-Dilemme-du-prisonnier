@@ -228,7 +228,7 @@ void *thread_party(void *ptr) {
                 printf("JEU FINI !!! \n");
             }
 
-            //TODO : Update wallet
+            //Update wallet
             // Les calcul de scores
             updateWallet(p1Result, p2Result, &p1, &p2);
             printf("Wallet: P1: %d - P2: %d\n", p1.wallet, p2.wallet);
@@ -274,7 +274,8 @@ void *thread_party(void *ptr) {
     //Fin de partie
     printf("[PARTY #%d] Fin de la partie\n", party.id);
     //TODO win = winner(j1, j2)
-    printf("[PARTY #%d] Le gagnant est 1\n", party.id);
+    int win = winner(p1, p2);
+    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv

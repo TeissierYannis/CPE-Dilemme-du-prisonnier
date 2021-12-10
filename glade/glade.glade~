@@ -22,7 +22,7 @@
             <signal name="clicked" handler="on_clicked_choice" swapped="no"/>
           </object>
           <packing>
-            <property name="x">132</property>
+            <property name="x">109</property>
             <property name="y">170</property>
           </packing>
         </child>
@@ -38,7 +38,7 @@
             <signal name="clicked" handler="on_clicked_choice" swapped="no"/>
           </object>
           <packing>
-            <property name="x">365</property>
+            <property name="x">387</property>
             <property name="y">170</property>
           </packing>
         </child>
@@ -76,7 +76,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_round">
             <property name="width-request">150</property>
             <property name="height-request">50</property>
             <property name="visible">True</property>
@@ -140,7 +140,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_j1">
             <property name="width-request">100</property>
             <property name="height-request">50</property>
             <property name="visible">True</property>
@@ -156,7 +156,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_j2">
             <property name="width-request">100</property>
             <property name="height-request">50</property>
             <property name="visible">True</property>
@@ -178,12 +178,57 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <attributes>
-              <attribute name="foreground" value="#2626a2a26969"/>
+              <attribute name="foreground" value="#616135358383"/>
               <attribute name="size" value="13000"/>
             </attributes>
           </object>
           <packing>
             <property name="x">130</property>
+            <property name="y">95</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="new_round">
+            <property name="label" translatable="yes">Nouveau round</property>
+            <property name="width-request">100</property>
+            <property name="height-request">70</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">252</property>
+            <property name="y">170</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="gagner">
+            <property name="width-request">150</property>
+            <property name="height-request">50</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Vous avez gagné !!!</property>
+            <attributes>
+              <attribute name="foreground" value="#2626a2a26969"/>
+              <attribute name="size" value="18000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">205</property>
+            <property name="y">95</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="perdu">
+            <property name="width-request">150</property>
+            <property name="height-request">50</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Vous avez perdu !!!</property>
+            <attributes>
+              <attribute name="foreground" value="#e0e01b1b2424"/>
+              <attribute name="size" value="18000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">205</property>
             <property name="y">95</property>
           </packing>
         </child>

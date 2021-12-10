@@ -24,6 +24,8 @@ typedef struct{
     int nb_round;
     bool is_choice_ok;
     bool is_answer_ok;
+    bool is_game_end;
+    int le_gagnant;
 } Lien;
 
 extern Lien lien;

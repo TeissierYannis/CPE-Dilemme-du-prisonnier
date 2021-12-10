@@ -37,11 +37,12 @@ void createGui(int argc, char **argv);
 //void createGui(int argc, char **argv);
 // Action lors d'un clic
 
-Bool are_equals(const char*,char*);
+int are_equals(const char*,char*);
 void on_clicked_choice(GtkButton *);
 void afficher_score();
 void afficher_round();
 void result();
 void on_quitter_clicked();
+void afficher_result();
 
 #endif

@@ -51,13 +51,17 @@ typedef struct {
 // Contient les informations du round
 typedef struct {
     // Resultat de chaque joueur
-    int j1_result;
-    int j2_result;
-    int j1_choice;
-    int j2_choice;
+    int p1_result; // choix
+    int p1_wallet; // score
+    int p2_result; // choix
+    int p2_wallet; // score
+    // Le temps
+    int p1_decision_time;
+    int p2_decision_time;
+  //  int p2_choice;
     // Numero du round
     int round_number;
-    char status[2048];
+    int status;
 } Round;
 
 // Récapitule la partie
@@ -99,7 +103,7 @@ Round get_round(int socket);
 // Permet de jouer en communicant avec le serveur
 void jouer(int socket, Game game);
 // Indique si la partie est fini ou continue
-bool game_end(Round round);
+int game_end(Round round);
 // Récaptiluer la partie
 void game_recap(int socketClient);
 // Recuperer la structure qui recaptilue la partie
@@ -108,7 +112,7 @@ Recap get_recap(int socketClient);
 void print_recap(Answer answer[]);
 
 // Relancer une partie
-bool restart_game(int socketClient, Joueur player);
+int restart_game(int socketClient, Joueur player);
 // Envoyer le status du joueur pour qu'il soit ajouté dans une nouvelle partie
 void send_player_status(int socketClient, Joueur player);
 
@@ -116,7 +120,7 @@ void send_player_status(int socketClient, Joueur player);
 struct sockaddr_in create_serv_adrr();
 
 // Récupérer le status de départ du round
-char *get_round_status(int socketClient);
+int get_round_status(int socketClient);
 // Créer le round de depart
 Round create_round(int socketClient);
 // Afficher le résultat du round

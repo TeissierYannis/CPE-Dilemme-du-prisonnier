@@ -9,7 +9,7 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdint.h>
 
 #ifndef LIEN_H
 #define LIEN_H
@@ -22,12 +22,16 @@ typedef struct{
     int score_j1;
     int score_j2;
     int nb_round;
+
+    int able_click;
     
-    bool is_choice_ok; // choix du joueur Fait / en Attente
-    bool is_answer_ok; // Resultat du round Reçue / en Attente
-    bool is_game_end; // Partie terminée Oui / Non
-    bool restart_choice; // choix de find de partie Recommencer / Quitter
-    bool is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
+    int is_choice_ok; // choix du joueur Fait / en Attente
+    int is_answer_ok; // Resultat du round Reçue / en Attente
+
+    int is_game_end; // Partie terminée Oui / Non
+   
+    int restart_choice; // choix de find de partie Recommencer / Quitter
+    int is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
 } Lien;
 
 // Lien global entre GUI et Socket contenant les informations sur le jeu

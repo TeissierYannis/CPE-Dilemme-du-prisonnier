@@ -15,7 +15,7 @@
 #include "headers/lien.h"
 
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
     // Contient les parametres de la communication Client
     ClientParameter *clientParam;
     clientParam = malloc(sizeof(ClientParameter));
@@ -36,18 +36,18 @@ int main(int argc, char **argv){
     // Lancer la communication client sous forme de thread
     pthread_t threadClient;
     int result = 0;
-    result = pthread_create(&threadClient, NULL, startGame,(void *) clientParam);
-   // pthread_join(threadClient, NULL);
+    result = pthread_create(&threadClient, NULL, startGame, (void *) clientParam);
+    pthread_detach(threadClient);
     printf("Apres thread client \n");
-    if (result){
-        printf("ERROR; return code from pthread_create() Client is %d\n", result);
+    if (result) {
+        printf("ERROR; retuurn code from pthread_create() Client is %d\n", result);
         exit(-1);
     }
 
     // Lancer le GUI pour jouer
-    createGui(argc,argv);
- 
-   return 0;
+    createGui(argc, argv);
+
+    return 0;
 }
 
 

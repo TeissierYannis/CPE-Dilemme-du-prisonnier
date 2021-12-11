@@ -2,20 +2,6 @@
 #include "../headers/gui.h"
 #include "../headers/lien.h"
 
-GtkWidget *window;
-GtkWidget *fixed1;
-GtkWidget *trahison;
-GtkWidget *collaboration;
-GtkWidget *quitter;
-GtkWidget *rounde;
-GtkWidget *titre;
-GtkWidget *score1;
-GtkWidget *score2;
-GtkBuilder *builder;
-GtkWidget *choix_adversaire;
-GtkWidget *rejouer;
-GtkWidget *label_rejouer;
-GtkWidget *info;
 
 int are_equals(const char *message, char *nom) {
 
@@ -28,36 +14,22 @@ int are_equals(const char *message, char *nom) {
 
 // Créer l'interface graphique
 void createGui(int argc, char **argv) {
-    gtk_init(&argc, &argv); // init Gtk
-
-    builder = gtk_builder_new_from_file("../glade/glade.glade");
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
-    gtk_builder_connect_signals(builder, NULL);
-
-    fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
-    trahison = GTK_WIDGET(gtk_builder_get_object(builder, "Trahison"));
-    collaboration = GTK_WIDGET(gtk_builder_get_object(builder, "Collaboration"));
-    quitter = GTK_WIDGET(gtk_builder_get_object(builder, "quitter"));
-    rounde = GTK_WIDGET(gtk_builder_get_object(builder, "rounde"));
-    titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
-    score1 = GTK_WIDGET(gtk_builder_get_object(builder, "score1"));
-    score2 = GTK_WIDGET(gtk_builder_get_object(builder, "score2"));
-    choix_adversaire = GTK_WIDGET(gtk_builder_get_object(builder, "choix_adversaire"));
-    rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "Rejouer"));
-    label_rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "labelRejouer"));
-    info = GTK_WIDGET(gtk_builder_get_object(builder, "Info"));
-    printf("GUI OK\n");
-    gtk_widget_show(window);
-    gtk_main();
+    createBoard(argc, argv); // init Gtk
 }
 
-// Lors d'un clic sur bouton
-void on_clicked_choice(GtkButton *b) {
+// Thread pour afficher les infos sur le jeux
+void choice_clicked(void *boutton){
+    GtkButton *b;
+     // Lire les parametres du client
+    b = (GtkButton *) boutton;
+
     // Si le clique est autorisé
     if(lien.able_click == 1){
         printf("Clique autorisé !\n ");
-        lien.able_click = 0; // bloquer le clique suivant
-        gtk_label_set_text(GTK_LABEL(info), "Vous pouvez jouer !");
+        // Prévoir le prochain round
+        lien.able_click = 0;
+    
+       // gtk_label_set_text(GTK_LABEL(tools.info), "Vous pouvez jouer !");
         // Récuperer nom du bouton cliqué
         const char *message = gtk_button_get_label(b);
 
@@ -82,8 +54,24 @@ void on_clicked_choice(GtkButton *b) {
     }
     else if(lien.able_click == 0){
         printf("Attendre pour clique !\n ");
-        gtk_label_set_text(GTK_LABEL(info), "Patientez un peu...");
+        //gtk_label_set_text(GTK_LABEL(tools.info), "Patientez un peu...");
     }
+}
+
+// Lors d'un clic sur bouton
+void on_clicked_choice(GtkButton *b) {
+    // Lancer l'affichage du clique sous forme de thread pour ne pas bloquer GTK
+    // En ayant le monopole de l'utilisation ici
+    pthread_t threadClick;
+    int result = 0;
+    result = pthread_create(&threadClick, NULL, choice_clicked, (void *) b);
+    pthread_detach(threadClick);
+    printf("Apres thread clique \n");
+    if (result) {
+        printf("ERROR; return code from pthread_create() Click is %d\n", result);
+        exit(-1);
+    }
+
     
 }
 
@@ -95,8 +83,8 @@ void afficher_score() {
     sprintf(score_j1, "%d", lien.score_j1);
     sprintf(score_j2, "%d", lien.score_j2);
     // Afficher score des 2 joueurs
-    gtk_label_set_text(GTK_LABEL(score1), score_j1);
-    gtk_label_set_text(GTK_LABEL(score2), score_j2);
+    gtk_label_set_text(GTK_LABEL(tools.score1), score_j1);
+    gtk_label_set_text(GTK_LABEL(tools.score2), score_j2);
 }
 
 // Afficher informations du round
@@ -106,7 +94,7 @@ void afficher_round() {
     sprintf(nb_round, "%d", lien.nb_round);
     printf("numero round GUI = %d\n", lien.nb_round);
     // Mettre le numero du round dans son label
-    gtk_label_set_text(GTK_LABEL(rounde), nb_round);
+    gtk_label_set_text(GTK_LABEL(tools.rounde), nb_round);
 }
 
 void afficher_choix_adversaire() {
@@ -139,7 +127,7 @@ void afficher_choix_adversaire() {
     // Phrase a afficher
     sprintf(message, "Vous avez %s et l'adevrse vous a %s",my_choice, ad_choice);
     // Affichage
-    gtk_label_set_text(GTK_LABEL(choix_adversaire), message);
+    gtk_label_set_text(GTK_LABEL(tools.choix_adversaire), message);
 }
 
 
@@ -156,7 +144,7 @@ void afficher_result() {
     // Afficher informations sur le choix de l'adversaire
     afficher_choix_adversaire();
     // Montrer le bouton pour recommencer une partie
-    //show_restart_button();
+    show_restart_button();
     // On passe la reponse suivante a faux pour commencer nouveau round
     lien.is_answer_ok = false;
 }
@@ -166,13 +154,13 @@ void show_restart_button() {
     // Si la partie est finie
     if (lien.is_game_end) {
         // On montre le bouton pour rejouer au joueur
-        gtk_widget_show(rejouer);
-        gtk_widget_show(label_rejouer);
-        gtk_widget_hide(trahison);
-        gtk_widget_hide(collaboration);
-        gtk_widget_hide(choix_adversaire);
-        gtk_widget_hide(score1);
-        gtk_widget_hide(score2);
+        gtk_widget_show(tools.rejouer);
+        gtk_widget_show(tools.label_rejouer);
+        gtk_widget_hide(tools.trahison);
+        gtk_widget_hide(tools.collaboration);
+        gtk_widget_hide(tools.choix_adversaire);
+        gtk_widget_hide(tools.score1);
+        gtk_widget_hide(tools.score2);
     }
 }
 
@@ -184,17 +172,17 @@ void on_restart_click(GtkButton *b) {
     lien.is_restart_clicked = true;
     // Si le choix est rejouer on raffrait les informations de partie en réinitialisant
     // Mettre une fonction pour initialiser tout ça automatiquement au depart ?
-    gtk_label_set_text(GTK_LABEL(score1), 0);
-    gtk_label_set_text(GTK_LABEL(score2), 0);
-    gtk_label_set_text(GTK_LABEL(choix_adversaire), "");
+    gtk_label_set_text(GTK_LABEL(tools.score1), 0);
+    gtk_label_set_text(GTK_LABEL(tools.score2), 0);
+    gtk_label_set_text(GTK_LABEL(tools.choix_adversaire), "");
     // On remontre les boutons de jeu et cache les boutons pour rejouer
-    gtk_widget_hide(rejouer);
-    gtk_widget_hide(label_rejouer);
-    gtk_widget_show(trahison);
-    gtk_widget_show(collaboration);
-    gtk_widget_show(choix_adversaire);
-    gtk_widget_show(score1);
-    gtk_widget_show(score2);
+    gtk_widget_hide(tools.rejouer);
+    gtk_widget_hide(tools.label_rejouer);
+    gtk_widget_show(tools.trahison);
+    gtk_widget_show(tools.collaboration);
+    gtk_widget_show(tools.choix_adversaire);
+    gtk_widget_show(tools.score1);
+    gtk_widget_show(tools.score2);
 
     printf("[GUI] Restart game\n");
 }

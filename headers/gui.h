@@ -7,30 +7,10 @@
  * @copyright Copyright (c) 2021
  * 
  */
-#include <stdlib.h>
-#include <sys/types.h>
-#include <signal.h>
-#include <unistd.h>
-#include <string.h>
-#include <gtk/gtk.h>
-#include <gtk/gtkx.h>
-#include <math.h>
-#include <ctype.h>
-//#include <pthread.h>
-#include <stdio.h>
-
-// Le lien entre GUI et socket client
-//#include "lien.h"
+#include "board.h"
 
 #ifndef GUI_H
 #define GUI_H
-
-
-// Contient les informations d'un Joueur
-typedef struct{
-    int argc;
-    char **argv;
-} GuiParameter;
 
 // Créer l'interface graphique
 void createGui(int argc, char **argv);
@@ -44,5 +24,6 @@ void afficher_round();
 void result();
 void on_quitter_clicked();
 void afficher_result();
+void choice_clicked(void *param);
 
 #endif

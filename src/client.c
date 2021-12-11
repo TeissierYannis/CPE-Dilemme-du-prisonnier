@@ -69,16 +69,24 @@ int client_connexion() {
 // Le client reçoit un id
 int client_recevoir_id(int socketClient, char *title) {
     int id;
-    char message[2048]; // stock le message que le serveur a envoyé
+    char message[255]; // stock le message que le serveur a envoyé
     char *key;    // titre du message
     char *separateur = " "; // separateur entre les champs du message
+    int receive;
 
     // Recevoir message du serveur contenant un identifiant et le nom de ce à quoi correspond l'ID
     // (id du joueur ou id de la partie)
     printf("[RECEIVE] Receiving id from server...\n");
-    read(socketClient, &message, 2048);
-    printf("[RECEIVE] id received : %s\n", message);
-    // Récupérer le titre de l'identifiant
+    receive = recv(socketClient, &message, sizeof(message), 0);
+    // Vérifier la réception
+    if (receive == -1){
+        printf("[RECEIVE] Error reception ID :");
+    }
+    else{
+        printf("[RECEIVE] id received : %s\n", message);
+    }
+     
+    // Récupérer le titre de l'identifiant en l'extrayant de la chaine de caracteres
     key = strtok(message, separateur);
 
     // Si l'ID correspond au type d'ID demandé on l'enregistre
@@ -86,7 +94,7 @@ int client_recevoir_id(int socketClient, char *title) {
         // Récuperer la deuxième partie du message (l'id) et le convertir en identifiant
         id = atoi(strtok(NULL, " "));
     }
-        // Sinon on passe sans utiliser l'ID
+    // Sinon on passe sans utiliser l'ID
     else {
         id = -1;
     }
@@ -287,16 +295,19 @@ Recap get_recap(int socketClient) {
 void game_recap(int socketClient) {
     Recap recap;
     recap = get_recap(socketClient);
+
+    // TODO Mettre dans le recap le nombre final de round ?
+    int length_J1 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
+    int length_J2 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
+
+    printf("TAILLE recap = %d\n", length_J1);
     // Afficher l'historique de la partie
-    print_recap(recap.list_answer_J1);
-    print_recap(recap.list_answer_J2);
+    print_recap(&recap.list_answer_J1, length_J1);
+    print_recap(&recap.list_answer_J2, length_J2);
 }
 
 // Afficher la recapitulation de la partie pour le joueur indiqué
-void print_recap(Answer answer[]) {
-    // TODO
-    // Mettre dans recap le nombre de round pour connaitre la taille ?
-    int length = 3; // TODO à CHANGER
+void print_recap(Answer *answer, int length) {
     printf("========================================================\n");
     printf("len recap = %d\n", length);
     // int id_player = answer[0].game.player_id;
@@ -344,14 +355,19 @@ void send_player_status(int socketClient, Joueur player) {
 // Recuperer le numero du carre cliqué
 int get_clique() {
     int clique = -1;
+    // Indiquer au joueur qu'il peut jouer
     lien.able_click = 1; // autoriser les cliques
+    gtk_label_set_text(GTK_LABEL(tools.info), "Vous pouvez jouer !");
+
     printf("Entrez la réponse : \n");
     // Tant que le joueur n'a pas cliqué on attend
     while (lien.is_choice_ok != true) {
         sleep(0.3);
     }
     lien.is_choice_ok = false;
-    lien.able_click = 0;
+    gtk_label_set_text(GTK_LABEL(tools.info), "Patienez J2 n'a pas répondue...");
+  //  lien.able_click = 0;
+   // lien.is_choice_ok = false;
     // On récupère le choix du joueur
     clique = lien.choix_j1;
     printf("Reponse choisie = %d\n", clique);
@@ -400,7 +416,7 @@ int get_round_status(int socketClient) {
     int recevoir;
     printf("Reception status du round...\n");
     // Recevoir le status du round
-    recevoir = recv(socketClient, &status_round, 255, 0);
+    recevoir = recv(socketClient, &status_round, sizeof(status_round), 0);
  
     strtok(status_round, " ");
     status = atoi(strtok(NULL, " "));
@@ -507,8 +523,7 @@ void startGame(void *param) {
         // Jouer a la partie
         jouer(socket, game);
         // Recapituler la partie
-
-      //  game_recap(socket);
+        game_recap(socket);
     } while (restart_game(socket, player)); // Tant que le joueur veut faire une nouvelle partie
 
 

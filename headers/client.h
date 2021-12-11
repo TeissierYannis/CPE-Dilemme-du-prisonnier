@@ -19,8 +19,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-// Le lien entre GUI et sockets Client
-//#include "lien.h"
+#include "board.h"
 
 #ifndef CLIENT_H
 #define CLIENT_H
@@ -109,7 +108,7 @@ void game_recap(int socketClient);
 // Recuperer la structure qui recaptilue la partie
 Recap get_recap(int socketClient);
 // Afficher la recapitulation de la partie
-void print_recap(Answer answer[]);
+void print_recap(Answer answer[], int length);
 
 // Relancer une partie
 int restart_game(int socketClient, Joueur player);

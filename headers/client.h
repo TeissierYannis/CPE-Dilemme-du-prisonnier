@@ -136,4 +136,11 @@ bool continue_game();
 bool are_equal(char *a, char *b);
 // Indiquer si un identifiant est valide ou non
 bool is_id_valide(int id);
+// Recuppérer le gagnant de la partie
+int get_winner(int socket);
+// Indiquer si la partie est gagnée ou perdue
+bool is_game_win(Game game, int winner);
+// Afficher le gagnant de la partie
+void set_winner_name(int socket, Game game);
+
 #endif

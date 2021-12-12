@@ -196,7 +196,6 @@
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="margin-right">92</property>
-            <property name="margin-bottom">71</property>
             <signal name="clicked" handler="on_restart_click" swapped="no"/>
           </object>
           <packing>
@@ -210,12 +209,44 @@
             <property name="width-request">100</property>
             <property name="height-request">80</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">La partie est finie ! 
-Souhaitez vous rejouer ?</property>
+            <property name="label" translatable="yes">Partie terminée !</property>
           </object>
           <packing>
-            <property name="x">279</property>
-            <property name="y">73</property>
+            <property name="x">162</property>
+            <property name="y">165</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Info">
+            <property name="name">Info</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">
+</property>
+          </object>
+          <packing>
+            <property name="x">276</property>
+            <property name="y">109</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Winner">
+            <property name="name">Winner</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="font-desc" value="DejaVu Sans Bold Semi-Condensed 10"/>
+              <attribute name="style" value="normal"/>
+              <attribute name="weight" value="bold"/>
+              <attribute name="size" value="18432"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">268</property>
+            <property name="y">33</property>
           </packing>
         </child>
       </object>

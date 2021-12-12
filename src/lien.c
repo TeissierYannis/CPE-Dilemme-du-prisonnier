@@ -27,4 +27,6 @@ void create_link(){
     lien.restart_choice = 0;
     // Choix de fin de partie cliqué Oui / Non
     lien.is_restart_clicked = 0;
+    // Gagnant
+    lien.is_winner = false;
 }

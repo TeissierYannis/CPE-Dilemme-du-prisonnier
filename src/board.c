@@ -5,11 +5,12 @@ Tools tools;
 // Créer l'interface graphique
 void createBoard(int argc, char **argv) {
     gtk_init(&argc, &argv); // init Gtk
-
+    // Outils principaux
     tools.builder = gtk_builder_new_from_file("../glade/glade.glade");
     tools.window = GTK_WIDGET(gtk_builder_get_object(tools.builder, "window"));
     gtk_builder_connect_signals(tools.builder, NULL);
 
+    // Création des élements de jeu
     tools.fixed1 = GTK_WIDGET(gtk_builder_get_object(tools.builder, "fixed1"));
     tools.trahison = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Trahison"));
     tools.collaboration = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Collaboration"));
@@ -22,6 +23,10 @@ void createBoard(int argc, char **argv) {
     tools.rejouer = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Rejouer"));
     tools.label_rejouer = GTK_WIDGET(gtk_builder_get_object(tools.builder, "labelRejouer"));
     tools.info = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Info"));
+    tools.winner = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Winner"));
+
+    // Informations sur la partie à afficher
+    gtk_label_set_text(GTK_LABEL(tools.info), "Chargement de la partie...");
     printf("GUI OK\n");
     gtk_widget_show(tools.window);
     gtk_main();

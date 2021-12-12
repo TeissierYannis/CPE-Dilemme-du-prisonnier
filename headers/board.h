@@ -39,6 +39,7 @@ typedef struct {
     GtkWidget *rejouer;
     GtkWidget *label_rejouer;
     GtkWidget *info;
+    GtkWidget *winner;
 } Tools;
 
 

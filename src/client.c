@@ -258,6 +258,8 @@ void jouer(int socket, Game game) {
         // Afficher sur l'interface graphique le resultat du round
         show_round_result(round);
     }
+    // Mettre à jour le nom du gagant
+    set_winner_name(socket, game);
 }
 
 
@@ -268,7 +270,6 @@ int game_end(Round round) {
     // Si on reçoit l'indiquateur de fin de partie (via le serveur)
     if (round.status == 1) {
         result = true;
-        lien.is_game_end = true;
         printf("[GAME] Game finished.\n");
     }
     return result;
@@ -357,7 +358,8 @@ int get_clique() {
     int clique = -1;
     // Indiquer au joueur qu'il peut jouer
     lien.able_click = 1; // autoriser les cliques
-    gtk_label_set_text(GTK_LABEL(tools.info), "Vous pouvez jouer !");
+    // Aucune information à afficher
+    gtk_label_set_text(GTK_LABEL(tools.info), " ");
 
     printf("Entrez la réponse : \n");
     // Tant que le joueur n'a pas cliqué on attend
@@ -365,7 +367,8 @@ int get_clique() {
         sleep(0.3);
     }
     lien.is_choice_ok = false;
-    gtk_label_set_text(GTK_LABEL(tools.info), "Patienez J2 n'a pas répondue...");
+    // Afficher informations que J2 n'a pas encore joué
+    gtk_label_set_text(GTK_LABEL(tools.info), "Attente réponse J2...");
   //  lien.able_click = 0;
    // lien.is_choice_ok = false;
     // On récupère le choix du joueur
@@ -496,6 +499,52 @@ bool are_equal(char *key, char *name) {
         result = true;
     }
     return result;
+}
+
+int get_winner(int socket){
+    int winner;
+    int recevoir;
+    printf("[CLIENT] Waiting for winner name's...\n");
+    // Recevoir des données du serveur et les stock dans le gagnant
+    recevoir = recv(socket, &winner, sizeof(winner), 0);
+
+    printf("[CLIENT] Winner name's received.\n");
+
+    // Retourne -1 en cas d'erreur
+    if (recevoir == -1) {
+        printf("[CLIENT] Winner name's not received.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return winner;
+}
+
+bool is_game_win(Game game, int winner){
+    bool win = false;
+    if(game.player_id == winner){
+        win = true;
+    }
+    return win;
+}
+
+// Afficher le gagnant
+void set_winner_name(int socket, Game game){
+    int winner;
+    // Récuéperer id du gagnant
+    winner = get_winner(socket);
+    // Si la partie est gagnée
+    if(is_game_win(game, winner)){
+        // Afficher partie gagnée !
+        lien.is_winner = true;
+    }
+    // Si la partie est perdue
+    else{
+        // Afficher partie perdue !
+        lien.is_winner = false;
+    }
+    // indiquer la fin du jeu
+    lien.is_game_end = true;
+    printf("Partie gagné = %d et fin de partie = %d\n", lien.is_winner, lien.is_game_end);
 }
 
 

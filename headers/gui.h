@@ -25,5 +25,7 @@ void result();
 void on_quitter_clicked();
 void afficher_result();
 void choice_clicked(void *param);
+// Afficher le gagnant
+void show_winner();
 
 #endif

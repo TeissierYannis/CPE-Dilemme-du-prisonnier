@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifndef LIEN_H
 #define LIEN_H
@@ -32,6 +33,7 @@ typedef struct{
    
     int restart_choice; // choix de find de partie Recommencer / Quitter
     int is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
+    bool is_winner;
 } Lien;
 
 // Lien global entre GUI et Socket contenant les informations sur le jeu

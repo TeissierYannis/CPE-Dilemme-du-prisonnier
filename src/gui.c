@@ -29,7 +29,6 @@ void choice_clicked(void *boutton){
         // Prévoir le prochain round
         lien.able_click = 0;
     
-       // gtk_label_set_text(GTK_LABEL(tools.info), "Vous pouvez jouer !");
         // Récuperer nom du bouton cliqué
         const char *message = gtk_button_get_label(b);
 
@@ -143,25 +142,29 @@ void afficher_result() {
     afficher_score();
     // Afficher informations sur le choix de l'adversaire
     afficher_choix_adversaire();
-    // Montrer le bouton pour recommencer une partie
-    show_restart_button();
-    // On passe la reponse suivante a faux pour commencer nouveau round
+
+    // Si la partie est finie
+    if(lien.is_game_end){
+        gtk_label_set_text(GTK_LABEL(tools.info), "Fin de la partie...");
+        // Montrer le bouton pour recommencer une partie
+        show_restart_button();
+        show_winner();
+    }
+    
+    // On passe le resultat suivant a faux pour commencer nouveau round
     lien.is_answer_ok = false;
 }
 
 // On montre le bouton REJOUER quand la partie est finie
 void show_restart_button() {
-    // Si la partie est finie
-    if (lien.is_game_end) {
-        // On montre le bouton pour rejouer au joueur
-        gtk_widget_show(tools.rejouer);
-        gtk_widget_show(tools.label_rejouer);
-        gtk_widget_hide(tools.trahison);
-        gtk_widget_hide(tools.collaboration);
-        gtk_widget_hide(tools.choix_adversaire);
-        gtk_widget_hide(tools.score1);
-        gtk_widget_hide(tools.score2);
-    }
+    // On montre le bouton pour rejouer au joueur
+    gtk_widget_show(tools.rejouer);
+    gtk_widget_show(tools.label_rejouer);
+    gtk_widget_hide(tools.trahison);
+    gtk_widget_hide(tools.collaboration);
+   // gtk_widget_hide(tools.choix_adversaire);
+//    gtk_widget_hide(tools.score1);
+  //  gtk_widget_hide(tools.score2);
 }
 
 // Lors d'un clic sur bouton REJOUER
@@ -180,13 +183,29 @@ void on_restart_click(GtkButton *b) {
     gtk_widget_hide(tools.label_rejouer);
     gtk_widget_show(tools.trahison);
     gtk_widget_show(tools.collaboration);
-    gtk_widget_show(tools.choix_adversaire);
-    gtk_widget_show(tools.score1);
-    gtk_widget_show(tools.score2);
+   // gtk_widget_show(tools.choix_adversaire);
+   // gtk_widget_show(tools.score1);
+   // gtk_widget_show(tools.score2);
 
     printf("[GUI] Restart game\n");
 }
 
+// Afficher le gagnant
+void show_winner(){
+    char *mssg_win;
+    // Si on a gagné
+    if(lien.is_winner){
+        mssg_win = "Bravo vous avez gagné !";
+    }
+    // Si on a perdue
+    else{
+        mssg_win = "Zut vous avez perdu...";
+    }
+    // Message à afficher
+    gtk_label_set_text(GTK_LABEL(tools.winner), mssg_win);
+    gtk_widget_show(tools.winner);
+
+}
 
 // Quitter la partie (INDIQUER AU SERVEUR QUE LE JOUEUR EST PARTI)
 void on_quitter_clicked() {

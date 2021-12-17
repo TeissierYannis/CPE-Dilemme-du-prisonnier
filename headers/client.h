@@ -35,7 +35,7 @@ typedef struct{
 
 // Contient les informations de la partie
 typedef struct {
-    int player_id;
+    Joueur player;
     int id;
 } Game;
 
@@ -92,7 +92,7 @@ void disconnect_player(int socketClient, Joueur player);
 // Creer une socket client
 int create_socket();
 // Recevoir un identifiant (du joueur ou de la partie selon le choix)
-int * client_recevoir_id(int socketClient, char *title);
+int* client_recevoir_id(int socketClient, char *title);
 // Initialiser le joueur lorsqu'il reçoit un id
 Joueur create_player(int socketClient);
 // Indiquer le début de la partie avec un identifiant
@@ -100,7 +100,7 @@ Game create_game(int socketClient, Joueur player);
 // Recupérer le choix du joueur
 Answer get_answer(Game game);
 // Recuperer les informations du round
-Round get_round(int socket);
+Round get_round(int socket, , Game game);
 // Permet de jouer en communicant avec le serveur
 void jouer(int socket, Game game);
 // Indique si la partie est fini ou continue

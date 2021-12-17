@@ -67,14 +67,14 @@ int client_connexion() {
 }
 
 // Le client reçoit un id
-int * client_recevoir_id(int socketClient, char *title) {
+int* client_recevoir_id(int socketClient, char *title) {
     char * id;
     int id_int = -1, id_player_local = -1;
     char message[255]; // stock le message que le serveur a envoyé
     char *key;    // titre du message
     char *separateur = " "; // separateur entre les champs du message
     int receive;
-
+    int *result = malloc(sizeof(int) * 2);
     // Recevoir message du serveur contenant un identifiant et le nom de ce à quoi correspond l'ID
     // (id du joueur ou id de la partie)
     printf("[RECEIVE] Receiving id from server...\n");
@@ -96,7 +96,7 @@ int * client_recevoir_id(int socketClient, char *title) {
         // Récuperer la deuxième partie du message (l'id) et le convertir en identifiant
         id = strtok(NULL, " ");
 
-        printf("[RECEIVE] Id received : %s\n", id);
+      //  printf("[RECEIVE] Id received : %s\n", id);
 
         if (are_equal(title, "id")) {
             id_int = atoi(strtok(id, ":"));
@@ -108,8 +108,12 @@ int * client_recevoir_id(int socketClient, char *title) {
         }
     }
     // Sinon on passe sans utiliser l'ID
-
-    int result[2] = {id_int, id_player_local};
+    result[0] = id_int;
+    result[1] = id_player_local;
+    //int result[] = {id_int, id_player_local};
+  /*  for (int i = 0; i <2 ; i++){
+        printf("result = %d\n", result[i]);
+    }*/
     return result;
 }
 
@@ -117,13 +121,14 @@ int * client_recevoir_id(int socketClient, char *title) {
 Joueur create_player(int socketClient) {
     Joueur player;
     char *type_id = "id"; // A modifier selon valeur du serveur
-
+    
     printf("[CLIENT] Receiving player id...\n");
     // On récupère l'id du joueur
 
-    int * result = client_recevoir_id(socketClient, type_id);
+    int *result = client_recevoir_id(socketClient, type_id);
     int identifiant = result[0];
     int local_id = result[1];
+    //printf("identifiant = %d et local id = %d \n", identifiant, local_id);
     // Si l'ID récupérer est valide on l'affecte au joueur
     if (is_id_valide(identifiant)) {
         printf("[CLIENT] Player id received.\n");
@@ -150,12 +155,13 @@ Game create_game(int socketClient, Joueur player) {
     create_link();
     // Récupérer l'identifiant de la partie
     printf("[CLIENT] Receiving party id...\n");
-    id = client_recevoir_id(socketClient, "party");
+    int *result = client_recevoir_id(socketClient, "party"); // L'identifiant contient "id/role" -> role pas nécessaire pour game
+    id = result[0];
     // Si l'identifiant est valide
     if (is_id_valide(id)) {
         printf("[CLIENT] Party id received.\n");
         game.id = id;
-        game.player_id = player.id;
+        game.player = player;
     } else {
         printf("[CLIENT] Pargity id not valid.\n");
         exit(EXIT_FAILURE);
@@ -163,7 +169,8 @@ Game create_game(int socketClient, Joueur player) {
     // Affichage
     printf("\n=========== Infos partie ===============\n");
     printf("Game ID : %d\n", game.id);
-    printf("Player ID : %d\n", game.player_id);
+    printf("Player ID : %d\n", game.player.id);
+    printf("Role : %d\n", game.player.local_id);
     printf("==========================\n");
 
     // A faire creer le lien entre joueur et GUI
@@ -220,7 +227,7 @@ void send_answer(int socketClient, Game game) {
 }
 
 // Recuperer les informations du round (resultats J1 et J2 + n° du round)
-Round get_round(int socketClient) {
+Round get_round(int socketClient, Game game) {
     Round round;
     int recevoir;
     printf("[CLIENT] Waiting for round informations...\n");

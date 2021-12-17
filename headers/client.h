@@ -100,7 +100,7 @@ Game create_game(int socketClient, Joueur player);
 // Recupérer le choix du joueur
 Answer get_answer(Game game);
 // Recuperer les informations du round
-Round get_round(int socket, , Game game);
+Round get_round(int socket, Game game);
 // Permet de jouer en communicant avec le serveur
 void jouer(int socket, Game game);
 // Indique si la partie est fini ou continue

@@ -188,7 +188,7 @@ Answer get_answer(Game game) {
     //lien.is_answer_ok = false;
     // Infos sur le joueur et la partie
     answer.party_id = game.id;
-    answer.player_id = game.player_id;
+    answer.player_id = game.player.id;
     // Valeurs jouées par le joueur
     answer.choice = get_clique();
     answer.time = get_time_clique();
@@ -276,7 +276,7 @@ void jouer(int socket, Game game) {
         // Envoyer le choix du joueur au serveur
         send_answer(socket, game);
         // Le serveur nous renvois les resultat du round
-        round = get_round(socket);
+        round = get_round(socket, game);
         // Afficher sur l'interface graphique le resultat du round
         show_round_result(round);
     }
@@ -543,7 +543,7 @@ int get_winner(int socket){
 
 bool is_game_win(Game game, int winner){
     bool win = false;
-    if(game.player_id == winner){
+    if(game.player.id == winner){
         win = true;
     }
     return win;

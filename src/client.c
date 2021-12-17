@@ -104,7 +104,7 @@ int * client_recevoir_id(int socketClient, char *title) {
     }
     // Sinon on passe sans utiliser l'ID
 
-    int result[] = {id_int, id_player_local};
+    int result[2] = {id_int, id_player_local};
     return result;
 }
 
@@ -115,11 +115,15 @@ Joueur create_player(int socketClient) {
 
     printf("[CLIENT] Receiving player id...\n");
     // On récupère l'id du joueur
-    int identifiant = client_recevoir_id(socketClient, type_id);
+
+    int * result = client_recevoir_id(socketClient, type_id);
+    int identifiant = result[0];
+    int local_id = result[1];
     // Si l'ID récupérer est valide on l'affecte au joueur
     if (is_id_valide(identifiant)) {
         printf("[CLIENT] Player id received.\n");
         player.id = identifiant;
+        player.local_id = local_id;
         // Status du joueur "en ligne"
         strcpy(player.status, "online");
     }

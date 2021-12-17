@@ -30,6 +30,7 @@
 typedef struct{
     int id;
     char status[11];
+    int local_id;
 } Joueur;
 
 // Contient les informations de la partie

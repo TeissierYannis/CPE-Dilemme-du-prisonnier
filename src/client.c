@@ -67,8 +67,9 @@ int client_connexion() {
 }
 
 // Le client reçoit un id
-int client_recevoir_id(int socketClient, char *title) {
-    int id;
+int * client_recevoir_id(int socketClient, char *title) {
+    char * id;
+    int id_int = -1, id_player_local = -1;
     char message[255]; // stock le message que le serveur a envoyé
     char *key;    // titre du message
     char *separateur = " "; // separateur entre les champs du message
@@ -77,7 +78,7 @@ int client_recevoir_id(int socketClient, char *title) {
     // Recevoir message du serveur contenant un identifiant et le nom de ce à quoi correspond l'ID
     // (id du joueur ou id de la partie)
     printf("[RECEIVE] Receiving id from server...\n");
-    receive = recv(socketClient, &message, sizeof(message), 0);
+    receive = recv(socketClient, &message, sizeof(char) * 255, 0);
     // Vérifier la réception
     if (receive == -1){
         printf("[RECEIVE] Error reception ID :");
@@ -92,14 +93,19 @@ int client_recevoir_id(int socketClient, char *title) {
     // Si l'ID correspond au type d'ID demandé on l'enregistre
     if (are_equal(key, title)) {
         // Récuperer la deuxième partie du message (l'id) et le convertir en identifiant
-        id = atoi(strtok(NULL, " "));
+        id = strtok(NULL, " ");
+
+        if (are_equal(title, "id")) {
+            id_int = atoi(strtok(id, ":"));
+            id_player_local = atoi(strtok(NULL, ":"));
+        } else {
+            id_int = atoi(id);
+        }
     }
     // Sinon on passe sans utiliser l'ID
-    else {
-        id = -1;
-    }
 
-    return id;
+    int result[] = {id_int, id_player_local};
+    return result;
 }
 
 // Initialiser le joueur avec id reçu
@@ -193,7 +199,7 @@ void send_answer(int socketClient, Game game) {
 
     printf("[CLIENT] Sending answer to the server...\n");
     // On envoie la reponse du joueur
-    envoie = send(socketClient, &answer, sizeof(answer), 0);
+    envoie = send(socketClient, &answer, sizeof(Answer), 0);
 
     // Si envoie echoue
     if (envoie == -1) {
@@ -298,13 +304,13 @@ void game_recap(int socketClient) {
     recap = get_recap(socketClient);
 
     // TODO Mettre dans le recap le nombre final de round ?
-    int length_J1 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
-    int length_J2 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
+    //int length_J1 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
+    //int length_J2 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
 
-    printf("TAILLE recap = %d\n", length_J1);
+    //printf("TAILLE recap = %d\n", length_J1);
     // Afficher l'historique de la partie
-    print_recap(&recap.list_answer_J1, length_J1);
-    print_recap(&recap.list_answer_J2, length_J2);
+    print_recap((Answer *) &recap.list_answer_J1, recap.nb_round);
+    print_recap((Answer *) &recap.list_answer_J2, recap.nb_round);
 }
 
 // Afficher la recapitulation de la partie pour le joueur indiqué
@@ -343,7 +349,7 @@ void send_player_status(int socketClient, Joueur player) {
     int envoie;
     printf("Envoie du status du joueur au serveur...\n");
     // On envoie le status du joueur
-    envoie = send(socketClient, &player.status, sizeof(player.status), 0);
+    envoie = send(socketClient, &player.status, sizeof(int), 0);
 
     // Si envoie echoue
     if (envoie == -1) {
@@ -419,7 +425,7 @@ int get_round_status(int socketClient) {
     int recevoir;
     printf("Reception status du round...\n");
     // Recevoir le status du round
-    recevoir = recv(socketClient, &status_round, sizeof(status_round), 0);
+    recevoir = recv(socketClient, &status_round, sizeof(char) * 255, 0);
  
     strtok(status_round, " ");
     status = atoi(strtok(NULL, " "));
@@ -506,7 +512,7 @@ int get_winner(int socket){
     int recevoir;
     printf("[CLIENT] Waiting for winner name's...\n");
     // Recevoir des données du serveur et les stock dans le gagnant
-    recevoir = recv(socket, &winner, sizeof(winner), 0);
+    recevoir = recv(socket, &winner, sizeof(int), 0);
 
     printf("[CLIENT] Winner name's received.\n");
 

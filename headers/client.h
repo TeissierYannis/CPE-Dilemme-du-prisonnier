@@ -66,6 +66,7 @@ typedef struct {
 // Récapitule la partie
 typedef struct {
     // Contient la liste des reponses de chaque joueur
+    int nb_round;
     Answer list_answer_J1[10];
     Answer list_answer_J2[10];
 } Recap;
@@ -90,7 +91,7 @@ void disconnect_player(int socketClient, Joueur player);
 // Creer une socket client
 int create_socket();
 // Recevoir un identifiant (du joueur ou de la partie selon le choix)
-int client_recevoir_id(int socketClient, char *title);
+int * client_recevoir_id(int socketClient, char *title);
 // Initialiser le joueur lorsqu'il reçoit un id
 Joueur create_player(int socketClient);
 // Indiquer le début de la partie avec un identifiant

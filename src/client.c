@@ -90,14 +90,19 @@ int * client_recevoir_id(int socketClient, char *title) {
     // Récupérer le titre de l'identifiant en l'extrayant de la chaine de caracteres
     key = strtok(message, separateur);
 
+    printf("[RECEIVE] Key received : %s\n", key);
     // Si l'ID correspond au type d'ID demandé on l'enregistre
     if (are_equal(key, title)) {
         // Récuperer la deuxième partie du message (l'id) et le convertir en identifiant
         id = strtok(NULL, " ");
 
+        printf("[RECEIVE] Id received : %s\n", id);
+
         if (are_equal(title, "id")) {
             id_int = atoi(strtok(id, ":"));
             id_player_local = atoi(strtok(NULL, ":"));
+            printf("[RECEIVE] Id received : %d\n", id_int);
+            printf("[RECEIVE] Id player local received : %d\n", id_player_local);
         } else {
             id_int = atoi(id);
         }

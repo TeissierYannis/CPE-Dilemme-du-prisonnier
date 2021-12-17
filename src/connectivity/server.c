@@ -51,7 +51,7 @@ int create_server(char *ip, int port) {
 
     // prevent 60 timeout
     int timeout = 1;
-    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout));
+    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(int));
 
     // bind
     if (bind(socketfd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
@@ -154,10 +154,10 @@ void *thread_party(void *ptr) {
     player p2 = players[1];
 
     printf("Send user id to client\n");
-    sprintf(buffer_out, "id %d", p1.id);
+    sprintf(buffer_out, "id %d:1", p1.id);
     printf("%s\n", buffer_out);
     write(p1.socket, buffer_out, strlen(buffer_out));
-    sprintf(buffer_out, "id %d", p2.id);
+    sprintf(buffer_out, "id %d:2", p2.id);
     printf("%s\n", buffer_out);
     write(p2.socket, buffer_out, strlen(buffer_out));
 
@@ -198,8 +198,8 @@ void *thread_party(void *ptr) {
         init_answer(&buffer_answer2);
 
         printf("[PARTY #%d] Reading response from clients\n", party.id);
-        p1_t = read(p1.socket, &buffer_answer1, BUFFERSIZE);
-        p2_t = read(p2.socket, &buffer_answer2, BUFFERSIZE);
+        p1_t = read(p1.socket, &buffer_answer1, sizeof(answer_struct));
+        p2_t = read(p2.socket, &buffer_answer2, sizeof(answer_struct));
         printf("Réponse J1 reçue ... = %d\n", buffer_answer1.choice);
         if (p1_t > 0 || p2_t > 0) {
 
@@ -212,8 +212,6 @@ void *thread_party(void *ptr) {
             // fill answer struct
             p1Result = buffer_answer1.choice;
             p1Time = buffer_answer1.time;
-
-         
 
             printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",
                    party.id,
@@ -243,7 +241,7 @@ void *thread_party(void *ptr) {
             round round_struct, round_party;
             init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
             init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
-            add_round_to_party(&party, &round_party);
+            // add_round_to_party(&party, &round_party);
 
            // sleep(5);
 
@@ -261,10 +259,6 @@ void *thread_party(void *ptr) {
         }
     }
     printf("[PARTY #%d] Every rounds was played \n", party.id);
-
-    // TODO : Send end to client the recap
-
-    //sleep(3);
 
     printf("[PARTY #%d] Generating recap...\n", party.id);
     recap party_recap = generating_recap(&party);

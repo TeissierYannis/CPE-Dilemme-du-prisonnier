@@ -63,7 +63,9 @@ typedef struct {
     int time;
 } answer_struct;
 
-typedef struct {
+typedef struct
+{
+    int nb_round;
     answer_struct list_answer_J1[10];
     answer_struct list_answer_J2[10];
 } recap;

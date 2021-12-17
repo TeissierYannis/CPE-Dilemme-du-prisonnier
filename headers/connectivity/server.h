@@ -6,7 +6,7 @@
 
 #include "../game/core.h"
 
-#define BUFFERSIZE 255
+#define BUFFERSIZE 1024
 
 typedef struct {
     player *clients;

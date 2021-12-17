@@ -98,10 +98,10 @@ void init_round(round *round, int p1_result, int p1_decision_time, int p2_result
  * @param round round to add
  */
 void add_round_to_party(party *party, round *round0) {
-    party->round_count += 1;
     int count = party->round_count;
     //init_round(party->round[count], round0->p1_result, round0->p1_decision_time, round0->p2_result, round0->p2_decision_time, round0->status, round0->round_number);
     party->round[count] = *round0;
+    party->round_count += 1;
 }
 
 /**
@@ -115,6 +115,9 @@ recap generating_recap(party *party) {
 
     printf("========================================================\n");
 
+
+    // 3:P1{1,0,10;2,1,25;3,0,2},P2{1,0,10;2,1,25;3,0,2}
+
     for (int i = 0; i < party->round_count; i++) {
 
         printf("Round %d\n", i + 1);
@@ -124,12 +127,13 @@ recap generating_recap(party *party) {
         printf("en %d secondes\n", party->round[i].p2_decision_time);
         printf("\n");
 
-        answer_struct answer_p1 = {party->id, party->player_game->id, party->round[i].p1_result, party->round[i].p1_wallet};
-        answer_struct answer_p2 = {party->id, party->player_game->id, party->round[i].p2_result, party->round[i].p2_wallet};
+        answer_struct answer_p1 = {party->id, party->player_game->id, party->round[i].p1_result, party->round[i].p1_decision_time};
+        answer_struct answer_p2 = {party->id, party->player_game->id, party->round[i].p2_result, party->round[i].p2_decision_time};
 
         recap.list_answer_J1[i] = answer_p1;
         recap.list_answer_J2[i] = answer_p2;
     }
+    recap.nb_round = party->round_count;
     printf("========================================================\n");
     return recap;
 }

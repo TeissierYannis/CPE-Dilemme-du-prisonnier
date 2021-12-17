@@ -188,9 +188,12 @@ Answer get_answer(Game game) {
     // Infos sur le joueur et la partie
     answer.party_id = game.id;
     answer.player_id = game.player.id;
+
+    int time_start = time(NULL), time_end;
     // Valeurs jouées par le joueur
     answer.choice = get_clique();
-    answer.time = get_time_clique();
+    time_end = time(NULL);
+    answer.time = time_end - time_start;
 
     printf("[CLIENT] Player choice completed.\n");
     return answer;
@@ -393,7 +396,7 @@ void send_player_status(int socketClient, Joueur player) {
 /* A MODIFIER POUR PRENDRE LA VALEUR DU CARRE CLIQUE*/
 // Recuperer le numero du carre cliqué
 int get_clique() {
-    int clique = -1;
+    int clique = -1, time_start, time_end, time_diff;
     // Indiquer au joueur qu'il peut jouer
     lien.able_click = 1; // autoriser les cliques
     // Aucune information à afficher
@@ -401,9 +404,8 @@ int get_clique() {
 
     printf("Entrez la réponse : \n");
     // Tant que le joueur n'a pas cliqué on attend
-    while (lien.is_choice_ok != true) {
-        sleep(0.3);
-    }
+    while (lien.is_choice_ok != true) {}
+
     lien.is_choice_ok = false;
     // Afficher informations que J2 n'a pas encore joué
     gtk_label_set_text(GTK_LABEL(tools.info), "Attente réponse J2...");

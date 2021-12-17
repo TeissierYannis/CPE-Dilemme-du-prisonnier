@@ -558,7 +558,7 @@ int get_winner(int socket){
 
 bool is_game_win(Game game, int winner){
     bool win = false;
-    if(game.player.id == winner){
+    if(game.player.local_id == winner){
         win = true;
     }
     return win;

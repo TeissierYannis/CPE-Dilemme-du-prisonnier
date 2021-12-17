@@ -15,10 +15,10 @@ int create_socket() {
     // Socket(Protocole IP, Protocole transmission des données, Port)
     // AF_INET = Domaine d'adresse IPV4
     // SOCK_STREAM = TCP
-    int DOMAIN = AF_INET;
+    int domain = AF_INET;
     int TYPE = SOCK_STREAM;
     int PROTOCOL = 0;
-    int socketClient = socket(DOMAIN, TYPE, PROTOCOL);
+    int socketClient = socket(domain, TYPE, PROTOCOL);
 
     printf("[SOCKET] Socket created.\n");
 

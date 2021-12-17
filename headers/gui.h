@@ -27,5 +27,5 @@ void afficher_result();
 void choice_clicked(void *param);
 // Afficher le gagnant
 void show_winner();
-
+void show_restart_button();
 #endif

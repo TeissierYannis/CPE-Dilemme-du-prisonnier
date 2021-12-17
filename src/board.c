@@ -22,8 +22,13 @@ void createBoard(int argc, char **argv) {
     tools.choix_adversaire = GTK_WIDGET(gtk_builder_get_object(tools.builder, "choix_adversaire"));
     tools.rejouer = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Rejouer"));
     tools.label_rejouer = GTK_WIDGET(gtk_builder_get_object(tools.builder, "labelRejouer"));
+    // Informations sur la communication client / serveur
     tools.info = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Info"));
-    tools.winner = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Winner"));
+  //  tools.winner = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Winner"));
+    tools.image_gagner = GTK_WIDGET(gtk_builder_get_object(tools.builder, "image_gagner"));
+    tools.image_perdu = GTK_WIDGET(gtk_builder_get_object(tools.builder, "image_perdu"));
+    tools.gagner = GTK_WIDGET(gtk_builder_get_object(tools.builder, "gagner"));
+    tools.perdu = GTK_WIDGET(gtk_builder_get_object(tools.builder, "perdu"));
 
     // Informations sur la partie à afficher
     gtk_label_set_text(GTK_LABEL(tools.info), "Chargement de la partie...");

@@ -39,7 +39,14 @@ typedef struct {
     GtkWidget *rejouer;
     GtkWidget *label_rejouer;
     GtkWidget *info;
-    GtkWidget *winner;
+ //   GtkWidget *winner;
+    // Les images
+    GtkWidget *image_gagner;
+    GtkWidget *image_perdu;
+    // Les messages de fin de partie (supprimer winner)
+    GtkWidget *perdu;
+    GtkWidget *gagner;
+    GtkWidget *egalite;
 } Tools;
 
 

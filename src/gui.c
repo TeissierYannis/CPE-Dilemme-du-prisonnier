@@ -192,18 +192,23 @@ void on_restart_click(GtkButton *b) {
 
 // Afficher le gagnant
 void show_winner(){
-    char *mssg_win;
+   // char *mssg_win;
     // Si on a gagné
     if(lien.is_winner){
-        mssg_win = "Bravo vous avez gagné !";
+        gtk_widget_show(tools.gagner);
+        gtk_widget_show(tools.image_gagner);
+      //  mssg_win = "Bravo vous avez gagné !";
     }
     // Si on a perdue
     else{
-        mssg_win = "Zut vous avez perdu...";
+        gtk_widget_show(tools.perdu);
+        gtk_widget_show(tools.image_perdu);
+    //    mssg_win = "Zut vous avez perdu...";
     }
+    // TODO si égalité
     // Message à afficher
-    gtk_label_set_text(GTK_LABEL(tools.winner), mssg_win);
-    gtk_widget_show(tools.winner);
+   // gtk_label_set_text(GTK_LABEL(tools.winner), mssg_win);
+   // gtk_widget_show(tools.winner);
 
 }
 

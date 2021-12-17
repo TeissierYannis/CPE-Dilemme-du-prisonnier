@@ -404,7 +404,9 @@ int get_clique() {
 
     printf("Entrez la réponse : \n");
     // Tant que le joueur n'a pas cliqué on attend
-    while (lien.is_choice_ok != true) {}
+    while (lien.is_choice_ok != true) {
+        sleep(0.3); // mettre un sleep pour ne pas monopoliser toutes les ressources
+    }
 
     lien.is_choice_ok = false;
     // Afficher informations que J2 n'a pas encore joué

@@ -338,7 +338,7 @@ void game_recap(int socketClient) {
     //int length_J1 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
     //int length_J2 = sizeof(recap.list_answer_J1)/sizeof(recap.list_answer_J1[0]); // TODO à CHANGER
 
-    //printf("TAILLE recap = %d\n", length_J1);
+    printf("TAILLE recap = %d\n", recap.nb_round);
     // Afficher l'historique de la partie
     print_recap((Answer *) &recap.list_answer_J1, recap.nb_round);
     print_recap((Answer *) &recap.list_answer_J2, recap.nb_round);

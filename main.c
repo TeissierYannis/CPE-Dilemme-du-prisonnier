@@ -15,7 +15,7 @@ GtkWidget *fixed1;
 GtkWidget *trahison;
 GtkWidget *collaboration;
 GtkWidget *quitter;
-GtkWidget *new_round;
+GtkWidget *rejouer;
 GtkWidget *choix_adversaire;
 GtkWidget *rounde;
 GtkWidget *titre;
@@ -27,7 +27,13 @@ GtkWidget *label_j2;
 GtkWidget *perdu;
 GtkWidget *gagner;
 GtkWidget *egalite;
+GtkWidget *image_gagner;
+GtkWidget *image_perdu;
 GtkBuilder *builder;
+
+
+
+
 
 void afficher_result();
 void create_link();
@@ -39,6 +45,7 @@ void on_quitter_clicked();
 void afficher_choix_adversaire();
 void end_game();
 Bool end_round();
+void on_rejouer_clicked();
 
 void create_link()
 {
@@ -62,10 +69,10 @@ int main(int argc, char **argv)
     gtk_builder_connect_signals(builder, NULL);
 
     fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
-    trahison = GTK_WIDGET(gtk_builder_get_object(builder, "trahison"));
-    collaboration = GTK_WIDGET(gtk_builder_get_object(builder, "collaboration"));
+    trahison = GTK_WIDGET(gtk_builder_get_object(builder, "Trahison"));
+    collaboration = GTK_WIDGET(gtk_builder_get_object(builder, "Collaboration"));
     quitter = GTK_WIDGET(gtk_builder_get_object(builder, "quitter"));
-    new_round = GTK_WIDGET(gtk_builder_get_object(builder, "new_round"));
+    rejouer = GTK_WIDGET(gtk_builder_get_object(builder, "rejouer"));
     choix_adversaire = GTK_WIDGET(gtk_builder_get_object(builder, "choix_adversaire"));
     rounde = GTK_WIDGET(gtk_builder_get_object(builder, "rounde"));
     titre = GTK_WIDGET(gtk_builder_get_object(builder, "titre"));
@@ -76,6 +83,8 @@ int main(int argc, char **argv)
     label_j2 = GTK_WIDGET(gtk_builder_get_object(builder, "label_j2"));
     gagner = GTK_WIDGET(gtk_builder_get_object(builder, "gagner"));
     perdu = GTK_WIDGET(gtk_builder_get_object(builder, "perdu"));
+    image_gagner = GTK_WIDGET(gtk_builder_get_object(builder, "image_gagner"));
+    image_perdu = GTK_WIDGET(gtk_builder_get_object(builder, "image_perdu"));
     egalite = GTK_WIDGET(gtk_builder_get_object(builder, "egalite"));
 
     //g_signal_connect(G_OBJECT(trahison), "clicked", G_CALLBACK(on_clicked_choice), NULL);
@@ -189,24 +198,19 @@ void end_game()
 {
     if (lien.is_game_end = end_round())
     {
-        gtk_widget_show(new_round);
+        gtk_widget_show(rejouer);
         
-        gtk_widget_set_sensitive (trahison, FALSE);        // Erreur
-        gtk_widget_set_sensitive (collaboration, FALSE);  // Erreur
-        gtk_widget_hide(rounde);
-        gtk_widget_hide(score1);
-        gtk_widget_hide(score2);
-        gtk_widget_hide(label_round);
-        gtk_widget_hide(label_j1);
-        gtk_widget_hide(label_j2);
-        gtk_widget_hide(choix_adversaire);
+        gtk_widget_hide(trahison);        // Erreur
+        gtk_widget_hide(collaboration);  
         if (lien.le_gagnant == 1)
         {
             gtk_widget_show(gagner);
+            gtk_widget_show(image_gagner);
         }
         else if (lien.le_gagnant == 2)
         {
             gtk_widget_show(perdu);
+            gtk_widget_show(image_perdu);
         }
         else if (lien.le_gagnant == 0)
         {
@@ -224,6 +228,22 @@ void afficher_result()
     afficher_round();
     afficher_score();
     afficher_choix_adversaire();
+}
+
+void on_rejouer_clicked(){
+    gtk_label_set_text(GTK_LABEL(score1), 0);
+    gtk_label_set_text(GTK_LABEL(score2), 0);
+    gtk_label_set_text(GTK_LABEL(rounde), 0);
+    lien.nb_round = 0;
+    // On remontre les boutons de jeu et cache les boutons pour rejouer
+    gtk_widget_hide(image_gagner);
+    gtk_widget_hide(image_perdu);
+    gtk_widget_hide(rejouer);
+    gtk_widget_hide(gagner);
+    gtk_widget_hide(perdu);
+    gtk_widget_hide(egalite);
+    gtk_widget_show(trahison);
+    gtk_widget_show(collaboration);
 }
 
 void on_quitter_clicked()

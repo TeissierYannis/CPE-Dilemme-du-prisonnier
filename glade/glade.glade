@@ -23,7 +23,7 @@
           </object>
           <packing>
             <property name="x">109</property>
-            <property name="y">170</property>
+            <property name="y">200</property>
           </packing>
         </child>
         <child>
@@ -39,7 +39,7 @@
           </object>
           <packing>
             <property name="x">387</property>
-            <property name="y">170</property>
+            <property name="y">200</property>
           </packing>
         </child>
         <child>
@@ -104,7 +104,7 @@
           </object>
           <packing>
             <property name="x">300</property>
-            <property name="y">260</property>
+            <property name="y">280</property>
           </packing>
         </child>
         <child>
@@ -152,7 +152,7 @@
           </object>
           <packing>
             <property name="x">240</property>
-            <property name="y">260</property>
+            <property name="y">280</property>
           </packing>
         </child>
         <child>
@@ -183,21 +183,22 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">130</property>
-            <property name="y">95</property>
+            <property name="x">135</property>
+            <property name="y">75</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="new_round">
-            <property name="label" translatable="yes">Nouveau round</property>
-            <property name="width-request">100</property>
+          <object class="GtkButton" id="rejouer">
+            <property name="label" translatable="yes">Rejouer</property>
+            <property name="width-request">110</property>
             <property name="height-request">70</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <signal name="clicked" handler="on_rejouer_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">252</property>
-            <property name="y">170</property>
+            <property name="x">263</property>
+            <property name="y">210</property>
           </packing>
         </child>
         <child>
@@ -205,15 +206,15 @@
             <property name="width-request">150</property>
             <property name="height-request">50</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Vous avez gagné !!!</property>
+            <property name="label" translatable="yes">Bravo vous avez gagné !</property>
             <attributes>
               <attribute name="foreground" value="#2626a2a26969"/>
               <attribute name="size" value="18000"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">205</property>
-            <property name="y">95</property>
+            <property name="x">180</property>
+            <property name="y">118</property>
           </packing>
         </child>
         <child>
@@ -221,15 +222,15 @@
             <property name="width-request">150</property>
             <property name="height-request">50</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Vous avez perdu !!!</property>
+            <property name="label" translatable="yes">Zut vous avez perdu...</property>
             <attributes>
               <attribute name="foreground" value="#e0e01b1b2424"/>
               <attribute name="size" value="18000"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">205</property>
-            <property name="y">95</property>
+            <property name="x">194</property>
+            <property name="y">118</property>
           </packing>
         </child>
         <child>
@@ -245,7 +246,92 @@
           </object>
           <packing>
             <property name="x">231</property>
-            <property name="y">95</property>
+            <property name="y">118</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="info">
+            <property name="width-request">150</property>
+            <property name="height-request">50</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">information......</property>
+            <attributes>
+              <attribute name="style" value="italic"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">243</property>
+            <property name="y">165</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="time">
+            <property name="width-request">150</property>
+            <property name="height-request">50</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#e6e661610000"/>
+              <attribute name="size" value="13000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">510</property>
+            <property name="y">16</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="image_perdu">
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">../images/perdu50.png</property>
+          </object>
+          <packing>
+            <property name="x">110</property>
+            <property name="y">102</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="image_gagner">
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">../images/gagner50.png</property>
+          </object>
+          <packing>
+            <property name="x">101</property>
+            <property name="y">102</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">1</property>
+            <property name="pixbuf">../images/cpe.png</property>
+          </object>
+          <packing>
+            <property name="x">13</property>
+            <property name="y">306</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label_sec">
+            <property name="width-request">10</property>
+            <property name="height-request">50</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">S</property>
+            <attributes>
+              <attribute name="foreground" value="#e6e661610000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">599</property>
+            <property name="y">18</property>
           </packing>
         </child>
       </object>

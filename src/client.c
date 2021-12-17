@@ -239,13 +239,28 @@ Round get_round(int socketClient, Game game) {
     // A SEPARER DANS UNE AUTRE FONCTION
     // On met à jour les infos a transmettre au GUI
     lien.is_choice_ok = false;
-    // Le score des deux joueurs
-    lien.score_j1 = round.p1_wallet;
-    lien.score_j2 = round.p2_wallet;
+    
+    // Si on est J2
+    if(game.player.local_id%2 == 0){
+        // Le score des deux joueurs
+        lien.score_j1 = round.p2_wallet;
+        lien.score_j2 = round.p1_wallet;
+        // Le choix des deux joueurs
+        lien.choix_j1 = round.p2_result;
+        lien.choix_j2 = round.p1_result;
+    }
+    // Si on est J1
+    else{
+        // Le score des deux joueurs
+        lien.score_j1 = round.p1_wallet;
+        lien.score_j2 = round.p2_wallet;
+        // Le choix des deux joueurs
+        lien.choix_j1 = round.p1_result;
+        lien.choix_j2 = round.p2_result;
+    }
+    
     lien.nb_round = round.round_number;
-    // Le choix des deux joueurs
-    lien.choix_j1 = round.p1_result;
-    lien.choix_j2 = round.p2_result;
+    
     printf("J1 choice = %d et J2 choice = %d\n", lien.choix_j1, lien.choix_j2);
     lien.is_answer_ok = true;
 

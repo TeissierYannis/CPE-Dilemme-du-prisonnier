@@ -152,7 +152,7 @@ Game create_game(int socketClient, Joueur player) {
         game.id = id;
         game.player_id = player.id;
     } else {
-        printf("[CLIENT] Party id not valid.\n");
+        printf("[CLIENT] Pargity id not valid.\n");
         exit(EXIT_FAILURE);
     }
     // Affichage

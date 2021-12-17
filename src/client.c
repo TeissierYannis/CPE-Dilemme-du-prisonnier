@@ -8,6 +8,7 @@
 
 #include "../headers/client.h"
 #include "../headers/lien.h"
+#include "../headers/configs/configurator.h"
 
 // Créer une socket
 int create_socket() {
@@ -46,13 +47,11 @@ struct sockaddr_in create_serv_adrr(char *adresse_serv, int port_serveur) {
 // Partie client
 int client_connexion() {
     int socketClient = create_socket();
-
-    // IP et Port du serveur
-    char *adresse_serv = "127.0.0.1";
-    int port_serveur = 30000;
+    // Read config to allow connexion to the server
+    server_config server_config = readconfig();
 
     // stockaddr_in correspond à une adresse internet (IP et un port)
-    struct sockaddr_in addrClient = create_serv_adrr(adresse_serv, port_serveur);
+    struct sockaddr_in addrClient = create_serv_adrr(server_config.ip, atoi(server_config.port));
 
     // Le client se connecte à l'adresse du serveur
     printf("[CONNEXION] Connecting to server...\n");
@@ -98,7 +97,7 @@ int* client_recevoir_id(int socketClient, char *title) {
 
       //  printf("[RECEIVE] Id received : %s\n", id);
 
-        if (are_equal(title, "id")) {
+        if (strstr(id, ":")) {
             id_int = atoi(strtok(id, ":"));
             id_player_local = atoi(strtok(NULL, ":"));
             printf("[RECEIVE] Id received : %d\n", id_int);
@@ -297,18 +296,20 @@ void jouer(int socket, Game game) {
     }
     // Mettre à jour le nom du gagant
     set_winner_name(socket, game);
+    game_recap(socket);
 }
 
 
 // Indique si la partie est fini ou continue
 int game_end(Round round) {
-    bool result = 0;
+    int result = 0;
     
     // Si on reçoit l'indiquateur de fin de partie (via le serveur)
     if (round.status == 1) {
-        result = true;
+        result = 1;
         printf("[GAME] Game finished.\n");
     }
+    printf("[DD] Result = %d\n", result);
     return result;
 }
 

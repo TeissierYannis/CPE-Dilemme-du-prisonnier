@@ -19,6 +19,6 @@ include_directories(${GTK3_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -rdynamic")
 add_definitions(${GTK3_CFLAGS_OTHER})
-add_executable(${CMAKE_PROJECT_NAME} main.c headers/client.h src/client.c headers/gui.h src/gui.c headers/lien.h src/lien.c headers/board.h src/board.c)
+add_executable(${CMAKE_PROJECT_NAME} main.c headers/client.h src/client.c headers/gui.h src/gui.c headers/lien.h src/lien.c headers/board.h src/board.c src/configs/configurator.c headers/configs/configurator.h headers/utils/files_utils.h headers/utils/string_utils.h src/utils/files_utils.c src/utils/string_utils.c)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GTK3_LIBRARIES})

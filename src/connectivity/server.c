@@ -260,6 +260,12 @@ void *thread_party(void *ptr) {
     }
     printf("[PARTY #%d] Every rounds was played \n", party.id);
 
+    int win = winner(p1, p2);
+    write(p1.socket, &win, sizeof(int));
+    write(p2.socket, &win, sizeof(int));
+
+    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
+
     printf("[PARTY #%d] Generating recap...\n", party.id);
     recap party_recap = generating_recap(&party);
     printf("[PARTY #%d] Sending recap to clients... \n", party.id);
@@ -270,8 +276,6 @@ void *thread_party(void *ptr) {
     //Fin de partie
     printf("[PARTY #%d] Fin de la partie\n", party.id);
     //TODO win = winner(j1, j2)
-    int win = winner(p1, p2);
-    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv

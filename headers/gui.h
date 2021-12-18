@@ -19,13 +19,9 @@ void createGui(int argc, char **argv);
 
 int are_equals(const char*,char*);
 void on_clicked_choice(GtkButton *);
-void afficher_score();
-void afficher_round();
+
 void result();
 void on_quitter_clicked();
-void afficher_result();
 void choice_clicked(void *param);
-// Afficher le gagnant
-void show_winner();
-void show_restart_button();
+
 #endif

@@ -144,5 +144,8 @@ int get_winner(int socket);
 bool is_game_win(Game game, int winner);
 // Afficher le gagnant de la partie
 void set_winner_name(int socket, Game game);
+// Compte à rebours du temps de jeu
+void start_countdown();
+void countdown(void *param);
 
 #endif

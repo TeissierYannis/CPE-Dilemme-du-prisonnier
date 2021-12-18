@@ -9,6 +9,7 @@
 #include "../headers/client.h"
 #include "../headers/lien.h"
 #include "../headers/configs/configurator.h"
+#include "../headers/affichage.h"
 
 // Créer une socket
 int create_socket() {
@@ -273,7 +274,8 @@ Round get_round(int socketClient, Game game) {
         printf("[CLIENT] Round not received.\n");
         exit(EXIT_FAILURE);
     }
-
+    // Afficher les resultats
+    afficher_result();
     return round;
 }
 
@@ -401,17 +403,39 @@ int get_clique() {
     lien.able_click = 1; // autoriser les cliques
     // Aucune information à afficher
     gtk_label_set_text(GTK_LABEL(tools.info), " ");
-
+ 
     printf("Entrez la réponse : \n");
+
+    int duree = 10; // Temps que l'on a pour choisir une réponse
+    char valeur[3]; // Valeur du temps en chaîne de caractère
+    
+    
+       
     // Tant que le joueur n'a pas cliqué on attend
     while (lien.is_choice_ok != true) {
-        sleep(0.3); // mettre un sleep pour ne pas monopoliser toutes les ressources
+        sleep(1); // mettre un sleep pour ne pas monopoliser toutes les ressources
+         // Afficher la valeur du chrono
+        sprintf(valeur, "%ds", duree);
+     //   sprintf(value,"%d", duree);
+     //   printf("TEMPS = %d\n", duree);
+        gtk_label_set_text(GTK_LABEL(tools.chrono), valeur);
+        // Patienter 1 sec avant d'afficher la valeur suivante
+       // printf("%d - 1 = %d\n", duree, duree-1);
+        duree=duree-1;
+        // Si le compte à rebours et fini et qu'on a pas reçue de reponse du joueur
+        if(duree == 0){
+            lien.choix_j1 = 0; // Choisir aléatoirement le choix du joueur
+            lien.is_choice_ok = true;
+           // break;
+        }
+
     }
 
     lien.is_choice_ok = false;
+    gtk_label_set_text(GTK_LABEL(tools.chrono), "Envoie...");
     // Afficher informations que J2 n'a pas encore joué
     gtk_label_set_text(GTK_LABEL(tools.info), "Attente réponse J2...");
-  //  lien.able_click = 0;
+    lien.able_click = 0;
    // lien.is_choice_ok = false;
     // On récupère le choix du joueur
     clique = lien.choix_j1;
@@ -587,8 +611,49 @@ void set_winner_name(int socket, Game game){
     // indiquer la fin du jeu
     lien.is_game_end = true;
     printf("Partie gagné = %d et fin de partie = %d\n", lien.is_winner, lien.is_game_end);
+    show_end_game();
 }
 
+// Compte à rebours avant la fin du round
+void start_countdown(){
+     // Lancer le compte à rebours sans bloquer l'écoute du joueur
+    pthread_t countdownThread;
+    int result = 0;
+    char param = NULL;
+    result = pthread_create(&countdownThread, NULL, countdown, (void *) param);
+    pthread_detach(countdownThread);
+    printf("Apres thread countdown \n");
+    if (result) {
+        printf("ERROR; return code from pthread_create() Countdown is %d\n", result);
+        exit(-1);
+    }    
+}
+
+void countdown(void * param){
+    int duree = 10; // Temps que l'on a pour choisir une réponse
+    char valeur[3]; // Valeur du temps en chaîne de caractère
+    
+    // Attendre 1 sec puis modifier le compte à rebours
+    while(lien.is_choice_ok == false){
+        // Afficher la valeur du chrono
+        sprintf(valeur, "%d", duree);
+     //   sprintf(value,"%d", duree);
+        printf("TEMPS = %d\n", duree);
+        gtk_label_set_text(GTK_LABEL(tools.chrono), valeur);
+        // Patienter 1 sec avant d'afficher la valeur suivante
+        sleep(1);
+        printf("%d - 1 = %d\n", duree, duree-1);
+        duree=duree-1;
+        // Si le compte à rebours et fini et qu'on a pas reçue de reponse du joueur
+        if(duree == 0){
+            lien.choix_j1 = 0; // Choisir aléatoirement le choix du joueur
+            lien.is_choice_ok = true; // Indiquer qu'une valeur a été choisie
+            gtk_label_set_text(GTK_LABEL(tools.chrono), "FINITO");
+            break;
+        }
+    }
+    gtk_label_set_text(GTK_LABEL(tools.chrono), "Envoie...");
+}
 
 // Programme principal du client
 void startGame(void *param) {

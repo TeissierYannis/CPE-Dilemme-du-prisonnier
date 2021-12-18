@@ -188,13 +188,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="rejouer">
+          <object class="GtkButton" id="Rejouer">
             <property name="label" translatable="yes">Rejouer</property>
+            <property name="name">Rejouer</property>
             <property name="width-request">110</property>
             <property name="height-request">70</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <signal name="clicked" handler="on_rejouer_clicked" swapped="no"/>
+            <signal name="clicked" handler="on_restart_click" swapped="no"/>
           </object>
           <packing>
             <property name="x">263</property>
@@ -320,6 +321,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="label_sec">
+            <property name="name">label_sec</property>
             <property name="width-request">10</property>
             <property name="height-request">50</property>
             <property name="visible">True</property>

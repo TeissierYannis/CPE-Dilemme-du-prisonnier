@@ -29,7 +29,8 @@ void createBoard(int argc, char **argv) {
     tools.image_perdu = GTK_WIDGET(gtk_builder_get_object(tools.builder, "image_perdu"));
     tools.gagner = GTK_WIDGET(gtk_builder_get_object(tools.builder, "gagner"));
     tools.perdu = GTK_WIDGET(gtk_builder_get_object(tools.builder, "perdu"));
-
+    // Compte à rebours d'un round
+    tools.chrono = GTK_WIDGET(gtk_builder_get_object(tools.builder, "label_sec"));
     // Informations sur la partie à afficher
     gtk_label_set_text(GTK_LABEL(tools.info), "Chargement de la partie...");
     printf("GUI OK\n");

@@ -47,6 +47,8 @@ typedef struct {
     GtkWidget *perdu;
     GtkWidget *gagner;
     GtkWidget *egalite;
+    // Compte à rebours de la partie
+    GtkWidget *chrono;
 } Tools;
 
 

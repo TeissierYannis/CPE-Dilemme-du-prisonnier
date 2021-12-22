@@ -332,18 +332,36 @@ void *thread_party(void *ptr) {
         exit(EXIT_FAILURE);
     }
 
-   if((strcmp(status_j1, "online") == 0) || (strcmp(status_j2, "online") == 0)) {
-        printf("ON REJOUE \n");
-        // Mettre le joueur dans une nouvelle partie
-        sleep(1000);
+    // Si J1 veut rejouer
+   if(strcmp(status_j1, "online") == 0) {
+        printf("J1 REJOUE \n");
+        // On remet le clients dans la file d'attente
+        add_client(&clientsList, p1);
+        sleep(1);
     }
+    // Si J1 ne veut plus jouer
     else if(strcmp(status_j1, "disconnect") == 0){
-        printf("ON S'EN VAS \n");
+        printf("ON S'EN VAS J1\n");
         close(p1.socket);
+        // Faire quitter les parties
+        sleep(1);
+    }
+
+    // Si J2 veut rejouer
+   if(strcmp(status_j2, "online") == 0) {
+        printf("J2 REJOUE \n");
+        // On remet le clients dans la file d'attente
+        add_client(&clientsList, p2);
+        sleep(1);
+    }
+     // Si J2 ne veut plus jouer
+    else if(strcmp(status_j2, "disconnect") == 0){
+        printf("ON S'EN VAS J2\n");
         close(p2.socket);
         // Faire quitter les parties
         sleep(1);
     }
+  
 
     free(players);
     pthread_exit(0);

@@ -70,6 +70,12 @@ typedef struct
     answer_struct list_answer_J2[10];
 } recap;
 
+// Test debug
+typedef struct{
+    char out[256];
+} Buffer_out;
+
+
 extern rules rules0;
 extern game game0;
 

@@ -24,9 +24,9 @@ void create_link(){
     // Partie finie Oui / Non
     lien.is_game_end = 0;
     // Choix de fin de partie Recommencer / Quitter
-    lien.restart_choice = 0;
+    lien.restart_choice = false;
     // Choix de fin de partie cliqué Oui / Non
-    lien.is_restart_clicked = 0;
+    lien.is_restart_clicked = false;
     // Gagnant
     lien.is_winner = false;
 }

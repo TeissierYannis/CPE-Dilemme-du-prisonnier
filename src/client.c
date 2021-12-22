@@ -351,11 +351,12 @@ void print_recap(Answer *answer, int length) {
 // Relancer une partie
 int restart_game(int socketClient, Joueur player) {
     // Par défaut le client quitte la partie
-    bool result = 0;
+    int result = 0;
     // Selon le choix du joueur (quitter partie ou relancer partie)
-    if (!continue_game()) { 
+    if (continue_game() == false) { 
         strcpy(player.status, "disconnect");
-    } else {
+    } 
+    else {
         strcpy(player.status, "online");
         result = 1;
     }
@@ -370,7 +371,7 @@ void send_player_status(int socketClient, Joueur player) {
     Buffer_out buffer;
     sprintf(buffer.out, "%s", player.status);
 
-    printf("Envoie du status du joueur au serveur...\n");
+    printf("Envoie du status du joueur au serveur : %s\n", buffer.out);
     // On envoie le status du joueur
    // envoie = send(socketClient, &player.status, sizeof(int), 0);
     envoie = write(socketClient, &buffer, sizeof(buffer));
@@ -455,7 +456,7 @@ bool continue_game() {
     bool result = false;
     // Patienter jusqu'a ce que le joueur est choisie de rejouer ou quitter
     while (lien.is_restart_clicked == false) {
-        sleep(1);
+        usleep(200000); // Dormir 0.2 secondes
     }
     result = lien.restart_choice;
     // printf("Voulez vous jouer une nouvelle partie ? [No->0 and Yes->1]\n");
@@ -664,12 +665,13 @@ void startGame(void *param) {
     // Lire les parametres du client
     client = (ClientParameter *) param;
     socket = client->socket;
-    player = client->player;
+//    player = client->player;
 
     // Contenue du jeu
     // Continuer à jouer ou quitter ?
     // Tant que le client veut continuer à jouer on informe le serveur
     do {
+        player = create_player(socket);
         // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
         game = create_game(socket, player);
         printf("Partie créée ! \n");

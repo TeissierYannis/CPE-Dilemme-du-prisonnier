@@ -82,7 +82,7 @@ void afficher_result() {
     // On patiente 3 secondes pour voir les scores avant de commencer un nouveau round 
     gtk_label_set_text(GTK_LABEL(tools.info), "Résultat du round");
     gtk_label_set_text(GTK_LABEL(tools.chrono), "Affichage...");
-    sleep(3);
+    sleep(3); // Laisser le temps de voir les resultats avant de commencer nouveau round
 }
 
 // Lorsque la partie est finie

@@ -79,7 +79,7 @@ typedef struct {
 // Contient les informations d'un Joueur
 typedef struct{
     int socket;
-    Joueur player;
+  //  Joueur player;
 } ClientParameter;
 
 

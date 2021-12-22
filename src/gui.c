@@ -71,27 +71,63 @@ void on_clicked_choice(GtkButton *b) {
 }
 
 
-// Lors d'un clic sur bouton REJOUER
-void on_restart_click(GtkButton *b) {
-    // Indiquer qu'il souhaite rejouer
-    lien.restart_choice = true;
-    // Indiquer que le joueur a fait son choix
-    lien.is_restart_clicked = true;
+void new_party(void *boutton){
+    GtkButton *b;
+    // Lire les parametres du client
+    b = (GtkButton *) boutton;
+    
     // Si le choix est rejouer on raffrait les informations de partie en réinitialisant
     // Mettre une fonction pour initialiser tout ça automatiquement au depart ?
     gtk_label_set_text(GTK_LABEL(tools.score1), 0);
     gtk_label_set_text(GTK_LABEL(tools.score2), 0);
+    gtk_label_set_text(GTK_LABEL(tools.rounde), 0);
     gtk_label_set_text(GTK_LABEL(tools.choix_adversaire), "");
+    gtk_label_set_text(GTK_LABEL(tools.chrono), "");
+    
+    gtk_label_set_text(GTK_LABEL(tools.info), "Chargement de la partie...");
+
     // On remontre les boutons de jeu et cache les boutons pour rejouer
     gtk_widget_hide(tools.rejouer);
     gtk_widget_hide(tools.label_rejouer);
+    gtk_widget_hide(tools.gagner);
+    gtk_widget_hide(tools.perdu);
+    gtk_widget_hide(tools.egalite);
+
+    gtk_widget_hide(tools.image_gagner);
+    gtk_widget_hide(tools.image_perdu);
+
     gtk_widget_show(tools.trahison);
     gtk_widget_show(tools.collaboration);
    // gtk_widget_show(tools.choix_adversaire);
    // gtk_widget_show(tools.score1);
    // gtk_widget_show(tools.score2);
 
-    printf("[GUI] Restart game\n");
+
+    printf("[GUI] New game en approche\n");
+
+    pthread_exit(0);
+
+}
+
+// Lors d'un clic sur bouton REJOUER
+void on_restart_click(GtkButton *b){
+    printf("RESTART CLIQUE\n");
+     
+    // Lancer l'affichage du clique sous forme de thread pour ne pas bloquer GTK
+    // En ayant le monopole de l'utilisation ici
+    pthread_t threadRestart;
+    int result = 0;
+    result = pthread_create(&threadRestart, NULL, new_party, (void *) b);
+    pthread_detach(threadRestart);
+    printf("Apres thread restart \n");
+    if (result) {
+        printf("ERROR; return code from pthread_create() Restart is %d\n", result);
+        exit(-1);
+    }
+    // Indiquer qu'il souhaite rejouer
+    lien.restart_choice = true;
+    // Indiquer que le joueur a fait son choix
+    lien.is_restart_clicked = true;
 }
 
 // Quitter la partie (INDIQUER AU SERVEUR QUE LE JOUEUR EST PARTI)

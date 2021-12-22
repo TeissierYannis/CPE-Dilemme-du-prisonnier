@@ -31,8 +31,8 @@ typedef struct{
 
     int is_game_end; // Partie terminée Oui / Non
    
-    int restart_choice; // choix de find de partie Recommencer / Quitter
-    int is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
+    bool restart_choice; // choix de find de partie Recommencer / Quitter
+    bool is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
     bool is_winner;
 } Lien;
 

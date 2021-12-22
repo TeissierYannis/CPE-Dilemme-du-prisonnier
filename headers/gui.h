@@ -24,4 +24,7 @@ void result();
 void on_quitter_clicked();
 void choice_clicked(void *param);
 
+void on_restart_click(GtkButton *b);
+void new_party(void *boutton);
+
 #endif

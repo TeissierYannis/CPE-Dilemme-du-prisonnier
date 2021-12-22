@@ -28,10 +28,10 @@ int main(int argc, char **argv) {
     // Connexion au serveur et création de la socket client (sert à la communication)
     socket = client_connexion();
     // Creation du joueur avec son identifiant
-    player = create_player(socket);
+   // player = create_player(socket);
     // Ajouter le socket et le joueur dans les parametres de la communication client
     clientParam->socket = socket;
-    clientParam->player = player;
+  //  clientParam->player = player;
 
     // Lancer la communication client sous forme de thread
     pthread_t threadClient;

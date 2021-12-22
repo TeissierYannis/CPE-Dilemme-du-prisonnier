@@ -204,6 +204,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="gagner">
+            <property name="name">gagner</property>
             <property name="width-request">150</property>
             <property name="height-request">50</property>
             <property name="can-focus">False</property>
@@ -220,6 +221,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="perdu">
+            <property name="name">perdu</property>
             <property name="width-request">150</property>
             <property name="height-request">50</property>
             <property name="can-focus">False</property>
@@ -236,6 +238,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="egalite">
+            <property name="name">egalite</property>
             <property name="width-request">150</property>
             <property name="height-request">50</property>
             <property name="can-focus">False</property>
@@ -326,7 +329,6 @@
             <property name="height-request">50</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">S</property>
             <attributes>
               <attribute name="foreground" value="#e6e661610000"/>
             </attributes>

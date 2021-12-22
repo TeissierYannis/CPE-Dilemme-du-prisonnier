@@ -28,9 +28,11 @@ void afficher_round();
 void afficher_choix_adversaire();
 void afficher_result();
 void show_restart_button();
-void show_winner();
+//void show_winner();
 void show_end_game();
-
+void show_win();
+void show_loose();
+void show_egality();
 
 
 #endif

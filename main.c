@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     // Lancer la communication client sous forme de thread
     pthread_t threadClient;
     int result = 0;
-    result = pthread_create(&threadClient, NULL, startGame, (void *) clientParam);
+    result = pthread_create(&threadClient, NULL, startGame, clientParam);
     pthread_detach(threadClient);
     printf("Apres thread client \n");
     if (result) {
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
     // Lancer le GUI pour jouer
     createGui(argc, argv);
-
+    free(clientParam);
     return 0;
 }
 

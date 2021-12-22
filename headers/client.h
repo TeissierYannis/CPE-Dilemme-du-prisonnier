@@ -25,11 +25,15 @@
 #define CLIENT_H
 
 
+// Test debug
+typedef struct{
+    char out[256];
+} Buffer_out;
 
 // Contient les informations d'un Joueur
 typedef struct{
     int id;
-    char status[11];
+    char status[255];
     int local_id;
 } Joueur;
 
@@ -125,7 +129,7 @@ int get_round_status(int socketClient);
 // Créer le round de depart
 Round create_round(int socketClient);
 // Afficher le résultat du round
-void show_round_result(Round round);
+void show_round_result(Round round, Game game);
 
 // Recuperer le numero du carre cliqué
 int get_clique();

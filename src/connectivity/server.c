@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 #include "../../headers/connectivity/server.h"
 #include "../../headers/game/rules.h"
 
@@ -113,12 +114,9 @@ void *handle_clients() {
     pthread_t thread;
    // player *players = malloc(sizeof(player) * 2);
     
-    // Attendre qu'il y ait 2 joueurs
-    while(clientsList.client_count < 2){
-        sleep(1);
-    }
 
-  //  while (is_running) {
+    while (is_running) {
+        // Si 2 joueurs sont disponibles
         if (clientsList.client_count >= 2) {
             // Randomize clients pairs
             pair = randomize_pairs();
@@ -127,7 +125,6 @@ void *handle_clients() {
                 clientsList.clients[pair[0]].status = 1;
                 clientsList.clients[pair[1]].status = 1;
 
-               
                 // Create list of 2 clients from random pair
                 player *players = malloc(sizeof(player) * 2);
                 players[0] = clientsList.clients[pair[0]];
@@ -138,10 +135,15 @@ void *handle_clients() {
                 // Create thread for party
                 pthread_create(&thread, 0, thread_party, players);
                 pthread_detach(thread);
+
+                // Les 2 joueurs ne sont plus disponibles
+                remove_client(&clientsList, players[0].socket);
+                remove_client(&clientsList, players[1].socket);
                // free(players);
                 
             }
-    //    }
+        }
+        usleep(10000); // Faire une pause dans le while TRUE (en us)
     }
     printf("[HANDLER] Stopping handler thread.\n");
     pthread_exit(0);

@@ -116,6 +116,8 @@ void *handle_clients() {
     
 
     while (is_running) {
+        printf("Nombre de clients connectés : %d\n", clientsList.client_count);
+        sleep(2);
         // Si 2 joueurs sont disponibles
         if (clientsList.client_count >= 2) {
             // Randomize clients pairs
@@ -136,7 +138,7 @@ void *handle_clients() {
                 pthread_create(&thread, 0, thread_party, players);
                 pthread_detach(thread);
 
-                // Les 2 joueurs ne sont plus disponibles
+                // Les 2 joueurs ne sont plus disponibles quand ils jouent
                 remove_client(&clientsList, players[0].socket);
                 remove_client(&clientsList, players[1].socket);
                // free(players);
@@ -167,20 +169,12 @@ void *thread_party(void *ptr) {
     player p2 = players[1];
 
     printf("Send user id to client\n");
-     // nettoyer buffer
-    //memset(buffer_out,0 ,sizeof(buffer_out));
-   // char buff[20];
+
     sprintf(buffer.out, "id %d:1", p1.id);
-  //  strcpy(buffer.out, buff);
     printf("%s\n", buffer.out);
     write(p1.socket, &buffer, sizeof(buffer));
 
-    // nettoyer buffer
-    //memset(buffer_out,0 ,sizeof(buffer_out));
-
     sprintf(buffer.out, "id %d:2", p2.id);
-   // strcpy(buffer.out, buff);
-
     printf("%s\n", buffer.out);
     write(p2.socket, &buffer, sizeof(buffer));
 
@@ -310,7 +304,7 @@ void *thread_party(void *ptr) {
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv
-    sleep(5);
+    
     printf("[PARTY #%d] Results logged...\n", party.id);
     printf("[PARTY #%d] Leaving party...\n", party.id);
     
@@ -318,13 +312,13 @@ void *thread_party(void *ptr) {
     int fd_j1, fd_j2;
     char status_j1[20];
     char status_j2[20];
-
-    fd_j1 = read(p1.socket, &buffer, sizeof(buffer));
-    strcpy(status_j1, buffer.out);
-
-    fd_j2 = read(p1.socket, &buffer, sizeof(buffer));
-    strcpy(status_j2, buffer.out);
-
+    Buffer_out buffer_j1;
+    Buffer_out buffer_j2;
+    
+    printf("[STATUS] Wait for players status\n");
+    fd_j1 = read(p1.socket, &buffer_j1, sizeof(buffer_j1));
+    fd_j2 = read(p2.socket, &buffer_j2, sizeof(buffer_j2));
+   
     if(fd_j1 < 0 || fd_j2 < 0){
         perror("Erreur réception status");
         close(p1.socket);
@@ -332,9 +326,13 @@ void *thread_party(void *ptr) {
         exit(EXIT_FAILURE);
     }
 
+    strcpy(status_j1, buffer_j1.out);
+    strcpy(status_j2, buffer_j2.out);
+    printf("[PLAYER] Status joueur reçue J1 : %s et J2 : %s\n", buffer_j1.out, buffer_j2.out);
     // Si J1 veut rejouer
    if(strcmp(status_j1, "online") == 0) {
         printf("J1 REJOUE \n");
+        p1.status = 0;
         // On remet le clients dans la file d'attente
         add_client(&clientsList, p1);
         sleep(1);
@@ -350,6 +348,7 @@ void *thread_party(void *ptr) {
     // Si J2 veut rejouer
    if(strcmp(status_j2, "online") == 0) {
         printf("J2 REJOUE \n");
+        p2.status = 0;
         // On remet le clients dans la file d'attente
         add_client(&clientsList, p2);
         sleep(1);

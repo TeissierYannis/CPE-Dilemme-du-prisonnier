@@ -395,7 +395,7 @@ int get_clique() {
     printf("Entrez la réponse : \n");
 
     int duree = 10; // Temps que l'on a pour choisir une réponse
-    char valeur[3]; // Valeur du temps en chaîne de caractère
+    char valeur[10]; // Valeur du temps en chaîne de caractère
     int compteur = 0; // Compte le temps écoulé
     
     // TODO FAIRE UNE FONCTION REFRESH CHRONO

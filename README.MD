@@ -364,14 +364,13 @@ Préparation du build :
 
 Afin de compiler le projet nous vous proposons deux solutions :
 
-Via un script adapté à la machine que vous utilisez (Linux, Windows, MacOS)
+Via un script adapté à la machine que vous utilisez (Linux, MacOS)
 
-Pour windows, il faut choisir le script "build_windows.bat"
 Pour Linux et MacOS, il faut choisir le script "build_unix.sh"
 
-Dans les deux cas, il faut ouvrir un terminal et lancer le script.
+Il faut ensuite ouvrir un terminal et lancer le script.
 ```bash
-./build_<environnement>.sh/bat
+./build_<environnement>.sh
 ```
 
 Dans le dossier *output*, il y aura un executable "client" et un executable "server".
@@ -381,25 +380,6 @@ Dans le dossier "client_config", vous y trouverez les fichiers de configuration 
 Et dans le dossier "server_config", vous y trouverez les fichiers de configuration du serveur.
 
 Via la ligne de commande.
-
-Windows
-```
-cd server
-md build
-cd build
-cmake ..
-make all
-cp server.exe ../server.exe
-
-cd ..
-
-cd client
-md build
-cd build
-cmake ..
-make all
-cp client.exe ../client.exe
-```
 
 Unix
 ```
@@ -513,5 +493,8 @@ Il suffit de modifier les valeurs de l'ip_address avec l'ip du serveur et du por
 ## 🧐 Documentation <a name = "doc"></a>
 
 Pour générer la documentation du projet, il suffit de lancer la commande suivante :
+```bash
+./build_unix_doc.sh
 ```
 
+Pour accéder à la documentation, il suffit de lancer le fichier *index.html* du dossier *documentation/client* ou *documentation/server* dans un navigateur web.

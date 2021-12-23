@@ -1,1 +1,13 @@
 Partie; Round; Choix J1; Choix J2; Temps de décision J1; Temps de décision J2; Solde J1; Solde J2
+
+1;1;1;1;8;6;-1;-1
+
+1;2;1;0;3;5;-11;-1
+
+1;3;1;0;3;4;-21;-1
+
+1;1;0;0;4;2;-5;-5
+
+1;2;1;1;5;4;-6;-6
+
+1;3;0;1;5;4;-6;-16

@@ -68,28 +68,27 @@ int client_connexion() {
 }
 
 // Le client reçoit un id
-int* client_recevoir_id(int socketClient, char *title) {
-    char * id;
+int *client_recevoir_id(int socketClient, char *title) {
+    char *id;
     int id_int = -1, id_player_local = -1;
- //   char buffer_out[256]; // stock le message que le serveur a envoyé
+    //   char buffer_out[256]; // stock le message que le serveur a envoyé
     Buffer_out buffer;
     char *key;    // titre du message
     char *separateur = " "; // separateur entre les champs du message
     int receive;
-    int *result = malloc(sizeof(int)*2);
+    int *result = malloc(sizeof(int) * 2);
     // Recevoir message du serveur contenant un identifiant et le nom de ce à quoi correspond l'ID
     // (id du joueur ou id de la partie)
-   printf("[RECEIVE] Receiving id from server...\n");
-   // receive = recv(socketClient, &message, sizeof(char)* 255, 0);
-   receive = read(socketClient, &buffer, sizeof(buffer));
-   // strcpy(buffer.out, "id 1:1");
+    printf("[RECEIVE] Receiving id from server...\n");
+    // receive = recv(socketClient, &message, sizeof(char)* 255, 0);
+    receive = read(socketClient, &buffer, sizeof(buffer));
+    // strcpy(buffer.out, "id 1:1");
     // Vérifier la réception
-    if (receive < 0){
+    if (receive < 0) {
         perror("[RECEIVE] Error reception ID :");
         close(socketClient);
         exit(EXIT_FAILURE);
-    }
-    else{
+    } else {
         printf("[RECEIVE] id received : %s\n", buffer.out);
     }
 
@@ -102,7 +101,7 @@ int* client_recevoir_id(int socketClient, char *title) {
         // Récuperer la deuxième partie du message (l'id) et le convertir en identifiant
         id = strtok(NULL, " ");
 
-      //  printf("[RECEIVE] Id received : %s\n", id);
+        //  printf("[RECEIVE] Id received : %s\n", id);
 
         if (strstr(id, ":")) {
             id_int = atoi(strtok(id, ":"));
@@ -124,7 +123,7 @@ int* client_recevoir_id(int socketClient, char *title) {
 Joueur create_player(int socketClient) {
     Joueur player;
     char *type_id = "id"; // A modifier selon valeur du serveur
-    
+
     printf("[CLIENT] Receiving player id...\n");
     // On récupère l'id du joueur
 
@@ -139,8 +138,7 @@ Joueur create_player(int socketClient) {
         player.local_id = local_id;
         // Status du joueur "en ligne"
         strcpy(player.status, "online");
-    }
-        // Si l'id récupéré n'est pas valide on quitte le jeu
+    } // Si l'id récupéré n'est pas valide on quitte le jeu
     else {
         printf("[CLIENT] Player id not valid.\n");
         close(socketClient);
@@ -160,7 +158,8 @@ Game create_game(int socketClient, Joueur player) {
     create_link();
     // Récupérer l'identifiant de la partie
     printf("[CLIENT] Receiving party id...\n");
-    int *result = client_recevoir_id(socketClient, "party"); // L'identifiant contient "id/role" -> role pas nécessaire pour game
+    int *result = client_recevoir_id(socketClient,
+                                     "party"); // L'identifiant contient "id/role" -> role pas nécessaire pour game
     id = result[0];
     // Si l'identifiant est valide
     if (is_id_valide(id)) {
@@ -195,7 +194,7 @@ Answer get_answer(Game game) {
     // Infos sur le joueur et la partie
     answer.party_id = game.id;
     answer.player_id = game.player.id;
-    
+
     int time_start = time(NULL), time_end;
     // Valeurs jouées par le joueur
     answer.choice = get_clique();
@@ -212,7 +211,7 @@ void send_answer(int socketClient, Game game) {
     int envoie;
 
     // Recuperer la reponse du joueur
-    answer = get_answer(game); 
+    answer = get_answer(game);
 
     // Affichage
     printf("====================\n");
@@ -224,7 +223,7 @@ void send_answer(int socketClient, Game game) {
 
     printf("[CLIENT] Sending answer to the server...\n");
     // On envoie la reponse du joueur
- //   envoie = send(socketClient, &answer, sizeof(Answer), 0);
+    //   envoie = send(socketClient, &answer, sizeof(Answer), 0);
     envoie = write(socketClient, &answer, sizeof(Answer));
     // Si envoie echoue
     if (envoie == -1) {
@@ -240,12 +239,12 @@ void send_answer(int socketClient, Game game) {
 Round get_round(int socketClient, Game game) {
     Round round;
     int recevoir;
-    
+
     printf("[CLIENT] Waiting for round informations...\n");
     // Recevoir des données du serveur et les stock dans le round
-   recevoir = read(socketClient, &round, sizeof(Round));
-    
-   // printf("TAILLE round reçue = %d\n", recevoir);
+    recevoir = read(socketClient, &round, sizeof(Round));
+
+    // printf("TAILLE round reçue = %d\n", recevoir);
     // Retourne -1 en cas d'erreur
     if (recevoir == -1) {
         perror("[CLIENT] Round not received");
@@ -268,7 +267,7 @@ void jouer(int socket, Game game) {
     // TODO : Afficher le round depuis la com serv ??
 
     // Tant que le nombre de round n'est pas terminé on continue
-    do{
+    do {
         //printf("game end = %s\n", game_end(round) ? "true" : "false");
         // Envoyer le choix du joueur au serveur
         send_answer(socket, game);
@@ -276,23 +275,22 @@ void jouer(int socket, Game game) {
         round = get_round(socket, game);
         // Afficher sur l'interface graphique le resultat du round
         show_round_result(round, game);
-    }while (game_end(round) != 1);
+    } while (game_end(round) != 1);
     // Mettre à jour le nom du gagant
-    set_winner_name(socket, game); 
-    game_recap(socket); 
+    set_winner_name(socket, game);
+    game_recap(socket);
 }
 
 
 // Indique si la partie est fini ou continue
 int game_end(Round round) {
     int result = 1;
-    
+
     // Si on reçoit l'indiquateur de fin de partie (via le serveur)
     if (round.status != 1) {
         result = 0;
         printf("[GAME] Game continue.\n");
-    }
-    else if (round.status == 1) {
+    } else if (round.status == 1) {
         result = 1;
         printf("[GAME] Game finished.\n");
     }
@@ -304,10 +302,10 @@ int game_end(Round round) {
 Recap get_recap(int socketClient) {
     Recap recap;
     int recevoir;
-    
+
     printf("Reception recap du serveur...\n");
     // Recevoir recapitulatif des choix de chaque joueur a chaque round
-  //  recevoir = recv(socketClient, &recap, sizeof(Recap), 0);
+    //  recevoir = recv(socketClient, &recap, sizeof(Recap), 0);
     recevoir = read(socketClient, &recap, sizeof(Recap));
     // Retourne -1 en cas d'erreur
     if (recevoir == -1) {
@@ -353,10 +351,9 @@ int restart_game(int socketClient, Joueur player) {
     // Par défaut le client quitte la partie
     int result = 0;
     // Selon le choix du joueur (quitter partie ou relancer partie)
-    if (continue_game() == false) { 
+    if (continue_game() == false) {
         strcpy(player.status, "disconnect");
-    } 
-    else {
+    } else {
         strcpy(player.status, "online");
         result = 1;
     }
@@ -373,7 +370,7 @@ void send_player_status(int socketClient, Joueur player) {
 
     printf("Envoie du status du joueur au serveur : %s\n", buffer.out);
     // On envoie le status du joueur
-   // envoie = send(socketClient, &player.status, sizeof(int), 0);
+    // envoie = send(socketClient, &player.status, sizeof(int), 0);
     envoie = write(socketClient, &buffer, sizeof(buffer));
     // Si envoie echoue
     if (envoie == -1) {
@@ -391,35 +388,35 @@ int get_clique() {
     lien.able_click = 1; // autoriser les cliques
     // Aucune information à afficher
     gtk_label_set_text(GTK_LABEL(tools.info), " ");
- 
+
     printf("Entrez la réponse : \n");
 
     int duree = 10; // Temps que l'on a pour choisir une réponse
     char valeur[10]; // Valeur du temps en chaîne de caractère
     int compteur = 0; // Compte le temps écoulé
-    
+
     // TODO FAIRE UNE FONCTION REFRESH CHRONO
     // Afficher la valeur du chrono
-   // sprintf(valeur, "%ds", duree);
+    // sprintf(valeur, "%ds", duree);
     //gtk_label_set_text(GTK_LABEL(tools.chrono), valeur);
-       
+
     // Tant que le joueur n'a pas cliqué on attend
     while (lien.is_choice_ok != true) {
-        compteur+=2; // Compte les milisecondes (2 -> 0.2 sec)
+        compteur += 2; // Compte les milisecondes (2 -> 0.2 sec)
         // printf("COMPTEUR = %d\n", compteur);
         // Si 1 seconde s'est écoulée
-        if(compteur > 10){
-              // Afficher la valeur du chrono
+        if (compteur > 10) {
+            // Afficher la valeur du chrono
             sprintf(valeur, "%ds", duree);
             gtk_label_set_text(GTK_LABEL(tools.chrono), valeur);
             // Patienter 1 sec avant d'afficher la valeur suivante
-            duree=duree-1;
+            duree = duree - 1;
             compteur = 0;
         }
-        
+
 
         // Si le compte à rebours et fini et qu'on a pas reçue de reponse du joueur
-        if(duree < 0){
+        if (duree < 0) {
             lien.choix_j1 = 0; // Choisir aléatoirement le choix du joueur
             lien.is_choice_ok = true;
             break;
@@ -434,7 +431,7 @@ int get_clique() {
     // Afficher informations que J2 n'a pas encore joué
     gtk_label_set_text(GTK_LABEL(tools.info), "Attente réponse J2...");
     lien.able_click = 0;
-  
+
     // On récupère le choix du joueur
     clique = lien.choix_j1;
     printf("Reponse choisie = %d\n", clique);
@@ -477,12 +474,12 @@ bool is_id_valide(int id) {
 int get_round_status(int socketClient) {
     int status;
     Buffer_out buffer;
-   // char status_round[256];
+    // char status_round[256];
     int recevoir;
     printf("Reception status du round...\n");
 
     // Recevoir le status du round
-   // recevoir = recv(socketClient, &status_round, sizeof(char)*255, 0);
+    // recevoir = recv(socketClient, &status_round, sizeof(char)*255, 0);
     recevoir = read(socketClient, &buffer, sizeof(buffer));
     printf("TAILLE LUE = %d\n", recevoir);
     // Retourne -1 en cas d'erreur
@@ -497,7 +494,7 @@ int get_round_status(int socketClient) {
     strtok(buffer.out, " ");
     status = atoi(strtok(NULL, " "));
     printf("Avant round = %s\n", buffer.out);
-    
+
     printf("round récupéré status : %d\n", status);
     return status;
 }
@@ -510,9 +507,9 @@ Round create_round(int socketClient) {
 
     // TODO ATTENDRE LE DEBUT DU ROUND
     // Tant que le round n'a pas commencé on attend
-  //  do {
-        round_status = get_round_status(socketClient);
-   // } while (round_status != 0);
+    //  do {
+    round_status = get_round_status(socketClient);
+    // } while (round_status != 0);
 
     // Score de départ
 
@@ -545,9 +542,9 @@ void show_round_result(Round round, Game game) {
 
     // On met à jour les infos a transmettre au GUI
     lien.is_choice_ok = false;
-    
+
     // Si on est J2
-    if(game.player.local_id%2 == 0){
+    if (game.player.local_id % 2 == 0) {
         // Le score des deux joueurs
         lien.score_j1 = round.p2_wallet;
         lien.score_j2 = round.p1_wallet;
@@ -555,8 +552,8 @@ void show_round_result(Round round, Game game) {
         lien.choix_j1 = round.p2_result;
         lien.choix_j2 = round.p1_result;
     }
-    // Si on est J1
-    else{
+        // Si on est J1
+    else {
         // Le score des deux joueurs
         lien.score_j1 = round.p1_wallet;
         lien.score_j2 = round.p2_wallet;
@@ -564,13 +561,13 @@ void show_round_result(Round round, Game game) {
         lien.choix_j1 = round.p1_result;
         lien.choix_j2 = round.p2_result;
     }
-    
+
     lien.nb_round = round.round_number;
-    
+
     printf("J1 choice = %d et J2 choice = %d\n", lien.choix_j1, lien.choix_j2);
     lien.is_answer_ok = true;
 
-   
+
     // Afficher les resultats
     afficher_result();
 }
@@ -601,12 +598,12 @@ bool are_equal(char *key, char *name) {
     return result;
 }
 
-int get_winner(int socket){
+int get_winner(int socket) {
     int winner = 0;
     int recevoir;
     printf("[CLIENT] Waiting for winner name's...\n");
     // Recevoir des données du serveur et les stock dans le gagnant
-   // recevoir = recv(socket, &winner, sizeof(int), 0);
+    // recevoir = recv(socket, &winner, sizeof(int), 0);
     recevoir = read(socket, &winner, sizeof(int));
     printf("[CLIENT] Winner name's received.\n");
 
@@ -619,30 +616,29 @@ int get_winner(int socket){
     return winner;
 }
 
-bool is_game_win(Game game, int winner){
+bool is_game_win(Game game, int winner) {
     bool win = false;
-    if(game.player.local_id == winner){
+    if (game.player.local_id == winner) {
         win = true;
     }
     return win;
 }
 
 // Afficher le gagnant
-void set_winner_name(int socket, Game game){
+void set_winner_name(int socket, Game game) {
     int winner;
     // Récuéperer id du gagnant
     winner = get_winner(socket);
     // Si la partie est gagnée
-    if(is_game_win(game, winner)){
+    if (is_game_win(game, winner)) {
         // Afficher partie gagnée !
         show_win();
     }
-    // Si la partie est perdue ou égalité
-    else{
-        if(winner == 0){
+        // Si la partie est perdue ou égalité
+    else {
+        if (winner == 0) {
             show_egality();
-        }
-        else{
+        } else {
             show_loose();
         }
     }
@@ -671,6 +667,8 @@ void startGame(void *param) {
     // Continuer à jouer ou quitter ?
     // Tant que le client veut continuer à jouer on informe le serveur
     do {
+        memset(&player, 0, sizeof(Joueur));
+        memset(&game, 0, sizeof(Joueur));
         player = create_player(socket);
         // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)
         game = create_game(socket, player);
@@ -679,7 +677,7 @@ void startGame(void *param) {
         jouer(socket, game);
         printf("Finito\n");
         // Recapituler la partie
-      //  game_recap(socket);
+        //  game_recap(socket);
     } while (restart_game(socket, player)); // Tant que le joueur veut faire une nouvelle partie
 
     printf("Fini\n");

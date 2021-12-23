@@ -11,4 +11,9 @@
 
 #include "../../headers/game/core.h"
 
-void read_rules(rules * rules);
+/**
+ * @brief Read rules from files
+ * Read rules from files
+ * @param rules rules struct
+ */
+void read_rules(rules *rules);

@@ -1,14 +1,21 @@
-//
-// Created by Yannis Teissier on 17/11/2021.
-//
-
-// TODO : Modifier les regles avec de l'argent (un wallet)
+/**
+ * @file core.h
+ * @author Teissier Yannis
+ * @brief This file is the core of the game logic
+ * @version 0.1
+ * @date 2021-11-17
+ * @copyright Copyright (c) 2021
+ */
 
 #ifndef SERVER_CORE_H
 #define SERVER_CORE_H
 
 #pragma once
 
+/**
+ * @brief Contains the rules of the game
+ * Contains the rules of the game
+ */
 typedef struct {
     int nb_round;
     int default_wallet;
@@ -20,6 +27,10 @@ typedef struct {
     int trahison_collab_loose;
 } rules;
 
+/**
+ * @brief Contains the player informations
+ * Contains the player informations
+ */
 typedef struct {
     int id;
     int status;
@@ -27,6 +38,10 @@ typedef struct {
     int socket;
 } player;
 
+/**
+ * @brief Contains round informations
+ * Contains round informations
+ */
 typedef struct {
     // Resultat de chaque joueur
     int p1_result; // choix
@@ -36,12 +51,16 @@ typedef struct {
     // Le temps
     int p1_decision_time;
     int p2_decision_time;
-  //  int p2_choice;
+    //  int p2_choice;
     // Numero du round
     int round_number;
     int status;
 } round;
 
+/**
+ * @brief Contains party informations
+ * Contains party informations
+ */
 typedef struct {
     int id;
     player *player_game;
@@ -49,6 +68,9 @@ typedef struct {
     int round_count;
 } party;
 
+/**
+ * Contains the game informations
+ */
 typedef struct {
     player *player;
     int players_count;
@@ -56,6 +78,10 @@ typedef struct {
     int parties_count;
 } game;
 
+/**
+ * @brief Contains answer informations
+ * Contains answer informations
+ */
 typedef struct {
     int party_id;
     int player_id;
@@ -63,23 +89,26 @@ typedef struct {
     int time;
 } answer_struct;
 
-typedef struct
-{
+/**
+ * @brief Contains recap informations
+ * Contains recap informations
+ */
+typedef struct {
     int nb_round;
     answer_struct list_answer_J1[10];
     answer_struct list_answer_J2[10];
 } recap;
 
 // Test debug
-typedef struct{
+typedef struct {
     char out[256];
 } Buffer_out;
-
 
 extern rules rules0;
 extern game game0;
 
 /**
+ * @brief Initialize the game struct
  * Initialize game struct
  * set players_count to 0
  * set parties_count to 0
@@ -87,6 +116,7 @@ extern game game0;
 void init_game();
 
 /**
+ * @brief Initialize player struct
  * Initialize player struct
  * set id to (struct game) players_count + 1
  * and add it to the game (struct)
@@ -98,6 +128,7 @@ void init_game();
 void init_player(player *player, int socket);
 
 /**
+ * @brief Initialize party struct
  * Initialize party struct
  * set id to (struct game) party_count + 1
  * add it to the game (struct)
@@ -110,6 +141,7 @@ void init_player(player *player, int socket);
 void init_party(party *party0, player player1, player player2);
 
 /**
+ * @brief Initialize round struct
  * Initialize round struct
  * @param round round to initialize
  * @param p1_result (0 or 1)
@@ -121,34 +153,15 @@ void init_round(round *round, int p1_result, int p1_decision_time, int p2_result
                 int round_number, int p1Wallet, int p2Wallet);
 
 /**
+ * @brief add round to party
  * Add round to party
  * @param party party to update
  * @param round round to add
  */
-void add_round_to_party(party *party, round * round);
+void add_round_to_party(party *party, round *round);
 
 /**
- * Destroy player struct when player is leaving
- * Remove player from game struct
- * Remove player struct
- * @param player player who is leaving
- */
-void destroy_player(game *game, player *player);
-
-/**
- * Destroy party struct when party is finished
- * @param party party to remove
- */
-void destroy_party(party *party);
-
-/**
- * Destroy game struct when server will be closed
- */
-void destroy_game();
-
-void init_answer(answer_struct *answer);
-
-/**
+ * @brief Generating recapitulation of the party
  * Generating recapitulation of the party
  * @brief Generating recapitulation of the party
  * @param party party to generate recap
@@ -157,13 +170,10 @@ void init_answer(answer_struct *answer);
 recap generating_recap(party *party);
 
 /**
- * Parse answer from string
- * @brief Parse answer from string
- * @param answer _str string of the answer
- * @param answerStruct answer_struct struct
+ * @brief Initialize answer struct
+ * Initialize answer struct
+ * @param answer answer to initialize
  */
-void parse_answer(char * answer, answer_struct * answerStruct);
-
 void init_answer(answer_struct *answer);
 
 #endif //SERVER_CORE_H

@@ -1,6 +1,11 @@
-//
-// Created by Yannis Teissier on 26/11/2021.
-//
+/**
+ * @file server.h
+ * @author Teissier Yannis
+ * @brief This file contains server management functions and game loop
+ * @version 0.1
+ * @date 2021-11-26
+ * @copyright Copyright (c) 2021
+ */
 
 #include <netinet/in.h>
 #include <stdio.h>
@@ -13,8 +18,16 @@
 #include "../../headers/connectivity/server.h"
 #include "../../headers/game/rules.h"
 
+/**
+ * @brief Global client list
+ * Global client list
+ */
 clients_list clientsList;
 
+/**
+ * @brief Global is main thread running
+ * Global is main thread running
+ */
 int is_running = 1;
 
 /**
@@ -146,14 +159,13 @@ void *handle_clients() {
     pthread_exit(0);
 }
 
-
 /**
  * Thread for party
  * @brief Thread for party
  * @param players list of players
  */
 void *thread_party(void *ptr) {
-  //  char buffer_out[BUFFERSIZE];
+    //  char buffer_out[BUFFERSIZE];
     Buffer_out buffer;
 
     //temp
@@ -182,9 +194,9 @@ void *thread_party(void *ptr) {
     printf("[PARTY #%d] Party running\n", party.id);
 
     printf("[PARTY #%d] Send party id to client\n", party.id);
-   
+
     sprintf(buffer.out, "party %i", party.id);
-    
+
     write(p1.socket, buffer.out, sizeof(buffer));
     write(p2.socket, buffer.out, sizeof(buffer));
 
@@ -198,7 +210,7 @@ void *thread_party(void *ptr) {
     write(p1.socket, buffer.out, sizeof(buffer));
     write(p2.socket, buffer.out, sizeof(buffer));
     printf("TAILLE ENVOYEE : %d\n", sizeof(buffer));
-   // sleep(3);
+    // sleep(3);
 
     int nbRound = 1;
 
@@ -209,36 +221,38 @@ void *thread_party(void *ptr) {
     //Gestion des rounds
     while (nbRound <= Nb_Round_Max) {
         printf("[PARTY #%d] Round %i\n", nbRound, party.id);
-        
+
         init_answer(&buffer_answer1);
         init_answer(&buffer_answer2);
 
         printf("[PARTY #%d] Reading response from clients\n", party.id);
-       // p1_t = read(p1.socket, &buffer_answer1, sizeof(answer_struct));
-       // p2_t = read(p2.socket, &buffer_answer2, sizeof(answer_struct));
-       p1_sizet = read(p1.socket, &buffer_answer1, sizeof(buffer_answer1));
-       p2_sizet = read(p2.socket, &buffer_answer2, sizeof(buffer_answer2));
-        
-        if(p1_sizet < 0 || p2_sizet < 0){
+        // p1_t = read(p1.socket, &buffer_answer1, sizeof(answer_struct));
+        // p2_t = read(p2.socket, &buffer_answer2, sizeof(answer_struct));
+        p1_sizet = read(p1.socket, &buffer_answer1, sizeof(buffer_answer1));
+        p2_sizet = read(p2.socket, &buffer_answer2, sizeof(buffer_answer2));
+
+        if (p1_sizet < 0 || p2_sizet < 0) {
             perror("[PARTY] Error reading response from clients");
             close(p1.socket);
             close(p2.socket);
             exit(EXIT_FAILURE);
-        } 
+        }
 
         usleep(100000); // Wait a little
-        
+
         p1_sizet = 1;
         p2_sizet = 1;
         printf("Réponse J1 reçue ... = %d\n", buffer_answer1.choice);
         if (p1_sizet > 0 || p2_sizet > 0) {
 
-            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",party.id,p1.id,buffer_answer1.choice,buffer_answer1.time);
+            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n", party.id, p1.id,
+                   buffer_answer1.choice, buffer_answer1.time);
             // fill answer struct
             p1Result = buffer_answer1.choice;
             p1Time = buffer_answer1.time;
 
-            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",party.id,p2.id,buffer_answer2.choice,buffer_answer2.time);
+            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n", party.id, p2.id,
+                   buffer_answer2.choice, buffer_answer2.time);
             // fill answer struct
             p2Result = buffer_answer2.choice;
             p2Time = buffer_answer2.time;
@@ -254,10 +268,10 @@ void *thread_party(void *ptr) {
             printf("Wallet: P1: %d - P2: %d\n", p1.wallet, p2.wallet);
 
             p1Wallet = p1.wallet;
-            p2Wallet = p2.wallet; 
+            p2Wallet = p2.wallet;
 
             printf("[PARTY #%d] Generating round result\n", party.id);
-            
+
             init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
             init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
 
@@ -293,10 +307,10 @@ void *thread_party(void *ptr) {
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv
-    
+
     printf("[PARTY #%d] Results logged...\n", party.id);
     printf("[PARTY #%d] Leaving party...\n", party.id);
-    
+
     // Recupérer si le joueur veut rejouer ou quitter
     player_wanted_replay(p1, p2);
 
@@ -305,6 +319,11 @@ void *thread_party(void *ptr) {
     pthread_exit(0);
 }
 
+/**
+ * @brief Check if the players want to play again
+ * @param p1 First player
+ * @param p2 Second player
+ */
 void player_wanted_replay(player p1, player p2) {
     int p1_res, p2_res;
     char status_j1[20];
@@ -316,7 +335,7 @@ void player_wanted_replay(player p1, player p2) {
     p1_res = read(p1.socket, &buffer_j1, sizeof(buffer_j1));
     p2_res = read(p2.socket, &buffer_j2, sizeof(buffer_j2));
 
-    if(p1_res < 0 || p2_res < 0){
+    if (p1_res < 0 || p2_res < 0) {
         perror("[PARTY] Error reading response from clients");
         close(p1.socket);
         close(p2.socket);
@@ -326,7 +345,7 @@ void player_wanted_replay(player p1, player p2) {
     strcpy(status_j1, buffer_j1.out);
     strcpy(status_j2, buffer_j2.out);
     // P1 want to replay
-    if(strcmp(status_j1, "online") == 0) {
+    if (strcmp(status_j1, "online") == 0) {
         printf("P1 want to replay\n");
         p1.status = 0;
         // Add client to the queue
@@ -342,7 +361,7 @@ void player_wanted_replay(player p1, player p2) {
     }
 
     // P2 want to replay
-    if(strcmp(status_j2, "online") == 0) {
+    if (strcmp(status_j2, "online") == 0) {
         printf("P2 want to replay\n");
         p2.status = 0;
         // Add client to the queue
@@ -357,6 +376,11 @@ void player_wanted_replay(player p1, player p2) {
     }
 }
 
+/**
+ * @brief Randomize pair of players from the global player list
+ * Randomize pair of players from the global player list
+ * @return Pair of players
+ */
 int *randomize_pairs() {
     int *pair = malloc(sizeof(int) * 2);
     pair[0] = rand() % clientsList.client_count;
@@ -368,16 +392,33 @@ int *randomize_pairs() {
     return pair;
 }
 
+/**
+ * @brief Initialize client list
+ * Initialize client list
+ * @param clients List of clients
+ */
 void init_client_list(clients_list *client_list) {
     client_list->clients = malloc(sizeof(player) * 10);
     client_list->client_count = 0;
 }
 
+/**
+ * @brief Add a client to the list
+ * Add a client to the list
+ * @param clients List of clients
+ * @param client Client to add
+ */
 void add_client(clients_list *client_list, player client) {
     client_list->clients[client_list->client_count] = client;
     client_list->client_count++;
 }
 
+/**
+ * @brief Remove a client from the list
+ * Remove a client from the list
+ * @param clients List of clients
+ * @param socket fd Socket of the client
+ */
 void remove_client(clients_list *client_list, int socketfd) {
     for (int i = 0; i < client_list->client_count; i++) {
         if (client_list->clients[i].socket == socketfd) {

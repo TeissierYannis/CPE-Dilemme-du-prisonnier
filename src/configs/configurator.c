@@ -1,6 +1,11 @@
-//
-// Created by Yannis Teissier on 12/11/2021.
-//
+/**
+ * @file configurator.h
+ * @author Teissier Yannis
+ * @brief This file contains the configurations methods.
+ * @version 0.1
+ * @date 2021-11-12
+ * @copyright Copyright (c) 2021
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,8 +16,8 @@
  * @return server config struct
  */
 server_config readconfig() {
-     // Read config file
-    FILE * file_p = fopen("../config/server_config.json", "r");
+    // Read config file
+    FILE *file_p = fopen("../config/server_config.json", "r");
 
     // Initialize server config struct
     server_config server_config;
@@ -51,7 +56,7 @@ server_config readconfig() {
  * Initialize server config struct
  * @param server_config  server config struct
  */
-void init_config(server_config * config) {
+void init_config(server_config *config) {
     config->port = malloc(sizeof(char) * 20);
     config->ip = malloc(sizeof(char) * 20);
 }

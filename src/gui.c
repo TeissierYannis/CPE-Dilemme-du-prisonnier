@@ -35,7 +35,7 @@ void choice_clicked(void *boutton){
     // Si on a cliqué sur Trahison
     if (are_equals(message, "Trahison")) {
         // Valeur du choix  = 0
-        lien.choix_j1 = 0;
+        lien.choice = 0;
         lien.is_choice_ok = true; // indiqquer que le joueur a fait son choix
         // Afficher resultat du round
         //  afficher_result();
@@ -43,7 +43,7 @@ void choice_clicked(void *boutton){
         // Si on a cliqué sur collaboré
     else if (are_equals(message, "Collaboration")) {
         // Valeur du choix  = 1
-        lien.choix_j1 = 1;
+        lien.choice = 1;
         lien.is_choice_ok = true; // indiquer que le joueur a fait son choix
         // Afficher resultat du round
     //    afficher_result();

@@ -19,14 +19,15 @@
 //#include <pthread.h>
 #include <stdio.h>
 #include "board.h"
+#include "lien.h"
 
 #ifndef AFFICHAGE_H
 #define AFFICHAGE_H
 
-void afficher_score();
-void afficher_round();
-void afficher_choix_adversaire();
-void afficher_result();
+void afficher_score(int score_j1, int score_j2);
+void afficher_round(int numero);
+void afficher_choix_adversaire(int choix_j1, int choix_j2);
+void afficher_result(ResultRound result);
 void show_restart_button();
 //void show_winner();
 void show_end_game();

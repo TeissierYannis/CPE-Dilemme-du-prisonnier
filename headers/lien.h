@@ -15,26 +15,24 @@
 #ifndef LIEN_H
 #define LIEN_H
 
-
 // Contient les informations d'un Joueur
 typedef struct{
-    int choix_j1;
-    int choix_j2;
-    int score_j1;
-    int score_j2;
-    int nb_round;
-
     int able_click;
-    
-    int is_choice_ok; // choix du joueur Fait / en Attente
-    int is_answer_ok; // Resultat du round Reçue / en Attente
-
-    int is_game_end; // Partie terminée Oui / Non
+    int choice;
+    bool is_choice_ok; // choix du joueur Fait / en Attente
    
     bool restart_choice; // choix de find de partie Recommencer / Quitter
     bool is_restart_clicked; // choix du joueur de fin de partie Fait / en Attente
     bool is_winner;
 } Lien;
+
+typedef struct {
+    int choix_j1;
+    int choix_j2;
+    int score_j1;
+    int score_j2;
+    int nb_round;
+} ResultRound;
 
 // Lien global entre GUI et Socket contenant les informations sur le jeu
 extern Lien lien;

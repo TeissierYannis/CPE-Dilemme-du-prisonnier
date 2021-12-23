@@ -288,9 +288,10 @@ void *thread_party(void *ptr) {
     }
     printf("[PARTY #%d] Every rounds was played \n", party.id);
 
-    int win = winner(p1, p2);
-    write(p1.socket, &win, sizeof(int));
-    write(p2.socket, &win, sizeof(int));
+    char win[200];
+    sprintf(win, "winner %d", winner(p1, p2));
+    write(p1.socket, &win, sizeof(char) * 200);
+    write(p2.socket, &win, sizeof(char) * 200);
 
     printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
 

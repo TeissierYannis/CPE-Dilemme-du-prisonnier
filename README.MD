@@ -287,22 +287,61 @@ Régulièrement, nous faisions des codes reviews nous permettant de voir les cha
 Pour la communication, nous avons défini un protocole personnalisé.
 
 ```
+Permet d'envoyer au client un identifiant pour le serveur et un identifiant local servant dans la partie client afin de définir le joueur 1 et le joueur 2 
 id <id_client>:<id_local>
 
+Permet d'envoyer le numéro de partie au client
 party <id_party>
 
+Permet d'envoyer un status (status de la partie ou status du client)
 status <status>
 
+Permet de communiquer les réponses des clients au serveur 
 <answer_struct>
 
+Permet de communiquer le recapitulatif d'un round au client
 <round_struct>
 
-<int>
+Permet de communiquer l'id du winner au client
+winner <int>
 
+Permet de communiquer le recapitualtif de la partie au client
 <recap_party>
-
-<status>
 ```
 
 ## 🧐 Les difficultés <a name = "difficulties"></a>
+
+Difficultés liées au code :
+- Différentes manières d'écrire le code
+- L'adaptation du code de chaque personne au projet
+- Les différents types de bugs de mémoire
+- L'envoi de structures complexes 
+
+Difficultés liées à la communication :
+- Les différents types de communication existant
+- Définir un protocole personnalisé clair et simple
+
+Difficultés liées à la méthodologie :
+- Se coordonner avec les autres membres
+- Se tenir à jour avec les autres membres
+- Vérifier les changements des autres membres afin de pouvoir réaliser les changements
+
+Difficultés liées à la nouveauté :
+- La mise en place d'un serveur
+- La mise en place d'un client
+- La communication avec le serveur et le client
+- Mise en place d'une interface graphique
+
+Difficultés liées à la partie graphique :
+- Choix du style de l'interface graphique
+- Simplicité de l'interface graphique
+- Brancher l'interface graphique au client
+
 ## 🧐 Bilan <a name = "bilan"></a>
+
+Malgré les différentes difficultés rencontrées, nous avons réussi à réaliser le projet.
+Nous en tirerons des bénéfices, et nous adopterons une méthodologie différente en tirant profit des différentes difficultés rencontrées.
+
+Ce projet nous aura appris à traduire un concept en programme, en se basant sur le développement d'un client, un serveur et un interface graphique.
+
+Nous partions de simples connaissances basique en c et aujourd'hui nous avons été capable de mettre à l'épreuve nos connaissances afin de fournir un rendu final.

@@ -99,6 +99,7 @@ void *listening(void *socketfd) {
         player player;
         init_player(&player, client_sock);
         add_client(&clientsList, player);
+        printf("Clients connected : %d\n", clientsList.client_count);
     }
     pthread_exit(0);
 }
@@ -110,14 +111,10 @@ void *listening(void *socketfd) {
  */
 void *handle_clients() {
     int *pair;
-
     pthread_t thread;
-   // player *players = malloc(sizeof(player) * 2);
-    
 
     while (is_running) {
-        printf("Nombre de clients connectés : %d\n", clientsList.client_count);
-        sleep(2);
+        sleep(1);
         // Si 2 joueurs sont disponibles
         if (clientsList.client_count >= 2) {
             // Randomize clients pairs
@@ -138,11 +135,9 @@ void *handle_clients() {
                 pthread_create(&thread, 0, thread_party, players);
                 pthread_detach(thread);
 
-                // Les 2 joueurs ne sont plus disponibles quand ils jouent
+                // Remove players from list
                 remove_client(&clientsList, players[0].socket);
                 remove_client(&clientsList, players[1].socket);
-               // free(players);
-                
             }
         }
         usleep(10000); // Faire une pause dans le while TRUE (en us)
@@ -231,7 +226,7 @@ void *thread_party(void *ptr) {
             exit(EXIT_FAILURE);
         } 
 
-        usleep(100000); // Wait a little bit
+        usleep(100000); // Wait a little
         
         p1_sizet = 1;
         p2_sizet = 1;
@@ -265,18 +260,13 @@ void *thread_party(void *ptr) {
             
             init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
             init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
-          
-       //     add_round_to_party(&party, &round_party);
-
-           // sleep(5);
 
             printf("[PARTY #%d] Sending round result to clients... \n", party.id);
             printf("Envoie du round ... avec numero = %d\n", round_struct.round_number);
             printf("Envoie du round ... avec choix j1 = %d\n", round_struct.p1_result);
             write(p1.socket, &round_struct, sizeof(round));
             write(p2.socket, &round_struct, sizeof(round));
-       //      printf("TAILLE round envoyé = %d\n", sizeof(round));
-            printf("[PARTY #%d] Round result sent. \n", party.id); 
+            printf("[PARTY #%d] Round result sent. \n", party.id);
 
             add_round_to_party(&party, &round_struct);
 
@@ -298,9 +288,8 @@ void *thread_party(void *ptr) {
     write(p2.socket, &party_recap, sizeof(recap));
     printf("[PARTY #%d] Recap sent. \n", party.id);
 
-    //Fin de partie
+    // End of the party
     printf("[PARTY #%d] Fin de la partie\n", party.id);
-    //TODO win = winner(j1, j2)
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv
@@ -309,18 +298,26 @@ void *thread_party(void *ptr) {
     printf("[PARTY #%d] Leaving party...\n", party.id);
     
     // Recupérer si le joueur veut rejouer ou quitter
-    int fd_j1, fd_j2;
+    player_wanted_replay(p1, p2);
+
+    free(players);
+
+    pthread_exit(0);
+}
+
+void player_wanted_replay(player p1, player p2) {
+    int p1_res, p2_res;
     char status_j1[20];
     char status_j2[20];
     Buffer_out buffer_j1;
     Buffer_out buffer_j2;
-    
-    printf("[STATUS] Wait for players status\n");
-    fd_j1 = read(p1.socket, &buffer_j1, sizeof(buffer_j1));
-    fd_j2 = read(p2.socket, &buffer_j2, sizeof(buffer_j2));
-   
-    if(fd_j1 < 0 || fd_j2 < 0){
-        perror("Erreur réception status");
+
+    printf("[PARTY] Waiting for players wanted to replay\n");
+    p1_res = read(p1.socket, &buffer_j1, sizeof(buffer_j1));
+    p2_res = read(p2.socket, &buffer_j2, sizeof(buffer_j2));
+
+    if(p1_res < 0 || p2_res < 0){
+        perror("[PARTY] Error reading response from clients");
         close(p1.socket);
         close(p2.socket);
         exit(EXIT_FAILURE);
@@ -328,44 +325,37 @@ void *thread_party(void *ptr) {
 
     strcpy(status_j1, buffer_j1.out);
     strcpy(status_j2, buffer_j2.out);
-    printf("[PLAYER] Status joueur reçue J1 : %s et J2 : %s\n", buffer_j1.out, buffer_j2.out);
-    // Si J1 veut rejouer
-   if(strcmp(status_j1, "online") == 0) {
-        printf("J1 REJOUE \n");
+    // P1 want to replay
+    if(strcmp(status_j1, "online") == 0) {
+        printf("P1 want to replay\n");
         p1.status = 0;
-        // On remet le clients dans la file d'attente
-        add_client(&clientsList, p1);
-        sleep(1);
+        // Add client to the queue
+        player from_p1;
+        init_player(&from_p1, p1.socket);
+        add_client(&clientsList, from_p1);
     }
-    // Si J1 ne veut plus jouer
-    else if(strcmp(status_j1, "disconnect") == 0){
-        printf("ON S'EN VAS J1\n");
+        // P1 do not want to replay
+    else {
+        printf("P1 is leaving\n");
         close(p1.socket);
-        // Faire quitter les parties
-        sleep(1);
+        // Closing socket
     }
 
-    // Si J2 veut rejouer
-   if(strcmp(status_j2, "online") == 0) {
-        printf("J2 REJOUE \n");
+    // P2 want to replay
+    if(strcmp(status_j2, "online") == 0) {
+        printf("P2 want to replay\n");
         p2.status = 0;
-        // On remet le clients dans la file d'attente
-        add_client(&clientsList, p2);
-        sleep(1);
-    }
-     // Si J2 ne veut plus jouer
-    else if(strcmp(status_j2, "disconnect") == 0){
-        printf("ON S'EN VAS J2\n");
+        // Add client to the queue
+        player from_p2;
+        init_player(&from_p2, p2.socket);
+        add_client(&clientsList, from_p2);
+    } // P2 do not want to replay
+    else {
+        printf("P2 is leaving\n");
         close(p2.socket);
-        // Faire quitter les parties
-        sleep(1);
+        // Closing socket
     }
-  
-
-    free(players);
-    pthread_exit(0);
 }
-
 
 int *randomize_pairs() {
     int *pair = malloc(sizeof(int) * 2);

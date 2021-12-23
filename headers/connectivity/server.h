@@ -31,4 +31,6 @@ void *handle_clients();
 
 void *thread_party(void *ptr);
 
+void player_wanted_replay(player p1, player p2);
+
 #endif //SERVER_SERVER_H

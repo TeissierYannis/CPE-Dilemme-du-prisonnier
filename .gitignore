@@ -57,3 +57,5 @@ output/
 cmake-build-debug/
 build/
 .DS_Store
+doc/html
+doc/latex

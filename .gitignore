@@ -56,3 +56,5 @@ output/
 .idea/
 cmake-build-debug/
 build/
+doc/html
+doc/latex

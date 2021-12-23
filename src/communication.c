@@ -43,6 +43,7 @@ int *get_client_id(int socketClient, char *title) {
     // (id du joueur ou id de la partie)
     printf("[RECEIVE] Receiving id from server...\n");
     verif = read(socketClient, &buffer, sizeof(buffer));
+    
     // Vérifier la réception
     if (verif < 0) {
         perror("[RECEIVE] Error reception ID :");
@@ -147,6 +148,8 @@ void send_player_status(int socketClient, Joueur player) {
     Buffer_out buffer;
     // Copier le status du joueur dans le message à envoyer
     sprintf(buffer.out, "%s", player.status);
+
+    printf("[STATUS] Envoie : %s\n", buffer.out);
     // On envoie le status du joueur
     verif = write(socketClient, &buffer, sizeof(buffer));
     

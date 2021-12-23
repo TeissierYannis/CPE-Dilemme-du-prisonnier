@@ -98,10 +98,6 @@ void new_party(void *boutton){
 
     gtk_widget_show(tools.trahison);
     gtk_widget_show(tools.collaboration);
-   // gtk_widget_show(tools.choix_adversaire);
-   // gtk_widget_show(tools.score1);
-   // gtk_widget_show(tools.score2);
-
 
     printf("[GUI] New game en approche\n");
 

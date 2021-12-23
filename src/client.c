@@ -83,8 +83,7 @@ Game create_game(int socketClient, Joueur player) {
 
     // Récupérer l'identifiant de la partie
     printf("[CLIENT] Receiving party id...\n");
-    int *result = get_client_id(socketClient,
-                                     "party"); // L'identifiant contient "id/role" -> role pas nécessaire pour game
+    int *result = get_client_id(socketClient, "party"); // L'identifiant contient "id/role" -> role pas nécessaire pour game
     id = result[0];
     // Si l'identifiant est valide
     if (is_id_valide(id)) {
@@ -487,7 +486,7 @@ void startGame(void *param) {
         // Initialiser le joueur
         memset(&player, 0, sizeof(Joueur));
          // Initialiser le jeu
-        memset(&game, 0, sizeof(Joueur));
+        memset(&game, 0, sizeof(Game));
 
         player = create_player(socket);
         // Creation de la partie avec son identifiant et l'id du joueur (possible lorsque 2 joueurs co sur le serveur)

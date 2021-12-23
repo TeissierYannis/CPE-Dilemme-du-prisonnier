@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include "../../headers/connectivity/server.h"
 #include "../../headers/game/rules.h"
+#include "../../headers/results/writefile.h"
 
 /**
  * @brief Global client list
@@ -307,6 +308,7 @@ void *thread_party(void *ptr) {
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv
+    writefile(party);
 
     printf("[PARTY #%d] Results logged...\n", party.id);
     printf("[PARTY #%d] Leaving party...\n", party.id);

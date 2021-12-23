@@ -1,18 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <signal.h>
-#include <unistd.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkx.h>
-#include <math.h>
-#include <ctype.h>
 #include <pthread.h>
 
 #include "headers/client.h"
 #include "headers/gui.h"
 #include "headers/lien.h"
+#include "headers/connexion.h"
 
 
 int main(int argc, char **argv) {

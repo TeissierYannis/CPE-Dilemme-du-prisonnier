@@ -7,17 +7,7 @@
  * @copyright Copyright (c) 2021
  * 
  */
-#include <stdlib.h>
-#include <sys/types.h>
-#include <signal.h>
-#include <unistd.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkx.h>
-#include <math.h>
-#include <ctype.h>
-//#include <pthread.h>
-#include <stdio.h>
 
 
 #ifndef BOARD_H

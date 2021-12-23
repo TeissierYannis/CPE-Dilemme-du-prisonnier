@@ -7,12 +7,6 @@
  * @copyright Copyright (c) 2021
  * 
  */
-#include <stdlib.h>
-#include <signal.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdio.h>
-
 #ifndef OUTILS_H
 #define OUTILS_H
 

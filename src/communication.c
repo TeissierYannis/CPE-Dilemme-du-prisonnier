@@ -11,10 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <unistd.h> // a voir si obligatoire
-#include <arpa/inet.h>
 #include <string.h>
 #include "../headers/communication.h"
 
@@ -170,10 +167,13 @@ void send_player_status(int socketClient, Joueur player) {
 int get_winner(int socket) {
     int winner = 0;
     int recevoir;
+    Buffer_out buffer;
     printf("[CLIENT] Waiting for winner name's...\n");
     // Recevoir des données du serveur et les stock dans le gagnant
     // recevoir = recv(socket, &winner, sizeof(int), 0);
-    recevoir = read(socket, &winner, sizeof(int));
+    recevoir = read(socket, &buffer, sizeof(char) * 200);
+    strtok(buffer.out, " ");
+    winner = atoi(strtok(NULL, " "));
     printf("[CLIENT] Winner name's received.\n");
 
     // Retourne -1 en cas d'erreur

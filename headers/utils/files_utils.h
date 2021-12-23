@@ -5,10 +5,7 @@
 #ifndef SERVER_FILES_UTILS_H
 #define SERVER_FILES_UTILS_H
 
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "string_utils.h"
 

@@ -1,4 +1,5 @@
-#include <stdbool.h>
+#include <gtk/gtk.h>
+#include "../headers/board.h"
 #include "../headers/affichage.h"
 
 // Afficher informations score des joueurs

@@ -1,0 +1,38 @@
+\hypertarget{server_8h_source}{}\doxysection{server.\+h}
+\label{server_8h_source}\index{headers/connectivity/server.h@{headers/connectivity/server.h}}
+\mbox{\hyperlink{server_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#ifndef SERVER\_SERVER\_H}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#define SERVER\_SERVER\_H}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}../game/core.h"{}}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{19 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{20     \mbox{\hyperlink{structplayer}{player}} *clients;}
+\DoxyCodeLine{21     \textcolor{keywordtype}{int} client\_count;}
+\DoxyCodeLine{22 \} \mbox{\hyperlink{structclients__list}{clients\_list}};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{keyword}{extern} \mbox{\hyperlink{structclients__list}{clients\_list}} \mbox{\hyperlink{server_8h_a402998e3f6ef282dfcaa8aa17d726711}{clientsList}};}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{33 \textcolor{keywordtype}{int} \mbox{\hyperlink{server_8h_a42181c0e06c4cf01ec7ee1455155bb4c}{create\_server}}(\textcolor{keywordtype}{char} *ip, \textcolor{keywordtype}{int} port);}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{40 \textcolor{keywordtype}{void} *\mbox{\hyperlink{server_8h_aebc9ad6f7c0a7737fe7645254a7749d7}{listening}}(\textcolor{keywordtype}{void} *socketfd);}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{47 \textcolor{keywordtype}{void} \mbox{\hyperlink{server_8h_a3ab17d88f3db17b497bebdc395ba5e2a}{init\_client\_list}}(\mbox{\hyperlink{structclients__list}{clients\_list}} *clients);}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{55 \textcolor{keywordtype}{void} \mbox{\hyperlink{server_8h_af842f4c2509b7428f5645765ed8be7fd}{add\_client}}(\mbox{\hyperlink{structclients__list}{clients\_list}} *clients, \mbox{\hyperlink{structplayer}{player}} client);}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{63 \textcolor{keywordtype}{void} \mbox{\hyperlink{server_8h_a0fc2e2e27999ec7f020b81541a7cf999}{remove\_client}}(\mbox{\hyperlink{structclients__list}{clients\_list}} *clients, \textcolor{keywordtype}{int} socket);}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{70 \textcolor{keywordtype}{int} *\mbox{\hyperlink{server_8h_a01f93c94582e2bb6d0a1ef1273e2de32}{randomize\_pairs}}();}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{76 \textcolor{keywordtype}{void} *\mbox{\hyperlink{server_8h_ae4b6c4d42fb12fab7fba8fd5489ddc7a}{handle\_clients}}();}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{84 \textcolor{keywordtype}{void} *\mbox{\hyperlink{server_8h_aa589e489899e570f8175f0997bcdb681}{thread\_party}}(\textcolor{keywordtype}{void} *ptr);}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{91 \textcolor{keywordtype}{void} \mbox{\hyperlink{server_8h_af70f4c42930cc561834c8f32fb8e3591}{player\_wanted\_replay}}(\mbox{\hyperlink{structplayer}{player}} p1, \mbox{\hyperlink{structplayer}{player}} p2);}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//SERVER\_SERVER\_H}}
+
+\end{DoxyCode}

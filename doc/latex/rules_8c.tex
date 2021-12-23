@@ -1,0 +1,60 @@
+\hypertarget{rules_8c}{}\doxysection{src/game/rules.c File Reference}
+\label{rules_8c}\index{src/game/rules.c@{src/game/rules.c}}
+{\ttfamily \#include \char`\"{}../../headers/game/core.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{rules_8c_ac773435c1bbe866892c58450128e691e}{update\+Wallet}} (int choix\+J1, int choix\+J2, \mbox{\hyperlink{structplayer}{player}} $\ast$joueur1, \mbox{\hyperlink{structplayer}{player}} $\ast$joueur2)
+\begin{DoxyCompactList}\small\item\em Update the wallets of players Update the wallets of the players. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{rules_8c_aebe57a6441316cfe73f5aebe63e3b04e}{winner}} (\mbox{\hyperlink{structplayer}{player}} joueur1, \mbox{\hyperlink{structplayer}{player}} joueur2)
+\begin{DoxyCompactList}\small\item\em Get the winner of the game. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Nicola Piemontese 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{rules_8c_ac773435c1bbe866892c58450128e691e}\label{rules_8c_ac773435c1bbe866892c58450128e691e}} 
+\index{rules.c@{rules.c}!updateWallet@{updateWallet}}
+\index{updateWallet@{updateWallet}!rules.c@{rules.c}}
+\doxysubsubsection{\texorpdfstring{updateWallet()}{updateWallet()}}
+{\footnotesize\ttfamily void update\+Wallet (\begin{DoxyParamCaption}\item[{int}]{choix\+J1,  }\item[{int}]{choix\+J2,  }\item[{\mbox{\hyperlink{structplayer}{player}} $\ast$}]{joueur1,  }\item[{\mbox{\hyperlink{structplayer}{player}} $\ast$}]{joueur2 }\end{DoxyParamCaption})}
+
+
+
+Update the wallets of players Update the wallets of the players. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em choix\+J1} & the choice of the player 1 \\
+\hline
+{\em choix\+J2} & the choice of the player 2 \\
+\hline
+{\em joueur1} & player 1 \\
+\hline
+{\em joueur2} & player 2 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{rules_8c_aebe57a6441316cfe73f5aebe63e3b04e}\label{rules_8c_aebe57a6441316cfe73f5aebe63e3b04e}} 
+\index{rules.c@{rules.c}!winner@{winner}}
+\index{winner@{winner}!rules.c@{rules.c}}
+\doxysubsubsection{\texorpdfstring{winner()}{winner()}}
+{\footnotesize\ttfamily int winner (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structplayer}{player}}}]{joueur1,  }\item[{\mbox{\hyperlink{structplayer}{player}}}]{joueur2 }\end{DoxyParamCaption})}
+
+
+
+Get the winner of the game. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em joueur1} & player 1 \\
+\hline
+{\em joueur2} & player 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the winner of the game 
+\end{DoxyReturn}

@@ -1,0 +1,233 @@
+\hypertarget{server_8h}{}\doxysection{headers/connectivity/server.h File Reference}
+\label{server_8h}\index{headers/connectivity/server.h@{headers/connectivity/server.h}}
+
+
+This file contains server management functions and game loop.  
+
+
+{\ttfamily \#include \char`\"{}../game/core.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structclients__list}{clients\+\_\+list}}
+\begin{DoxyCompactList}\small\item\em Structure containing the list of players. Structure containing the list of players. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{server_8h_a42181c0e06c4cf01ec7ee1455155bb4c}{create\+\_\+server}} (char $\ast$ip, int port)
+\begin{DoxyCompactList}\small\item\em Initialize the server. Initialize the server. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{server_8h_aebc9ad6f7c0a7737fe7645254a7749d7}{listening}} (void $\ast$socketfd)
+\begin{DoxyCompactList}\small\item\em Listening loop, waiting for new connections. Listening loop, waiting for new connections. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_8h_a3ab17d88f3db17b497bebdc395ba5e2a}{init\+\_\+client\+\_\+list}} (\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} $\ast$clients)
+\begin{DoxyCompactList}\small\item\em Initialize client list Initialize client list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_8h_af842f4c2509b7428f5645765ed8be7fd}{add\+\_\+client}} (\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} $\ast$clients, \mbox{\hyperlink{structplayer}{player}} client)
+\begin{DoxyCompactList}\small\item\em Add a client to the list Add a client to the list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_8h_a0fc2e2e27999ec7f020b81541a7cf999}{remove\+\_\+client}} (\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} $\ast$clients, int socket)
+\begin{DoxyCompactList}\small\item\em Remove a client from the list Remove a client from the list. \end{DoxyCompactList}\item 
+int $\ast$ \mbox{\hyperlink{server_8h_a01f93c94582e2bb6d0a1ef1273e2de32}{randomize\+\_\+pairs}} ()
+\begin{DoxyCompactList}\small\item\em Randomize pair of players from the global player list Randomize pair of players from the global player list. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{server_8h_ae4b6c4d42fb12fab7fba8fd5489ddc7a}{handle\+\_\+clients}} ()
+\begin{DoxyCompactList}\small\item\em Monitor pair of players and launch party from the pair Monitor pair of players and launch party from the pair. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{server_8h_aa589e489899e570f8175f0997bcdb681}{thread\+\_\+party}} (void $\ast$ptr)
+\begin{DoxyCompactList}\small\item\em This is the core of the game, it\textquotesingle{}s the main loop of the game This is the core of the game, it\textquotesingle{}s the main loop of the game Game logic, results monitoring. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_8h_af70f4c42930cc561834c8f32fb8e3591}{player\+\_\+wanted\+\_\+replay}} (\mbox{\hyperlink{structplayer}{player}} p1, \mbox{\hyperlink{structplayer}{player}} p2)
+\begin{DoxyCompactList}\small\item\em Check if the players want to play again. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{server_8h_a402998e3f6ef282dfcaa8aa17d726711}\label{server_8h_a402998e3f6ef282dfcaa8aa17d726711}} 
+\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} {\bfseries clients\+List}
+\begin{DoxyCompactList}\small\item\em Global client list Global client list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains server management functions and game loop. 
+
+\begin{DoxyAuthor}{Author}
+Teissier Yannis 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/11-\/26 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{server_8h_af842f4c2509b7428f5645765ed8be7fd}\label{server_8h_af842f4c2509b7428f5645765ed8be7fd}} 
+\index{server.h@{server.h}!add\_client@{add\_client}}
+\index{add\_client@{add\_client}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{add\_client()}{add\_client()}}
+{\footnotesize\ttfamily void add\+\_\+client (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} $\ast$}]{client\+\_\+list,  }\item[{\mbox{\hyperlink{structplayer}{player}}}]{client }\end{DoxyParamCaption})}
+
+
+
+Add a client to the list Add a client to the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em clients} & List of clients \\
+\hline
+{\em client} & Client to add \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_8h_a42181c0e06c4cf01ec7ee1455155bb4c}\label{server_8h_a42181c0e06c4cf01ec7ee1455155bb4c}} 
+\index{server.h@{server.h}!create\_server@{create\_server}}
+\index{create\_server@{create\_server}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{create\_server()}{create\_server()}}
+{\footnotesize\ttfamily int create\+\_\+server (\begin{DoxyParamCaption}\item[{char $\ast$}]{ip,  }\item[{int}]{port }\end{DoxyParamCaption})}
+
+
+
+Initialize the server. Initialize the server. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & Listening IP \\
+\hline
+{\em port} & Listening port \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+socket of the server
+\end{DoxyReturn}
+Initialize the server. Initialize the server.
+
+Create server socket from IP and PORT 
+\begin{DoxyParams}{Parameters}
+{\em ip} & IP address \\
+\hline
+{\em port} & PORT \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+server socket 
+\end{DoxyReturn}
+\mbox{\Hypertarget{server_8h_ae4b6c4d42fb12fab7fba8fd5489ddc7a}\label{server_8h_ae4b6c4d42fb12fab7fba8fd5489ddc7a}} 
+\index{server.h@{server.h}!handle\_clients@{handle\_clients}}
+\index{handle\_clients@{handle\_clients}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{handle\_clients()}{handle\_clients()}}
+{\footnotesize\ttfamily void $\ast$ handle\+\_\+clients (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Monitor pair of players and launch party from the pair Monitor pair of players and launch party from the pair. 
+
+Monitor pair of players and launch party from the pair Monitor pair of players and launch party from the pair.
+
+Dispatch client to parties thread \begin{DoxyReturn}{Returns}
+void$\ast$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{server_8h_a3ab17d88f3db17b497bebdc395ba5e2a}\label{server_8h_a3ab17d88f3db17b497bebdc395ba5e2a}} 
+\index{server.h@{server.h}!init\_client\_list@{init\_client\_list}}
+\index{init\_client\_list@{init\_client\_list}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{init\_client\_list()}{init\_client\_list()}}
+{\footnotesize\ttfamily void init\+\_\+client\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} $\ast$}]{client\+\_\+list }\end{DoxyParamCaption})}
+
+
+
+Initialize client list Initialize client list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em clients} & List of clients \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_8h_aebc9ad6f7c0a7737fe7645254a7749d7}\label{server_8h_aebc9ad6f7c0a7737fe7645254a7749d7}} 
+\index{server.h@{server.h}!listening@{listening}}
+\index{listening@{listening}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{listening()}{listening()}}
+{\footnotesize\ttfamily void $\ast$ listening (\begin{DoxyParamCaption}\item[{void $\ast$}]{socketfd }\end{DoxyParamCaption})}
+
+
+
+Listening loop, waiting for new connections. Listening loop, waiting for new connections. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em socketfd} & Socket of the server\\
+\hline
+\end{DoxyParams}
+Listening loop, waiting for new connections. Listening loop, waiting for new connections.
+
+Accept client connection 
+\begin{DoxyParams}{Parameters}
+{\em socketfd} & server socket \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+client socket 
+\end{DoxyReturn}
+\mbox{\Hypertarget{server_8h_af70f4c42930cc561834c8f32fb8e3591}\label{server_8h_af70f4c42930cc561834c8f32fb8e3591}} 
+\index{server.h@{server.h}!player\_wanted\_replay@{player\_wanted\_replay}}
+\index{player\_wanted\_replay@{player\_wanted\_replay}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{player\_wanted\_replay()}{player\_wanted\_replay()}}
+{\footnotesize\ttfamily void player\+\_\+wanted\+\_\+replay (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structplayer}{player}}}]{p1,  }\item[{\mbox{\hyperlink{structplayer}{player}}}]{p2 }\end{DoxyParamCaption})}
+
+
+
+Check if the players want to play again. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & First player \\
+\hline
+{\em p2} & Second player \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_8h_a01f93c94582e2bb6d0a1ef1273e2de32}\label{server_8h_a01f93c94582e2bb6d0a1ef1273e2de32}} 
+\index{server.h@{server.h}!randomize\_pairs@{randomize\_pairs}}
+\index{randomize\_pairs@{randomize\_pairs}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{randomize\_pairs()}{randomize\_pairs()}}
+{\footnotesize\ttfamily int $\ast$ randomize\+\_\+pairs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Randomize pair of players from the global player list Randomize pair of players from the global player list. 
+
+\begin{DoxyReturn}{Returns}
+Pair of players 
+\end{DoxyReturn}
+\mbox{\Hypertarget{server_8h_a0fc2e2e27999ec7f020b81541a7cf999}\label{server_8h_a0fc2e2e27999ec7f020b81541a7cf999}} 
+\index{server.h@{server.h}!remove\_client@{remove\_client}}
+\index{remove\_client@{remove\_client}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{remove\_client()}{remove\_client()}}
+{\footnotesize\ttfamily void remove\+\_\+client (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structclients__list}{clients\+\_\+list}} $\ast$}]{client\+\_\+list,  }\item[{int}]{socketfd }\end{DoxyParamCaption})}
+
+
+
+Remove a client from the list Remove a client from the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em clients} & List of clients \\
+\hline
+{\em socket} & fd Socket of the client \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_8h_aa589e489899e570f8175f0997bcdb681}\label{server_8h_aa589e489899e570f8175f0997bcdb681}} 
+\index{server.h@{server.h}!thread\_party@{thread\_party}}
+\index{thread\_party@{thread\_party}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{thread\_party()}{thread\_party()}}
+{\footnotesize\ttfamily void $\ast$ thread\+\_\+party (\begin{DoxyParamCaption}\item[{void $\ast$}]{ptr }\end{DoxyParamCaption})}
+
+
+
+This is the core of the game, it\textquotesingle{}s the main loop of the game This is the core of the game, it\textquotesingle{}s the main loop of the game Game logic, results monitoring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ptr} & Player pair as void pointer\\
+\hline
+\end{DoxyParams}
+This is the core of the game, it\textquotesingle{}s the main loop of the game This is the core of the game, it\textquotesingle{}s the main loop of the game Game logic, results monitoring.
+
+Thread for party 
+\begin{DoxyParams}{Parameters}
+{\em players} & list of players \\
+\hline
+\end{DoxyParams}

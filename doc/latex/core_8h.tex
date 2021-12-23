@@ -1,0 +1,194 @@
+\hypertarget{core_8h}{}\doxysection{headers/game/core.h File Reference}
+\label{core_8h}\index{headers/game/core.h@{headers/game/core.h}}
+
+
+This file is the core of the game logic.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structrules}{rules}}
+\begin{DoxyCompactList}\small\item\em Contains the rules of the game Contains the rules of the game. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structplayer}{player}}
+\begin{DoxyCompactList}\small\item\em Contains the player informations Contains the player informations. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structround}{round}}
+\begin{DoxyCompactList}\small\item\em Contains round informations Contains round informations. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structparty}{party}}
+\begin{DoxyCompactList}\small\item\em Contains party informations Contains party informations. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structgame}{game}}
+\item 
+struct \mbox{\hyperlink{structanswer__struct}{answer\+\_\+struct}}
+\begin{DoxyCompactList}\small\item\em Contains answer informations Contains answer informations. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structrecap}{recap}}
+\begin{DoxyCompactList}\small\item\em Contains recap informations Contains recap informations. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_buffer__out}{Buffer\+\_\+out}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{core_8h_a43344c9fbe4022056e87cbf2a1a77e87}\label{core_8h_a43344c9fbe4022056e87cbf2a1a77e87}} 
+void {\bfseries init\+\_\+game} ()
+\begin{DoxyCompactList}\small\item\em Initialize the game struct Initialize game struct set players\+\_\+count to 0 set parties\+\_\+count to 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{core_8h_a1fd4314d224cc86a464ce95f9804ba81}{init\+\_\+player}} (\mbox{\hyperlink{structplayer}{player}} $\ast$\mbox{\hyperlink{structplayer}{player}}, int socket)
+\begin{DoxyCompactList}\small\item\em Initialize player struct Initialize player struct set id to (struct game) players\+\_\+count + 1 and add it to the game (struct) set ip to the ip of the client set status to 0 (waiting for a player) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{core_8h_af31afcd191b4b9c7bd1a662ed217ccd6}{init\+\_\+party}} (\mbox{\hyperlink{structparty}{party}} $\ast$party0, \mbox{\hyperlink{structplayer}{player}} player1, \mbox{\hyperlink{structplayer}{player}} player2)
+\begin{DoxyCompactList}\small\item\em Initialize party struct Initialize party struct set id to (struct game) party\+\_\+count + 1 add it to the game (struct) add players to party set round\+\_\+count to 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{core_8h_af592371acca50b7ef8443ddbccc48bc7}{init\+\_\+round}} (\mbox{\hyperlink{structround}{round}} $\ast$\mbox{\hyperlink{structround}{round}}, int p1\+\_\+result, int p1\+\_\+decision\+\_\+time, int p2\+\_\+result, int p2\+\_\+decision\+\_\+time, int status, int round\+\_\+number, int p1\+Wallet, int p2\+Wallet)
+\begin{DoxyCompactList}\small\item\em Initialize round struct Initialize round struct. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{core_8h_a12a65493ea887d882044439461451ca5}{add\+\_\+round\+\_\+to\+\_\+party}} (\mbox{\hyperlink{structparty}{party}} $\ast$\mbox{\hyperlink{structparty}{party}}, \mbox{\hyperlink{structround}{round}} $\ast$\mbox{\hyperlink{structround}{round}})
+\begin{DoxyCompactList}\small\item\em add round to party Add round to party \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structrecap}{recap}} \mbox{\hyperlink{core_8h_a8ca71844f3c0fd1abb60e946870a6227}{generating\+\_\+recap}} (\mbox{\hyperlink{structparty}{party}} $\ast$\mbox{\hyperlink{structparty}{party}})
+\begin{DoxyCompactList}\small\item\em Generating recapitulation of the party Generating recapitulation of the party. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{core_8h_a90d0fa2661418ff48f231d44c2a257c1}{init\+\_\+answer}} (\mbox{\hyperlink{structanswer__struct}{answer\+\_\+struct}} $\ast$answer)
+\begin{DoxyCompactList}\small\item\em Initialize answer struct Initialize answer struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{core_8h_aff8d6800abf402edd53c5847f11d5b4e}\label{core_8h_aff8d6800abf402edd53c5847f11d5b4e}} 
+\mbox{\hyperlink{structrules}{rules}} {\bfseries rules0}
+\item 
+\mbox{\Hypertarget{core_8h_a439c287ccc70dc3a91e7aa98ec276e57}\label{core_8h_a439c287ccc70dc3a91e7aa98ec276e57}} 
+\mbox{\hyperlink{structgame}{game}} {\bfseries game0}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file is the core of the game logic. 
+
+\begin{DoxyAuthor}{Author}
+Teissier Yannis 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/11-\/17 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021
+\end{DoxyCopyright}
+\begin{DoxyAuthor}{Author}
+Teissier Yannis 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/11-\/13 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{core_8h_a12a65493ea887d882044439461451ca5}\label{core_8h_a12a65493ea887d882044439461451ca5}} 
+\index{core.h@{core.h}!add\_round\_to\_party@{add\_round\_to\_party}}
+\index{add\_round\_to\_party@{add\_round\_to\_party}!core.h@{core.h}}
+\doxysubsubsection{\texorpdfstring{add\_round\_to\_party()}{add\_round\_to\_party()}}
+{\footnotesize\ttfamily void add\+\_\+round\+\_\+to\+\_\+party (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structparty}{party}} $\ast$}]{party,  }\item[{\mbox{\hyperlink{structround}{round}} $\ast$}]{round0 }\end{DoxyParamCaption})}
+
+
+
+add round to party Add round to party 
+
+
+\begin{DoxyParams}{Parameters}
+{\em party} & party to update \\
+\hline
+{\em round} & round to add \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{core_8h_a8ca71844f3c0fd1abb60e946870a6227}\label{core_8h_a8ca71844f3c0fd1abb60e946870a6227}} 
+\index{core.h@{core.h}!generating\_recap@{generating\_recap}}
+\index{generating\_recap@{generating\_recap}!core.h@{core.h}}
+\doxysubsubsection{\texorpdfstring{generating\_recap()}{generating\_recap()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structrecap}{recap}} generating\+\_\+recap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structparty}{party}} $\ast$}]{party }\end{DoxyParamCaption})}
+
+
+
+Generating recapitulation of the party Generating recapitulation of the party. 
+
+Generating recapitulation of the party 
+\begin{DoxyParams}{Parameters}
+{\em party} & party to generate recap \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+recap of the party 
+\end{DoxyReturn}
+\mbox{\Hypertarget{core_8h_a90d0fa2661418ff48f231d44c2a257c1}\label{core_8h_a90d0fa2661418ff48f231d44c2a257c1}} 
+\index{core.h@{core.h}!init\_answer@{init\_answer}}
+\index{init\_answer@{init\_answer}!core.h@{core.h}}
+\doxysubsubsection{\texorpdfstring{init\_answer()}{init\_answer()}}
+{\footnotesize\ttfamily void init\+\_\+answer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structanswer__struct}{answer\+\_\+struct}} $\ast$}]{answer }\end{DoxyParamCaption})}
+
+
+
+Initialize answer struct Initialize answer struct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em answer} & answer to initialize \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{core_8h_af31afcd191b4b9c7bd1a662ed217ccd6}\label{core_8h_af31afcd191b4b9c7bd1a662ed217ccd6}} 
+\index{core.h@{core.h}!init\_party@{init\_party}}
+\index{init\_party@{init\_party}!core.h@{core.h}}
+\doxysubsubsection{\texorpdfstring{init\_party()}{init\_party()}}
+{\footnotesize\ttfamily void init\+\_\+party (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structparty}{party}} $\ast$}]{party0,  }\item[{\mbox{\hyperlink{structplayer}{player}}}]{player1,  }\item[{\mbox{\hyperlink{structplayer}{player}}}]{player2 }\end{DoxyParamCaption})}
+
+
+
+Initialize party struct Initialize party struct set id to (struct game) party\+\_\+count + 1 add it to the game (struct) add players to party set round\+\_\+count to 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em party} & party to initialize \\
+\hline
+{\em player1} & p1 \\
+\hline
+{\em player2} & p2 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{core_8h_a1fd4314d224cc86a464ce95f9804ba81}\label{core_8h_a1fd4314d224cc86a464ce95f9804ba81}} 
+\index{core.h@{core.h}!init\_player@{init\_player}}
+\index{init\_player@{init\_player}!core.h@{core.h}}
+\doxysubsubsection{\texorpdfstring{init\_player()}{init\_player()}}
+{\footnotesize\ttfamily void init\+\_\+player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structplayer}{player}} $\ast$}]{player0,  }\item[{int}]{socket }\end{DoxyParamCaption})}
+
+
+
+Initialize player struct Initialize player struct set id to (struct game) players\+\_\+count + 1 and add it to the game (struct) set ip to the ip of the client set status to 0 (waiting for a player) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & structure player \\
+\hline
+{\em ip} & ip of the client \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{core_8h_af592371acca50b7ef8443ddbccc48bc7}\label{core_8h_af592371acca50b7ef8443ddbccc48bc7}} 
+\index{core.h@{core.h}!init\_round@{init\_round}}
+\index{init\_round@{init\_round}!core.h@{core.h}}
+\doxysubsubsection{\texorpdfstring{init\_round()}{init\_round()}}
+{\footnotesize\ttfamily void init\+\_\+round (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structround}{round}} $\ast$}]{round,  }\item[{int}]{p1\+\_\+result,  }\item[{int}]{p1\+\_\+decision\+\_\+time,  }\item[{int}]{p2\+\_\+result,  }\item[{int}]{p2\+\_\+decision\+\_\+time,  }\item[{int}]{status,  }\item[{int}]{round\+\_\+count,  }\item[{int}]{p1\+Wallet,  }\item[{int}]{p2\+Wallet }\end{DoxyParamCaption})}
+
+
+
+Initialize round struct Initialize round struct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em round} & round to initialize \\
+\hline
+{\em p1\+\_\+result} & (0 or 1) \\
+\hline
+{\em p1\+\_\+decision\+\_\+time} & time of p1 decision (timestamp) \\
+\hline
+{\em p2\+\_\+result} & (0 or 1) \\
+\hline
+{\em p2\+\_\+decision\+\_\+time} & time of p2 decision (timestamp) \\
+\hline
+\end{DoxyParams}

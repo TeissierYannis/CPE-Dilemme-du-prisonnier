@@ -1,0 +1,76 @@
+\hypertarget{configurator_8h}{}\doxysection{headers/configs/configurator.h File Reference}
+\label{configurator_8h}\index{headers/configs/configurator.h@{headers/configs/configurator.h}}
+
+
+This file contains the configurations methods.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structserver__config}{server\+\_\+config}}
+\begin{DoxyCompactList}\small\item\em Server configuration (ip, port) Server configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{configurator_8h_a1b9018f5509ca9490ac42a9fd97eb688}{init\+\_\+config}} (\mbox{\hyperlink{structserver__config}{server\+\_\+config}} $\ast$config)
+\item 
+void \mbox{\hyperlink{configurator_8h_af6ba60d265e078f6c4852860c58eed10}{parse\+\_\+json}} (char $\ast$search\+\_\+key, char $\ast$to\+\_\+assign, FILE $\ast$config\+\_\+file)
+\begin{DoxyCompactList}\small\item\em Initialize json parsing to key\+:value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structserver__config}{server\+\_\+config}} \mbox{\hyperlink{configurator_8h_a0dae507534ee8825c161100712e11b3b}{readconfig}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains the configurations methods. 
+
+\begin{DoxyAuthor}{Author}
+Teissier Yannis 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/11-\/12 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{configurator_8h_a1b9018f5509ca9490ac42a9fd97eb688}\label{configurator_8h_a1b9018f5509ca9490ac42a9fd97eb688}} 
+\index{configurator.h@{configurator.h}!init\_config@{init\_config}}
+\index{init\_config@{init\_config}!configurator.h@{configurator.h}}
+\doxysubsubsection{\texorpdfstring{init\_config()}{init\_config()}}
+{\footnotesize\ttfamily void init\+\_\+config (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structserver__config}{server\+\_\+config}} $\ast$}]{config }\end{DoxyParamCaption})}
+
+Initialize server config struct 
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{structserver__config}{server\+\_\+config}}} & server config struct \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{configurator_8h_af6ba60d265e078f6c4852860c58eed10}\label{configurator_8h_af6ba60d265e078f6c4852860c58eed10}} 
+\index{configurator.h@{configurator.h}!parse\_json@{parse\_json}}
+\index{parse\_json@{parse\_json}!configurator.h@{configurator.h}}
+\doxysubsubsection{\texorpdfstring{parse\_json()}{parse\_json()}}
+{\footnotesize\ttfamily void parse\+\_\+json (\begin{DoxyParamCaption}\item[{char $\ast$}]{search\+\_\+key,  }\item[{char $\ast$}]{to\+\_\+assign,  }\item[{FILE $\ast$}]{config\+\_\+file }\end{DoxyParamCaption})}
+
+
+
+Initialize json parsing to key\+:value. 
+
+Initialize json parsing to key\+:value 
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{structserver__config}{server\+\_\+config}}} & config file \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{configurator_8h_a0dae507534ee8825c161100712e11b3b}\label{configurator_8h_a0dae507534ee8825c161100712e11b3b}} 
+\index{configurator.h@{configurator.h}!readconfig@{readconfig}}
+\index{readconfig@{readconfig}!configurator.h@{configurator.h}}
+\doxysubsubsection{\texorpdfstring{readconfig()}{readconfig()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structserver__config}{server\+\_\+config}} readconfig (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Read config json file and setup server struct \begin{DoxyReturn}{Returns}
+server config struct 
+\end{DoxyReturn}

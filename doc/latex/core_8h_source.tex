@@ -1,0 +1,96 @@
+\hypertarget{core_8h_source}{}\doxysection{core.\+h}
+\label{core_8h_source}\index{headers/game/core.h@{headers/game/core.h}}
+\mbox{\hyperlink{core_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#ifndef SERVER\_CORE\_H}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#define SERVER\_CORE\_H}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{19 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{20     \textcolor{keywordtype}{int} nb\_round;}
+\DoxyCodeLine{21     \textcolor{keywordtype}{int} default\_wallet;}
+\DoxyCodeLine{22     \textcolor{keywordtype}{int} trahison\_win;}
+\DoxyCodeLine{23     \textcolor{keywordtype}{int} trahison\_loose;}
+\DoxyCodeLine{24     \textcolor{keywordtype}{int} collab\_win;}
+\DoxyCodeLine{25     \textcolor{keywordtype}{int} collab\_loose;}
+\DoxyCodeLine{26     \textcolor{keywordtype}{int} trahison\_collab\_win;}
+\DoxyCodeLine{27     \textcolor{keywordtype}{int} trahison\_collab\_loose;}
+\DoxyCodeLine{28 \} \mbox{\hyperlink{structrules}{rules}};}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{34 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{35     \textcolor{keywordtype}{int} id;}
+\DoxyCodeLine{36     \textcolor{keywordtype}{int} status;}
+\DoxyCodeLine{37     \textcolor{keywordtype}{int} wallet;}
+\DoxyCodeLine{38     \textcolor{keywordtype}{int} socket;}
+\DoxyCodeLine{39 \} \mbox{\hyperlink{structplayer}{player}};}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{45 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{46     \textcolor{comment}{// Resultat de chaque joueur}}
+\DoxyCodeLine{47     \textcolor{keywordtype}{int} p1\_result; \textcolor{comment}{// choix}}
+\DoxyCodeLine{48     \textcolor{keywordtype}{int} p1\_wallet; \textcolor{comment}{// score}}
+\DoxyCodeLine{49     \textcolor{keywordtype}{int} p2\_result; \textcolor{comment}{// choix}}
+\DoxyCodeLine{50     \textcolor{keywordtype}{int} p2\_wallet; \textcolor{comment}{// score}}
+\DoxyCodeLine{51     \textcolor{comment}{// Le temps}}
+\DoxyCodeLine{52     \textcolor{keywordtype}{int} p1\_decision\_time;}
+\DoxyCodeLine{53     \textcolor{keywordtype}{int} p2\_decision\_time;}
+\DoxyCodeLine{54     \textcolor{comment}{//  int p2\_choice;}}
+\DoxyCodeLine{55     \textcolor{comment}{// Numero du round}}
+\DoxyCodeLine{56     \textcolor{keywordtype}{int} round\_number;}
+\DoxyCodeLine{57     \textcolor{keywordtype}{int} status;}
+\DoxyCodeLine{58 \} \mbox{\hyperlink{structround}{round}};}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{64 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{65     \textcolor{keywordtype}{int} id;}
+\DoxyCodeLine{66     \mbox{\hyperlink{structplayer}{player}} *player\_game;}
+\DoxyCodeLine{67     \mbox{\hyperlink{structround}{round}} \mbox{\hyperlink{structround}{round}}[100];}
+\DoxyCodeLine{68     \textcolor{keywordtype}{int} round\_count;}
+\DoxyCodeLine{69 \} \mbox{\hyperlink{structparty}{party}};}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{74 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{75     \mbox{\hyperlink{structplayer}{player}} *\mbox{\hyperlink{structplayer}{player}};}
+\DoxyCodeLine{76     \textcolor{keywordtype}{int} players\_count;}
+\DoxyCodeLine{77     \mbox{\hyperlink{structparty}{party}} *parties;}
+\DoxyCodeLine{78     \textcolor{keywordtype}{int} parties\_count;}
+\DoxyCodeLine{79 \} \mbox{\hyperlink{structgame}{game}};}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{85 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{86     \textcolor{keywordtype}{int} party\_id;}
+\DoxyCodeLine{87     \textcolor{keywordtype}{int} player\_id;}
+\DoxyCodeLine{88     \textcolor{keywordtype}{int} choice;}
+\DoxyCodeLine{89     \textcolor{keywordtype}{int} time;}
+\DoxyCodeLine{90 \} \mbox{\hyperlink{structanswer__struct}{answer\_struct}};}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{96 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{97     \textcolor{keywordtype}{int} nb\_round;}
+\DoxyCodeLine{98     \mbox{\hyperlink{structanswer__struct}{answer\_struct}} list\_answer\_J1[10];}
+\DoxyCodeLine{99     \mbox{\hyperlink{structanswer__struct}{answer\_struct}} list\_answer\_J2[10];}
+\DoxyCodeLine{100 \} \mbox{\hyperlink{structrecap}{recap}};}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102 \textcolor{comment}{// Test debug}}
+\DoxyCodeLine{103 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{104     \textcolor{keywordtype}{char} out[256];}
+\DoxyCodeLine{105 \} \mbox{\hyperlink{struct_buffer__out}{Buffer\_out}};}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107 \textcolor{keyword}{extern} \mbox{\hyperlink{structrules}{rules}} rules0;}
+\DoxyCodeLine{108 \textcolor{keyword}{extern} \mbox{\hyperlink{structgame}{game}} game0;}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{116 \textcolor{keywordtype}{void} \mbox{\hyperlink{core_8h_a43344c9fbe4022056e87cbf2a1a77e87}{init\_game}}();}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{128 \textcolor{keywordtype}{void} \mbox{\hyperlink{core_8h_a1fd4314d224cc86a464ce95f9804ba81}{init\_player}}(\mbox{\hyperlink{structplayer}{player}} *\mbox{\hyperlink{structplayer}{player}}, \textcolor{keywordtype}{int} socket);}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{141 \textcolor{keywordtype}{void} \mbox{\hyperlink{core_8h_af31afcd191b4b9c7bd1a662ed217ccd6}{init\_party}}(\mbox{\hyperlink{structparty}{party}} *party0, \mbox{\hyperlink{structplayer}{player}} player1, \mbox{\hyperlink{structplayer}{player}} player2);}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{152 \textcolor{keywordtype}{void} \mbox{\hyperlink{core_8h_af592371acca50b7ef8443ddbccc48bc7}{init\_round}}(\mbox{\hyperlink{structround}{round}} *\mbox{\hyperlink{structround}{round}}, \textcolor{keywordtype}{int} p1\_result, \textcolor{keywordtype}{int} p1\_decision\_time, \textcolor{keywordtype}{int} p2\_result, \textcolor{keywordtype}{int} p2\_decision\_time, \textcolor{keywordtype}{int} status,}
+\DoxyCodeLine{153                 \textcolor{keywordtype}{int} round\_number, \textcolor{keywordtype}{int} p1Wallet, \textcolor{keywordtype}{int} p2Wallet);}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{161 \textcolor{keywordtype}{void} \mbox{\hyperlink{core_8h_a12a65493ea887d882044439461451ca5}{add\_round\_to\_party}}(\mbox{\hyperlink{structparty}{party}} *\mbox{\hyperlink{structparty}{party}}, \mbox{\hyperlink{structround}{round}} *\mbox{\hyperlink{structround}{round}});}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{170 \mbox{\hyperlink{structrecap}{recap}} \mbox{\hyperlink{core_8h_a8ca71844f3c0fd1abb60e946870a6227}{generating\_recap}}(\mbox{\hyperlink{structparty}{party}} *\mbox{\hyperlink{structparty}{party}});}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{177 \textcolor{keywordtype}{void} \mbox{\hyperlink{core_8h_a90d0fa2661418ff48f231d44c2a257c1}{init\_answer}}(\mbox{\hyperlink{structanswer__struct}{answer\_struct}} *answer);}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//SERVER\_CORE\_H}}
+
+\end{DoxyCode}

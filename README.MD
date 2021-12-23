@@ -358,7 +358,9 @@ Préparation du build :
 - Installation de la librairie GTK+3
 - Installation de cmake
 - Installation de make
-- Installation de GCC
+- Installation de GCC ou un autre compilateur
+- Installation de git
+- Installation de Doxygen
 
 Afin de compiler le projet nous vous proposons deux solutions :
 
@@ -372,8 +374,144 @@ Dans les deux cas, il faut ouvrir un terminal et lancer le script.
 ./build_<environnement>.sh/bat
 ```
 
+Dans le dossier *output*, il y aura un executable "client" et un executable "server".
+
+Dans le dossier "client_config", vous y trouverez les fichiers de configuration du client.
+
+Et dans le dossier "server_config", vous y trouverez les fichiers de configuration du serveur.
+
 Via la ligne de commande.
 
+Windows
+```
+cd server
+md build
+cd build
+cmake ..
+make all
+cp server.exe ../server.exe
+
+cd ..
+
+cd client
+md build
+cd build
+cmake ..
+make all
+cp client.exe ../client.exe
+```
+
+Unix
+```
+cd server
+mkdir build
+cd build
+cmake ..
+make all
+cp server ../server
+
+cd ..
+
+cd client
+mkdir build
+cd build
+cmake ..
+make all
+cp client ../client
+```
+
 ## 🧐 Configuration Serveur <a name = "config_server"></a>
+
+Il existe deux fichiers de configurations pour le serveur :
+- server_config/rules_config.json
+- server_config/server_config.json
+
+Le fichier *server_config.json* permet de configurer la partie écoute du serveur.
+
+````json
+{
+  "ip_address": "127.0.0.1",
+  "port": "30000"
+}
+````
+
+Il suffit de modifier les valeurs de l'ip_address avec l'ip d'écoute et du port avec le port d'écoute.
+
+Le fichier *rules_config.json* permet de configurer les règles du jeu.
+
+````json
+{
+    "nb_round": "3",
+    "default_wallet": "0",
+
+    "trahison_win": "-5",
+    "trahison_loose": "-5",
+
+    "collab_win": "-1",
+    "collab_loose": "-1",
+    
+    "trahison_collab_win": "0",
+    "trahison_collab_loose": "-10"    
+}
+````
+
+*nb_round* correspond au nombre de round que la partie aura.
+```
+"nb_round": "3"
+```
+
+*default_wallet* correspond à la valeur de départ du porte-monnaie de chaque joueur.
+```
+"default_wallet": "0"
+```
+
+*trahison_win* correspond à la valeur de gain du joueur en cas de victoire contre un trahison.
+```
+"trahison_win": "-5"
+```
+
+*trahison_loose* correspond à la valeur de perte du joueur en cas de défaite contre un trahison.
+```
+"trahison_loose": "-5"
+```
+
+*collab_win* correspond à la valeur de gain du joueur en cas de victoire contre un collab.
+```
+"collab_win": "-1"
+```
+
+*collab_loose* correspond à la valeur de perte du joueur en cas de défaite contre un collab.
+```
+"collab_loose": "-1"
+```
+
+*trahison_collab_win* correspond à la valeur de gain du joueur en cas de victoire contre un trahison et un collab.
+```
+"trahison_collab_win": "0"
+```
+
+*trahison_collab_loose* correspond à la valeur de perte du joueur en cas de défaite contre un trahison et un collab.
+```
+"trahison_collab_loose": "-10"
+```
+
 ## 🧐 Configuration Client <a name = "config_client"></a>
-## 🧐 Documentation Client <a name = "doc"></a>
+Pour la configuration du client il n'existe qu'un seul fichier de configuration:
+- client_config/config.json
+
+Le fichier *config.json* permet de configurer la partie connexion au serveur.
+
+````json
+{
+  "ip_address": "127.0.0.1",
+  "port": "30000"
+}
+````
+
+Il suffit de modifier les valeurs de l'ip_address avec l'ip du serveur et du port du serveur.
+
+## 🧐 Documentation <a name = "doc"></a>
+
+Pour générer la documentation du projet, il suffit de lancer la commande suivante :
+```
+

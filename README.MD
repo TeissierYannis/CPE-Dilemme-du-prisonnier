@@ -38,6 +38,12 @@ Travail effectué
 - [Les difficultés](#difficulties)
 - [Bilan](#bilan)
 
+Fonctionnement
+- [Build](#build)
+- [Configuration Serveur](#config_server)
+- [Configuration Client](#config_client)
+- [Documentation](#doc)
+
 ## 🧐 Enoncé <a name = "context"></a>
 
 l’ICS (institue of Cognitives Sciences) est un laboratoire interdisciplinaire qui intègre l'expertise de
@@ -345,3 +351,29 @@ Nous en tirerons des bénéfices, et nous adopterons une méthodologie différen
 Ce projet nous aura appris à traduire un concept en programme, en se basant sur le développement d'un client, un serveur et un interface graphique.
 
 Nous partions de simples connaissances basique en c et aujourd'hui nous avons été capable de mettre à l'épreuve nos connaissances afin de fournir un rendu final.
+
+## 🧐 Build <a name = "build"></a>
+
+Préparation du build :
+- Installation de la librairie GTK+3
+- Installation de cmake
+- Installation de make
+- Installation de GCC
+
+Afin de compiler le projet nous vous proposons deux solutions :
+
+Via un script adapté à la machine que vous utilisez (Linux, Windows, MacOS)
+
+Pour windows, il faut choisir le script "build_windows.bat"
+Pour Linux et MacOS, il faut choisir le script "build_unix.sh"
+
+Dans les deux cas, il faut ouvrir un terminal et lancer le script.
+```bash
+./build_<environnement>.sh/bat
+```
+
+Via la ligne de commande.
+
+## 🧐 Configuration Serveur <a name = "config_server"></a>
+## 🧐 Configuration Client <a name = "config_client"></a>
+## 🧐 Documentation Client <a name = "doc"></a>

@@ -209,7 +209,6 @@ void *thread_party(void *ptr) {
     sprintf(buffer.out, "status %d", status);
     write(p1.socket, buffer.out, sizeof(buffer));
     write(p2.socket, buffer.out, sizeof(buffer));
-    printf("TAILLE ENVOYEE : %d\n", sizeof(buffer));
     // sleep(3);
 
     int nbRound = 1;

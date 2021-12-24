@@ -113,6 +113,7 @@ Game create_game(int socketClient, Joueur player) {
  */
 Answer get_answer(Game game) {
     int time_clique;
+    int correction = 2; // correction taux d'erreurs temps mesuré
     Answer answer;
     // Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie
     // + le choix du joueur + son temps de reponse
@@ -127,7 +128,7 @@ Answer get_answer(Game game) {
     // Valeurs jouées par le joueur
     answer.choice = get_clique();
     time_end = time(NULL);
-    answer.time = time_end - time_start;
+    answer.time = (time_end - time_start) - correction;
 
     printf("[CLIENT] Player choice completed.\n");
     return answer;
@@ -258,11 +259,11 @@ int get_clique() {
     compteur = 0; // Compte le temps écoulé
 
     // Tant que le joueur n'a pas cliqué on attend
-    while (lien.is_choice_ok != true) {
-        compteur += 1; // Compte les milisecondes (1 -> 0.01 sec)
+    while (lien.is_choice_ok != true){
+        compteur += 1; // Compte les milisecondes (1 -> 0.1 sec)
        
         // Si 1 seconde s'est écoulée
-        if (compteur > 100) {
+        if (compteur > 10) {
             // Afficher la valeur du chrono
             sprintf(valeur, "%ds", duree);
             gtk_label_set_text(GTK_LABEL(tools.chrono), valeur);
@@ -278,7 +279,7 @@ int get_clique() {
             break;
         }
         // Sleep en micro seconde (us)
-        usleep(10000); // Rafraichissement de la verification du clique toutes les 0.01s
+        usleep(100000); // Rafraichissement de la verification du clique toutes les 0.01s
     }
     // Une fois le choix du joueur effectué 
     // On repasse les autorisations de clique à 0
@@ -391,8 +392,8 @@ void show_round_result(Round round, Game game) {
         result.choix_j1 = round.p1_result;
         result.choix_j2 = round.p2_result;
         // Les temps de clique
-        result.temps_j1 = round.p2_decision_time;
-        result.temps_j2 = round.p1_decision_time;
+        result.temps_j1 = round.p1_decision_time;
+        result.temps_j2 = round.p2_decision_time;
     }
 
     result.nb_round = round.round_number;

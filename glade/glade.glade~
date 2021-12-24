@@ -345,13 +345,14 @@
             <property name="height-request">80</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Temps J1 :</property>
             <attributes>
-              <attribute name="foreground" value="#2626a2a26969"/>
+              <attribute name="foreground" value="#9a9a99999696"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">385</property>
-            <property name="y">265</property>
+            <property name="x">-3</property>
+            <property name="y">32</property>
           </packing>
         </child>
         <child>
@@ -361,13 +362,46 @@
             <property name="height-request">80</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Temps J2 :</property>
             <attributes>
-              <attribute name="foreground" value="#2626a2a26969"/>
+              <attribute name="foreground" value="#9a9a99999696"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">383</property>
-            <property name="y">307</property>
+            <property name="x">-3</property>
+            <property name="y">56</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Time_1">
+            <property name="name">Time_1</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#9a9a99999696"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">54</property>
+            <property name="y">28</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Time_2">
+            <property name="name">Time_2</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#9a9a99999696"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">54</property>
+            <property name="y">53</property>
           </packing>
         </child>
       </object>

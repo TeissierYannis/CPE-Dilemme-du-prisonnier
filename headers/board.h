@@ -40,6 +40,8 @@ typedef struct {
     // Compte à rebours de la partie
     GtkWidget *chrono;
     // Les temps de jeu
+    GtkWidget *time_1;
+    GtkWidget *time_2;
     GtkWidget *temps_j1;
     GtkWidget *temps_j2;
 } Tools;

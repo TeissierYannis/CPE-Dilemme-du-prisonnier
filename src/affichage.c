@@ -35,8 +35,8 @@ void afficher_temps_jeux(int time_j1, int time_j2) {
     char temps_j1[100];
     char temps_j2[100];
     // Placer entier dans chaine caractere
-    sprintf(temps_j1, "en %d sec", time_j1);
-    sprintf(temps_j2, "en %d sec", time_j2);
+    sprintf(temps_j1, "%ds", time_j1);
+    sprintf(temps_j2, "%ds", time_j2);
     // Afficher score des 2 joueurs
     gtk_label_set_text(GTK_LABEL(tools.temps_j1), temps_j1);
     gtk_label_set_text(GTK_LABEL(tools.temps_j2), temps_j2);

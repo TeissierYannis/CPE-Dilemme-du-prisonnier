@@ -13,6 +13,7 @@
 #define AFFICHAGE_H
 
 void afficher_score(int score_j1, int score_j2);
+void afficher_temps_jeux(int temps_j1, int temps_j2);
 void afficher_round(int numero);
 void afficher_choix_adversaire(int choix_j1, int choix_j2);
 void afficher_result(ResultRound result);

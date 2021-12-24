@@ -1,7 +1,7 @@
 /**
  * @file gui.c
  * @author SAGLAMER Tarik (tarik.saglamer@cpe.fr)
- * @brief
+ * @brief   Gestion des évenements de clic
  * @version 0.1
  * @date 2021-11-14
  * 
@@ -13,14 +13,13 @@
 #include "../headers/lien.h"
 
 /**
- * @brief Vérifie si le nom du boutton(message) est égale à nom
+ * @brief Vérifie si le nom du boutton(message) est égale au nom indiqué
  * @param message
  * @param nom
  * @return int
  */
 int are_equals(const char *message, char *nom)
 {
-
     if (strcmp(message, nom) == 0)
     {
         return true;
@@ -122,6 +121,8 @@ void new_party(void *boutton)
     gtk_label_set_text(GTK_LABEL(tools.rounde), 0);
     gtk_label_set_text(GTK_LABEL(tools.choix_adversaire), "");
     gtk_label_set_text(GTK_LABEL(tools.chrono), "");
+    gtk_label_set_text(GTK_LABEL(tools.temps_j1), "");
+    gtk_label_set_text(GTK_LABEL(tools.temps_j2), "");
 
     gtk_label_set_text(GTK_LABEL(tools.info), "Chargement de la partie...");
 

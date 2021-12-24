@@ -1,7 +1,7 @@
 /**
  * @file connexion.c
  * @author REVOL Alexis (alexis.revol@cpe.fr)
- * @brief
+ * @brief   Fonctionnalités pour se connecter au serveur
  * @version 0.1
  * @date 2021-23-12
  * 

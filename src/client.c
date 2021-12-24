@@ -1,10 +1,9 @@
 /**
  * @file client.c
  * @author REVOL Alexis (alexis.revol@cpe.fr)
- * @brief
+ * @brief Communication du client avec serveur et GUI
  * @version 0.1
  * @date 2021-11-14
- * 
  * @copyright Copyright (c) 2021
  * 
  */
@@ -124,7 +123,7 @@ Answer get_answer(Game game) {
     answer.party_id = game.id;
     answer.player_id = game.player.id;
 
-    int time_start = time(NULL), time_end;
+    time_t time_start = time(NULL), time_end;
     // Valeurs jouées par le joueur
     answer.choice = get_clique();
     time_end = time(NULL);
@@ -245,7 +244,7 @@ int restart_game(int socketClient, Joueur player) {
  * @return int
  */
 int get_clique() {
-    int clique = -1, time_start, time_end, time_diff;
+    int clique = -1;
     int duree, compteur;
     char valeur[10]; // Valeur du temps en chaîne de caractère
 
@@ -258,13 +257,12 @@ int get_clique() {
     duree = 60; // Temps que l'on a pour choisir une réponse
     compteur = 0; // Compte le temps écoulé
 
-    // TODO FAIRE UNE FONCTION REFRESH CHRONO
     // Tant que le joueur n'a pas cliqué on attend
     while (lien.is_choice_ok != true) {
-        compteur += 2; // Compte les milisecondes (2 -> 0.2 sec)
+        compteur += 1; // Compte les milisecondes (1 -> 0.01 sec)
        
         // Si 1 seconde s'est écoulée
-        if (compteur > 10) {
+        if (compteur > 100) {
             // Afficher la valeur du chrono
             sprintf(valeur, "%ds", duree);
             gtk_label_set_text(GTK_LABEL(tools.chrono), valeur);
@@ -275,12 +273,12 @@ int get_clique() {
 
         // Si le compte à rebours et fini et qu'on a pas reçue de reponse du joueur
         if (duree < 0) {
-            lien.choice = 0; // Choisir aléatoirement le choix du joueur
+            lien.choice = 0; // Choisir aléatoirement le choix du joueur : trahir
             lien.is_choice_ok = true;
             break;
         }
         // Sleep en micro seconde (us)
-        usleep(200000); // Rafraichissement de la verification du clique toutes les 0.2s
+        usleep(10000); // Rafraichissement de la verification du clique toutes les 0.01s
     }
     // Une fois le choix du joueur effectué 
     // On repasse les autorisations de clique à 0
@@ -379,6 +377,9 @@ void show_round_result(Round round, Game game) {
         // Le choix des deux joueurs
         result.choix_j1 = round.p2_result;
         result.choix_j2 = round.p1_result;
+        // Les temps de clique
+        result.temps_j1 = round.p2_decision_time;
+        result.temps_j2 = round.p1_decision_time;
     }
     // Si on est J1
     else {
@@ -389,6 +390,9 @@ void show_round_result(Round round, Game game) {
         // Le choix des deux joueurs
         result.choix_j1 = round.p1_result;
         result.choix_j2 = round.p2_result;
+        // Les temps de clique
+        result.temps_j1 = round.p2_decision_time;
+        result.temps_j2 = round.p1_decision_time;
     }
 
     result.nb_round = round.round_number;

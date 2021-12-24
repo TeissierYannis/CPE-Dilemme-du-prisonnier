@@ -1,7 +1,7 @@
 /**
  * @file client.h
  * @author REVOL Alexis 
- * @brief Ensemble des actions possibles par le client
+ * @brief Communication du client avec serveur et GUI
  * @version 0.1
  * @date 2021-11-14
  * 

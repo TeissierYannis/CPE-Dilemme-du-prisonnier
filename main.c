@@ -1,3 +1,13 @@
+/**
+ * @file main.h
+ * @author REVOL Alexis 
+ * @brief Lancer la communication client et l'interface graphique
+ * @version 0.1
+ * @date 2021-11-14
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
@@ -10,6 +20,12 @@
 #include "headers/connexion.h"
 
 
+/**
+ * @brief Coeur de la partie client
+ * @param arc
+ * @param argv
+ * @return int
+ */
 int main(int argc, char **argv) {
     // Contient les parametres de la communication Client
     ClientParameter *clientParam;
@@ -22,11 +38,9 @@ int main(int argc, char **argv) {
 
     // Connexion au serveur et création de la socket client (sert à la communication)
     socket = client_connexion();
-    // Creation du joueur avec son identifiant
-   // player = create_player(socket);
+   
     // Ajouter le socket et le joueur dans les parametres de la communication client
     clientParam->socket = socket;
-  //  clientParam->player = player;
 
     // Lancer la communication client sous forme de thread
     pthread_t threadClient;

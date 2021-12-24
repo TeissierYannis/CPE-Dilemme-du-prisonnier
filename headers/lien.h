@@ -1,6 +1,6 @@
 /**
  * @file lien.h 
- * @brief Interface Graphique Utilisateur
+ * @brief Canal qui fait le lien entre les évenements de clic et la communication client
  * @version 0.1
  * @date 2021-11-27
  * 
@@ -15,7 +15,9 @@
 #ifndef LIEN_H
 #define LIEN_H
 
-// Contient les informations d'un Joueur
+/**
+ * @brief Lien entre les évenements clic et la communication client
+ */
 typedef struct{
     int able_click;
     int choice;
@@ -26,11 +28,16 @@ typedef struct{
     bool is_winner;
 } Lien;
 
+/**
+ * @brief Résultats à afficher
+ */
 typedef struct {
     int choix_j1;
     int choix_j2;
     int score_j1;
     int score_j2;
+    int temps_j1;
+    int temps_j2;
     int nb_round;
 } ResultRound;
 

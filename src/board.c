@@ -47,6 +47,9 @@ void createBoard(int argc, char **argv)
   tools.egalite = GTK_WIDGET(gtk_builder_get_object(tools.builder, "egalite"));
   // Compte à rebours d'un round
   tools.chrono = GTK_WIDGET(gtk_builder_get_object(tools.builder, "label_sec"));
+  // Temps de jeux
+  tools.temps_j1 = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Temps_j1"));
+  tools.temps_j2 = GTK_WIDGET(gtk_builder_get_object(tools.builder, "Temps_j2"));
   // Informations sur la partie à afficher
   gtk_label_set_text(GTK_LABEL(tools.info), "Chargement de la partie...");
   printf("GUI OK\n");

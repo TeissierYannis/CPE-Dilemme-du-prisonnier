@@ -338,6 +338,38 @@
             <property name="y">18</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="Temps_j1">
+            <property name="name">Temps_j1</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#2626a2a26969"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">385</property>
+            <property name="y">265</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Temps_j2">
+            <property name="name">Temps_j2</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#2626a2a26969"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">383</property>
+            <property name="y">307</property>
+          </packing>
+        </child>
       </object>
     </child>
     <style>

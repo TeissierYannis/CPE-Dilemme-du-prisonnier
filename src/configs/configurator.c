@@ -12,6 +12,7 @@
 #include "../../headers/configs/configurator.h"
 
 /**
+ * @brief Reads json configuration file and setup server struct
  * Read config json file and setup server struct
  * @return server config struct
  */
@@ -53,6 +54,7 @@ server_config readconfig() {
 }
 
 /**
+ * @brief Initialize server config struct
  * Initialize server config struct
  * @param server_config  server config struct
  */

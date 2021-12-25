@@ -30,10 +30,11 @@ Consignes de l'épreuve
 - [Rapport](#eval_rapport)
 
 Travail effectué
-- [L'équipe](#team)
-- [Répartition du travail](#work_distribution)
-- [Méthodologie](#methodology)
-- [Justification des choix](#justify)
+- [Présentation de l'équipe](#team)
+- [Organisation du travail dans le groupe](#work_distribution)
+- [Méthodologie de développement](#methodology)
+- [Avancement du projet et justification des choix](#justify)
+- [ Difficultés rencontrées](#difficulties)
 - [Régles de communication](#communications_rules)
 - [Les difficultés](#difficulties)
 - [Bilan](#bilan)
@@ -43,6 +44,8 @@ Fonctionnement
 - [Configuration Serveur](#config_server)
 - [Configuration Client](#config_client)
 - [Documentation](#doc)
+
+<hr>
 
 ## 🧐 Enoncé <a name = "context"></a>
 
@@ -208,34 +211,50 @@ Toutes les informations nécessaires à la poursuite du développement devront �
 fichiers de documentation (répertoire doc) présent dans le projet (description du protocole par
 exemple)
 
+<hr>
 
+<h1>Travail effectué</h1>
 
-## 🧐 L'équipe <a name = "team"></a>
+## 🧐 Présentation de l'équipe <a name = "team"></a>
 
 Notre équipe est composée de 4 étudiants : 
- - Nicola : Originaire de BTS ...
- - Alexis : Originaire de BTS ...
- - Tarik : Originaire de BTS ...
+ - Nicola : Originaire de BTS SNIR
+ - Alexis : Originaire de BTS SNIR
+ - Tarik : Originaire de BTS SIO Option SLAM
  - Yannis : Originaire de BTS SIO Option SLAM
 
-## 🧐 Répartition du travail <a name = "work_distribution"></a>
+## 🧐 Organisation du travail dans le groupe <a name = "work_distribution"></a>
 
-Pour commencer, nous avons constitué deux groupes de travail : 
- - Tarik et Alexis : Partie client
- - Yannis et Nicola : Partie serveur
-
-Pour la partie client, Tarik s'est occupé de la partie GUI et Alexis de la partie de communication.
-
-Pour la partie serveur, Nicola s'est occupé de la partie logique du jeu, et Yannis de la communication.
-
+Avant de commencer à coder, nous avons écrit sur papier les différents points clés à réaliser afin d’établir les objectifs du projet. Une fois le cahier des charges rédigé, nous avons choisi de se répartir, entre chaque membre du groupe, les grandes parties du projet
+- Partie client :
+  - Réalisation de l’interface graphique - Tarik SAGLAMER
+  - Réalisation de la communication client - Alexis REVOL
+- Partie serveur :
+  - Réalisation de la logistique du jeu - Nicola PIEMONTESE
+  - Réalisation de la communication serveur - Yannis TEISSIER 
+  
+Ainsi chaque membre a pu se concentrer sur la réalisation de sa partie, cependant les parties étant étroitement liées, une communication permanente a été mise en place afin de s’assurer de la cohérence entre chaque branche du projet.
 
 ## 🧐 Méthodologie <a name = "methodology"></a>
 
 Afin de s'organiser et de réaliser le projet, nous avons commencé par écrire les différents points à réaliser.
 
+Dans un second temps, nous nous sommes organisés sur Github à l'aide de différentes branches.
+
+Une branche main vide dans le cas où une mauvaise manipulation venait à être faite. Une branche client pour la partie production client. Une branche serveur pour la partie production serveur. Une branche par personne pour la partie de développement.
+Nous avons également créé un serveur discord afin de communiquer efficacement sur le projet.
+
+Notre approche du travail s'est basée sur une méthodologie de développement agile personnalisée. Les heures de cours étaient principalement utilisées pour la correction de bug, la discussion, le code review et la rédaction des points à réaliser et des améliorations à apporter. Pour la partie développement, nous avons utilisé nos heures libres.
+Dans le cas ou un bug était détecté, deux solutions ont été proposées :
+- Résolution directe par la personne ayant détecté le bug
+- Résolution par la personne ayant développé le code
+
+Régulièrement, nous faisions des codes reviews nous permettant de mettre en commun le travail réalisé et de voir les changements effectués par les autres membres.
+
+<h5>Distribution des tâches</h5>
 ```
 
-graphisme :
+Partie Graphisme :
 
 - timer visuel pour début de round
 - fenetre de choix avec timer, numero de round (bloquer les boutons lorsque choix est deja fait)
@@ -243,52 +262,53 @@ graphisme :
 - afficher resultat fin de round
 - fin de partie (se reconnecter)
 
-envoi depuis le client:
+Partie communication client:
 
-- connexion config serveur (ip port)
-- mise en forme des communications
+- connexion en fonction de la configuration du client pour la connexion au serveur (ip port)
+- mise en forme des communications (protocole)
 
-reception coté serveur:
+Partie communication serveur:
 
-- setup config serveur (ip port)
-- interpretation des communications
+- Mettre en place une configuration pour le serveur (ip port)
+- interpretation des communications (protocole)
 
-regles du jeu:
+Partie logique du jeu:
 
-- lire la config
+- lire la configuration du jeu
 - gerer le nombre de joueurs
-- envoyer les instructions de début si nb joueurs ok
+- envoyer les instructions de début si le nombre de joueurs est bon
 - attendre la reponse
 - afficher les resultats
-- stocker en fichier les resultats
-- relance un round si nb round < nb round config
+- stocker dans un fichier les resultats
+- relancer un round si le nombre de rounds est inferieur au nombre de rounds dans le fichier de configuration
 ```
 
-Dans un second temps, nous nous sommes organisés sur Github à l'aide de différentes branches.
 
-Une branche main vide dans le cas ou une mauvaise manipulation venait à être faite.
-Une branche client pour la partie production client.
-Une branche serveur pour la partie production serveur.
+## 🧐 Avancement du projet et justification des choix <a name = "justify"></a>
 
-Une branche par personne pour la partie de développement.
+<h4>Justification des choix</h4>
 
-Nous avons également créée un serveur discord afin de communiquer efficacement sur le projet.
+Pour établir la communication entre un client et le serveur, nous avons choisi d’utiliser les sockets afin de transmettre des structures contenant les informations pertinentes à manipuler et traiter. Le client et le serveur possédants les mêmes structures cela permet de s’assurer que la forme de l’information envoyée sera la même que celle de l’information attendue à la réception. Nous avons choisi d’établir un protocole de communication entre le client et le serveur afin que la communication entre chaque partie suive une ligne identique.
 
-Notre approche du travail s'est basée sur une méthodologie de développement agile personnalisée.
+Pour réaliser l’interface graphique, nous avons utilisé GTK qui permet de réaliser des fenêtres graphiques personnalisables ce qui est idéal pour la réalisation du plateau de jeu. L’interface est composée des boutons pour jouer (trahir et collaborer) ainsi que de zones de textes permettant d’afficher les informations utiles pour le joueur. Ainsi lorsque dans le protocole de communication client/serveur nous souhaitons transmettre le choix de jeu réalisé par le client nous écoutons sur quel bouton le joueur à cliqué afin d’enregistrer et de traiter l’information. Lorsque le client réceptionne des informations du serveur il peut alors les fournir à l’interface graphique afin de les afficher
 
-Les heures de cours étaient principalement utilisées pour la correction de bug, la discussion, le code review et la rédaction des points à réaliser et des améliorations à apporter.
+Pour réaliser la logistique du jeu, nous avons choisi d’établir des règles qui permettent ainsi de traiter les informations  de manière efficace en s’assurant de conserver leur pertinence. Nous avons également choisi de réaliser des fichiers de configurations  lues au lancement du jeu, ceux-ci contenant des informations telles que l’adresse du serveur, le port, des règles du jeu... Cela permet, en cas de changement de l’adresse du serveur ou de certaines règles du jeu, de ne pas avoir à modifier les programmes ce qui facilite l’évolutivité et l’adaptation aux changements des programmes.
 
-Pour la partie développement, nous avons utilisé nos heures libre.
+<h4>Justification des choix</h4>
 
-Dans le cas ou un bug était détecté, deux solutions ont été proposées :
-- Résolution directe par la personne ayant detécté le bug
-- Résolution par la personne ayant développé le code
+Aujourd’hui le client et le serveur sont capables de lire leurs fichiers de configuration réceptifs, le serveur écoute les connexions entrantes et les place dans une file d’attente. Lorsque 2 clients sont disponibles dans la file d'attente, il lance la communication permettant de jouer en fournissant les informations de début de partie au client.
 
-Régulièrement, nous faisions des codes reviews nous permettant de voir les changements effectués par les autres membres. 
+Ainsi lorsque le client lance le jeu il est informé par un message que la partie se charge le temps que le serveur lui informe qu’une partie va débuter. Une fois le jeu commencé le client indique que le joueur peut jouer en cliquant sur un bouton, puis lors d’un clic il envoie l’information au serveur. Le serveur attend de recevoir les réponses des 2 joueurs, le joueur est alors informé qu’il est en attente de la réponse de l’adversaire s’il n’a pas encore joué.
 
+Lorsque le serveur a reçu les réponses des 2 joueurs, ils les traitent afin d’établir un score et il transmet au client le résultat du round, le client peut alors fournir à l’interface graphique le résultat du round (choix de l’adversaire, score de chaque joueur, etc…) afin de les afficher pour que le joueur soit informé du résultat du round et de ce qui a été effectué. Le joueur peut observer les résultats du round (durant 3 secondes) puis il est informé qu’un nouveau round commence et le schéma se répète.
 
-## 🧐 Justification des choix <a name = "justify"></a>
-## 🧐 Régles de communication <a name = "communications_rules"></a>
+Lorsque le serveur indique au client que la partie est terminée, le client affiché sur l’interface graphique un bouton pour rejouer ainsi que le nom du gagnant, si le joueur clique dessus alors le client est replacé dans la file d’attente du serveur, s’il quitte la partie le serveur ferme la connexion du client.
+
+Ainsi plusieurs joueurs peuvent jouer au dilemme du prisonnier en réseau (multi-joueurs) et peuvent recommencer des parties afin de tomber contre d’autres adversaires !
+
+Enfin les résultats d’une partie sont aussi stockés dans un fichier CSV pouvant être lu avec un logiciel de tableur comme Excel.
+
+## 🧐 Règles de communication <a name = "communications_rules"></a>
 
 Pour la communication, nous avons défini un protocole personnalisé.
 
@@ -315,42 +335,30 @@ Permet de communiquer le recapitualtif de la partie au client
 <recap_party>
 ```
 
-## 🧐 Les difficultés <a name = "difficulties"></a>
+## 🧐 Difficultés rencontrées <a name = "difficulties"></a>
 
-Difficultés liées au code :
-- Différentes manières d'écrire le code
-- L'adaptation du code de chaque personne au projet
-- Les différents types de bugs de mémoire
-- L'envoi de structures complexes 
+Durant la réalisation du projet nous avons été confrontés à différentes difficultés. Tout d’abord nous avons rencontré des difficultés liées à la programmation. En effet nous avons dû nous coordonner puisque chacun d’entre nous à des manières différentes de programmer, ainsi nous avons dû adapter certaines parties du code afin qu'elles fonctionnent avec le reste du projet. De plus, nous avons dû résoudre plusieurs problèmes liés à des bugs de mémoire.
 
-Difficultés liées à la communication :
-- Les différents types de communication existant
-- Définir un protocole personnalisé clair et simple
+Nous avons aussi passé du temps à établir une communication entre le serveur et les clients stables . En effet, nous devions réaliser une connexion permettant l’envoi de structure complexe, avec un protocole clair et simple.
 
-Difficultés liées à la méthodologie :
-- Se coordonner avec les autres membres
-- Se tenir à jour avec les autres membres
-- Vérifier les changements des autres membres afin de pouvoir réaliser les changements
+D'autres difficultés liées à la méthodologie sont aussi apparues. Ainsi puisque que toutes nos parties sont finalement liées entre elles, il nous est apparu nécessaire de bien se coordonner et de se tenir à jour des modifications des autres membres afin que les changements ne perturbent pas l'avancée des autres.
 
-Difficultés liées à la nouveauté :
-- La mise en place d'un serveur
-- La mise en place d'un client
-- La communication avec le serveur et le client
-- Mise en place d'une interface graphique
+Concernant la partie graphique nous nous sommes mis d’accord sur une interface graphique qui soit simple et avons dû l'adapter afin de pouvoir la faire communiquer avec le client.
 
-Difficultés liées à la partie graphique :
-- Choix du style de l'interface graphique
-- Simplicité de l'interface graphique
-- Brancher l'interface graphique au client
+Finalement plusieurs difficultés étaient dues au fait qu’aucun de nous quatre n’avait auparavant déjà programmé d’interfaces graphiques ou de communication client-serveur en C.
 
 ## 🧐 Bilan <a name = "bilan"></a>
 
-Malgré les différentes difficultés rencontrées, nous avons réussi à réaliser le projet.
-Nous en tirerons des bénéfices, et nous adopterons une méthodologie différente en tirant profit des différentes difficultés rencontrées.
+Au cours de ce projet nous avons su mettre en avant les compétences acquises au cours de ce module de développement et les compléter en recherchant des solutions pour résoudre des problèmes spécifiques au projet. Ce projet a nécessité de l’autonomie sur les réflexions et les choix des méthodes à apporter pour réaliser le travail demandé. Nous avons pu découvrir de nouvelles fonctionnalités telles que l'utilisation des sockets qui est une compétence nécessaire à maîtriser lorsqu’on souhaite réaliser des programmes en réseau, ou encore la gestion des événements qui est une notion importante à comprendre lors de la réalisation d’interface graphique.
 
-Ce projet nous aura appris à traduire un concept en programme, en se basant sur le développement d'un client, un serveur et un interface graphique.
+Nous avons ainsi su réaliser une application structurée et évolutive où chaque élément a une organisation précise.
 
-Nous partions de simples connaissances basique en c et aujourd'hui nous avons été capable de mettre à l'épreuve nos connaissances afin de fournir un rendu final.
+De plus, ce projet nous a permis de découvrir de nouvelles façons de développer en mettant la communication au cœur du projet, ce qui fut très enrichissant et valorisant.
+
+
+<hr>
+
+<h1>Fonctionnement</h1>
 
 ## 🧐 Build <a name = "build"></a>
 
@@ -370,7 +378,7 @@ Pour Linux et MacOS, il faut choisir le script "build_unix.sh"
 
 Il faut ensuite ouvrir un terminal et lancer le script.
 ```bash
-./build_<environnement>.sh
+./build_unix>.sh
 ```
 
 Dans le dossier *output*, il y aura un executable "client" et un executable "server".
@@ -496,5 +504,32 @@ Pour générer la documentation du projet, il suffit de lancer la commande suiva
 ```bash
 ./build_unix_doc.sh
 ```
+
+Via la ligne de commande.
+
+Unix
+```
+cd client || exit
+mkdir build
+cd build || exit
+cmake ..
+make doc
+
+cd ../..
+
+cd server || exit
+mkdir build
+cd build || exit
+cmake ..
+make doc
+cd ../..
+
+mkdir documentation
+mkdir -r documentation/client
+cp -r client/doc/html documentation/client
+mkdir -r documentation/server
+cp -r server/doc/html documentation/server
+```
+
 
 Pour accéder à la documentation, il suffit de lancer le fichier *index.html* du dossier *documentation/client* ou *documentation/server* dans un navigateur web.

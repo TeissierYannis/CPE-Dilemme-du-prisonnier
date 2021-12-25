@@ -18,7 +18,7 @@
  */
 server_config readconfig() {
      // Read config file
-    FILE * file_p = fopen("./client_config/config.json", "r");
+    FILE * file_p = fopen("../config/config.json", "r");
 
     // Initialize server config struct
     server_config server_config;

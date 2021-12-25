@@ -1,6 +1,11 @@
-//
-// Created by Yannis Teissier on 26/11/2021.
-//
+/**
+ * @file server.h
+ * @author Teissier Yannis
+ * @brief This file contains server management functions and game loop
+ * @version 0.1
+ * @date 2021-11-26
+ * @copyright Copyright (c) 2021
+ */
 
 #include <netinet/in.h>
 #include <stdio.h>
@@ -9,11 +14,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 #include "../../headers/connectivity/server.h"
 #include "../../headers/game/rules.h"
+#include "../../headers/results/writefile.h"
 
+/**
+ * @brief Global client list
+ * Global client list
+ */
 clients_list clientsList;
 
+/**
+ * @brief Global is main thread running
+ * Global is main thread running
+ */
 int is_running = 1;
 
 /**
@@ -34,7 +49,7 @@ int create_server(char *ip, int port) {
     // Socket address
     struct sockaddr_in server_addr;
     // create socket
-    socketfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    socketfd = socket(AF_INET, SOCK_STREAM, 0);
 
     // check if socket is created
     if (socketfd <= 0) {
@@ -51,7 +66,7 @@ int create_server(char *ip, int port) {
 
     // prevent 60 timeout
     int timeout = 1;
-    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout));
+    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(int));
 
     // bind
     if (bind(socketfd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
@@ -98,6 +113,7 @@ void *listening(void *socketfd) {
         player player;
         init_player(&player, client_sock);
         add_client(&clientsList, player);
+        printf("Clients connected : %d\n", clientsList.client_count);
     }
     pthread_exit(0);
 }
@@ -109,8 +125,11 @@ void *listening(void *socketfd) {
  */
 void *handle_clients() {
     int *pair;
+    pthread_t thread;
 
     while (is_running) {
+        sleep(1);
+        // Si 2 joueurs sont disponibles
         if (clientsList.client_count >= 2) {
             // Randomize clients pairs
             pair = randomize_pairs();
@@ -119,7 +138,6 @@ void *handle_clients() {
                 clientsList.clients[pair[0]].status = 1;
                 clientsList.clients[pair[1]].status = 1;
 
-                pthread_t thread;
                 // Create list of 2 clients from random pair
                 player *players = malloc(sizeof(player) * 2);
                 players[0] = clientsList.clients[pair[0]];
@@ -130,13 +148,17 @@ void *handle_clients() {
                 // Create thread for party
                 pthread_create(&thread, 0, thread_party, players);
                 pthread_detach(thread);
+
+                // Remove players from list
+                remove_client(&clientsList, players[0].socket);
+                remove_client(&clientsList, players[1].socket);
             }
         }
+        usleep(10000); // Faire une pause dans le while TRUE (en us)
     }
     printf("[HANDLER] Stopping handler thread.\n");
     pthread_exit(0);
 }
-
 
 /**
  * Thread for party
@@ -144,7 +166,8 @@ void *handle_clients() {
  * @param players list of players
  */
 void *thread_party(void *ptr) {
-    char buffer_out[BUFFERSIZE];
+    //  char buffer_out[BUFFERSIZE];
+    Buffer_out buffer;
 
     //temp
     int Nb_Round_Max = rules0.nb_round;
@@ -154,12 +177,12 @@ void *thread_party(void *ptr) {
     player p2 = players[1];
 
     printf("Send user id to client\n");
-    sprintf(buffer_out, "id %d", p1.id);
-    printf("%s\n", buffer_out);
-    write(p1.socket, buffer_out, strlen(buffer_out));
-    sprintf(buffer_out, "id %d", p2.id);
-    printf("%s\n", buffer_out);
-    write(p2.socket, buffer_out, strlen(buffer_out));
+
+    sprintf(buffer.out, "id %d:1", p1.id);
+    write(p1.socket, &buffer, sizeof(buffer));
+
+    sprintf(buffer.out, "id %d:2", p2.id);
+    write(p2.socket, &buffer, sizeof(buffer));
 
     sleep(3);
 
@@ -170,57 +193,64 @@ void *thread_party(void *ptr) {
     printf("[PARTY #%d] Party running\n", party.id);
 
     printf("[PARTY #%d] Send party id to client\n", party.id);
-    sprintf(buffer_out, "party %i", party.id);
-    write(p1.socket, buffer_out, strlen(buffer_out));
-    write(p2.socket, buffer_out, strlen(buffer_out));
+
+    sprintf(buffer.out, "party %i", party.id);
+
+    write(p1.socket, buffer.out, sizeof(buffer));
+    write(p2.socket, buffer.out, sizeof(buffer));
 
     sleep(3);
 
     // status 0 = playing, 1 = finished
     printf("[PARTY #%d] Send start instruction to client\n", party.id);
     int status = 0;
-    sprintf(buffer_out, "status %d", status);
-    write(p1.socket, buffer_out, strlen(buffer_out) + 1);
-    write(p2.socket, buffer_out, strlen(buffer_out) + 1);
 
-   // sleep(3);
+    sprintf(buffer.out, "status %d", status);
+    write(p1.socket, buffer.out, sizeof(buffer));
+    write(p2.socket, buffer.out, sizeof(buffer));
+    // sleep(3);
 
     int nbRound = 1;
 
+    int p1Result, p2Result, p1Time, p2Time, p1Wallet, p2Wallet;
+    size_t p1_sizet, p2_sizet;
+    answer_struct buffer_answer1, buffer_answer2;
+    round round_struct, round_party;
     //Gestion des rounds
     while (nbRound <= Nb_Round_Max) {
-        int p1Result, p2Result, p1Time, p2Time, p1Wallet, p2Wallet;
-        size_t p1_t, p2_t;
-
         printf("[PARTY #%d] Round %i\n", nbRound, party.id);
-        answer_struct buffer_answer1, buffer_answer2;
+
         init_answer(&buffer_answer1);
         init_answer(&buffer_answer2);
 
         printf("[PARTY #%d] Reading response from clients\n", party.id);
-        p1_t = read(p1.socket, &buffer_answer1, BUFFERSIZE);
-        p2_t = read(p2.socket, &buffer_answer2, BUFFERSIZE);
-        printf("Réponse J1 reçue ... = %d\n", buffer_answer1.choice);
-        if (p1_t > 0 || p2_t > 0) {
+        // p1_t = read(p1.socket, &buffer_answer1, sizeof(answer_struct));
+        // p2_t = read(p2.socket, &buffer_answer2, sizeof(answer_struct));
+        p1_sizet = read(p1.socket, &buffer_answer1, sizeof(buffer_answer1));
+        p2_sizet = read(p2.socket, &buffer_answer2, sizeof(buffer_answer2));
 
-            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",
-                   party.id,
-                   p1.id,
-                   buffer_answer1.choice,
-                   buffer_answer1.time
-            );
+        if (p1_sizet < 0 || p2_sizet < 0) {
+            perror("[PARTY] Error reading response from clients");
+            close(p1.socket);
+            close(p2.socket);
+            exit(EXIT_FAILURE);
+        }
+
+        usleep(100000); // Wait a little
+
+        p1_sizet = 1;
+        p2_sizet = 1;
+        printf("Réponse J1 reçue ... = %d\n", buffer_answer1.choice);
+        if (p1_sizet > 0 || p2_sizet > 0) {
+
+            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n", party.id, p1.id,
+                   buffer_answer1.choice, buffer_answer1.time);
             // fill answer struct
             p1Result = buffer_answer1.choice;
             p1Time = buffer_answer1.time;
 
-         
-
-            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n",
-                   party.id,
-                   p2.id,
-                   buffer_answer2.choice,
-                   buffer_answer2.time
-            );
+            printf("[PARTY #%d] Received answer from #%i: \n Answer : %i\n Time : %i\n", party.id, p2.id,
+                   buffer_answer2.choice, buffer_answer2.time);
             // fill answer struct
             p2Result = buffer_answer2.choice;
             p2Time = buffer_answer2.time;
@@ -236,16 +266,12 @@ void *thread_party(void *ptr) {
             printf("Wallet: P1: %d - P2: %d\n", p1.wallet, p2.wallet);
 
             p1Wallet = p1.wallet;
-            p2Wallet = p2.wallet; 
-
+            p2Wallet = p2.wallet;
 
             printf("[PARTY #%d] Generating round result\n", party.id);
-            round round_struct, round_party;
+
             init_round(&round_struct, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
             init_round(&round_party, p1Result, p1Time, p2Result, p2Time, status, nbRound, p1Wallet, p2Wallet);
-            add_round_to_party(&party, &round_party);
-
-           // sleep(5);
 
             printf("[PARTY #%d] Sending round result to clients... \n", party.id);
             printf("Envoie du round ... avec numero = %d\n", round_struct.round_number);
@@ -257,56 +283,104 @@ void *thread_party(void *ptr) {
             add_round_to_party(&party, &round_struct);
 
             nbRound += 1;
-           //sleep(100);
         }
     }
     printf("[PARTY #%d] Every rounds was played \n", party.id);
 
-    // TODO : Send end to client the recap
+    char win[200];
+    sprintf(win, "winner %d", winner(p1, p2));
+    write(p1.socket, &win, sizeof(char) * 200);
+    write(p2.socket, &win, sizeof(char) * 200);
 
-    //sleep(3);
+    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
 
     printf("[PARTY #%d] Generating recap...\n", party.id);
     recap party_recap = generating_recap(&party);
     printf("[PARTY #%d] Sending recap to clients... \n", party.id);
-    write(p1.socket, &party_recap, sizeof(recap));
-    write(p2.socket, &party_recap, sizeof(recap));
+  //  write(p1.socket, &party_recap, sizeof(recap));
+   // write(p2.socket, &party_recap, sizeof(recap));
     printf("[PARTY #%d] Recap sent. \n", party.id);
 
-    //Fin de partie
+    // End of the party
     printf("[PARTY #%d] Fin de la partie\n", party.id);
-    //TODO win = winner(j1, j2)
-    int win = winner(p1, p2);
-    printf("[PARTY #%d] Le gagnant est %d\n", party.id, win);
 
     printf("[PARTY #%d] Logging results...\n", party.id);
     //TODO write results.csv
-    sleep(5);
+    writefile(party);
+
     printf("[PARTY #%d] Results logged...\n", party.id);
     printf("[PARTY #%d] Leaving party...\n", party.id);
 
     // Recupérer si le joueur veut rejouer ou quitter
-    char status_j1[11];
-    char status_j2[11];
-    read(p1.socket, &status_j1, sizeof(status_j1));
-    read(p1.socket, &status_j2, sizeof(status_j2));
+    player_wanted_replay(p1, p2);
 
-    sleep(500);
-   if((strcmp(status_j1, "online") == 0) || (strcmp(status_j2, "online") == 0)) {
-        printf("ON REJOUE \n");
-        // Mettre le joueur dans une nouvelle partie
-        sleep(1000);
-    }
-    else if(strcmp(status_j1, "disconnect") == 0){
-        printf("ON S'EN VAS \n");
-        // Faire quitter les parties
-        sleep(1);
-    }
-    
+    free(players);
+
     pthread_exit(0);
 }
 
+/**
+ * @brief Check if the players want to play again
+ * @param p1 First player
+ * @param p2 Second player
+ */
+void player_wanted_replay(player p1, player p2) {
+    int p1_res, p2_res;
+    char status_j1[20];
+    char status_j2[20];
+    Buffer_out buffer_j1;
+    Buffer_out buffer_j2;
 
+    printf("[PARTY] Waiting for players wanted to replay\n");
+    p1_res = read(p1.socket, &buffer_j1, sizeof(buffer_j1));
+    p2_res = read(p2.socket, &buffer_j2, sizeof(buffer_j2));
+
+    if (p1_res < 0 || p2_res < 0) {
+        perror("[PARTY] Error reading response from clients");
+        close(p1.socket);
+        close(p2.socket);
+        exit(EXIT_FAILURE);
+    }
+
+    strcpy(status_j1, buffer_j1.out);
+    strcpy(status_j2, buffer_j2.out);
+    // P1 want to replay
+    if (strcmp(status_j1, "online") == 0) {
+        printf("P1 want to replay\n");
+        p1.status = 0;
+        // Add client to the queue
+        player from_p1;
+        init_player(&from_p1, p1.socket);
+        add_client(&clientsList, from_p1);
+    }
+        // P1 do not want to replay
+    else {
+        printf("P1 is leaving\n");
+        close(p1.socket);
+        // Closing socket
+    }
+
+    // P2 want to replay
+    if (strcmp(status_j2, "online") == 0) {
+        printf("P2 want to replay\n");
+        p2.status = 0;
+        // Add client to the queue
+        player from_p2;
+        init_player(&from_p2, p2.socket);
+        add_client(&clientsList, from_p2);
+    } // P2 do not want to replay
+    else {
+        printf("P2 is leaving\n");
+        close(p2.socket);
+        // Closing socket
+    }
+}
+
+/**
+ * @brief Randomize pair of players from the global player list
+ * Randomize pair of players from the global player list
+ * @return Pair of players
+ */
 int *randomize_pairs() {
     int *pair = malloc(sizeof(int) * 2);
     pair[0] = rand() % clientsList.client_count;
@@ -318,16 +392,33 @@ int *randomize_pairs() {
     return pair;
 }
 
+/**
+ * @brief Initialize client list
+ * Initialize client list
+ * @param clients List of clients
+ */
 void init_client_list(clients_list *client_list) {
     client_list->clients = malloc(sizeof(player) * 10);
     client_list->client_count = 0;
 }
 
+/**
+ * @brief Add a client to the list
+ * Add a client to the list
+ * @param clients List of clients
+ * @param client Client to add
+ */
 void add_client(clients_list *client_list, player client) {
     client_list->clients[client_list->client_count] = client;
     client_list->client_count++;
 }
 
+/**
+ * @brief Remove a client from the list
+ * Remove a client from the list
+ * @param clients List of clients
+ * @param socket fd Socket of the client
+ */
 void remove_client(clients_list *client_list, int socketfd) {
     for (int i = 0; i < client_list->client_count; i++) {
         if (client_list->clients[i].socket == socketfd) {

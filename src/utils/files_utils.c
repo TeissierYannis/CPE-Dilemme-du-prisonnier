@@ -1,6 +1,12 @@
-//
-// Created by Yannis Teissier on 17/11/2021.
-//
+/**
+ * @file core.h
+ * @author Teissier Yannis
+ * @brief This file is the core of the game logic
+ * @version 0.1
+ * @date 2021-11-17
+ * @copyright Copyright (c) 2021
+ */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,9 +19,9 @@
  * @brief Initialize json parsing to key:value
  * @param server_config config file
  */
-void parse_json(char * search_key, char * to_assign, FILE * config_file) {
+void parse_json(char *search_key, char *to_assign, FILE *config_file) {
 
-    char * buffer = malloc(sizeof(char) * 100), * key = malloc(sizeof(char) * 20), * value = malloc(sizeof(char) * 20);
+    char *buffer = malloc(sizeof(char) * 100), *key = malloc(sizeof(char) * 20), *value = malloc(sizeof(char) * 20);
     int i = 0;
 
     // Read file word by word
@@ -50,4 +56,8 @@ void parse_json(char * search_key, char * to_assign, FILE * config_file) {
     }
     // Reset file pointer
     rewind(config_file);
+
+    free(buffer);
+    free(key);
+    free(value);
 }

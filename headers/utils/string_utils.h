@@ -1,6 +1,11 @@
-//
-// Created by Yannis Teissier on 13/11/2021.
-//
+/**
+ * @file core.h
+ * @author Teissier Yannis
+ * @brief This file is the core of the game logic
+ * @version 0.1
+ * @date 2021-11-13
+ * @copyright Copyright (c) 2021
+ */
 
 #ifndef SERVER_STRING_UTILS_H
 #define SERVER_STRING_UTILS_H

@@ -1,8 +1,7 @@
 #!/bin/sh
 
 mkdir build
-cd build
+cd build || exit
 cmake ..
 make all
-clear
 ./server

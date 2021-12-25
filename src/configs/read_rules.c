@@ -23,9 +23,9 @@
  */
 void read_rules(rules *rules) {
     //printf("Read rules:\n");
-    if (access("./server_config/rules_config.json", F_OK) != -1) {
+    if (access("../config/rules_config.json", F_OK) != -1) {
         //rules rules;
-        FILE *file_rule = fopen("./server_config/rules_config.json", "r");
+        FILE *file_rule = fopen("../config/rules_config.json", "r");
 
         char *nb_round = malloc(sizeof(char) * 20);
         parse_json("nb_round", nb_round, file_rule);

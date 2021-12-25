@@ -1,7 +1,6 @@
 #!/bin/sh
-
 mkdir build
-cd build || exit
+cd build
 cmake ..
 make all
-./server
+./client

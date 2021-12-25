@@ -1,5 +1,7 @@
 #!/bin/sh
 
+rm -rf output
+
 # Build script for the Unix version of the application
 printf "Building the Unix version of the application...\n"
 mkdir output
@@ -30,9 +32,14 @@ printf "Building the application finished.\n"
 printf "Preparing configuration files...\n"
 mkdir output/client_config
 mkdir output/server_config
-cp client/config/config.json output/client_config/config.json
-cp server/config/rules_config.json output/server_config/rules_config.json
-cp server/config/server_config.json output/server_config/server_config.json
+mkdir output/client_config/images
+mkdir output/results
+
+cp client/images/* output/client_config/images/
+cp client/glade/glade.glade output/client_config/glade.glade
+cp client/client_config/config.json output/client_config/config.json
+cp server/server_config/rules_config.json output/server_config/rules_config.json
+cp server/server_config/server_config.json output/server_config/server_config.json
 printf "Configuration files prepared.\n"
 
 printf "Application build finished.\n"

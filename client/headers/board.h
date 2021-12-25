@@ -7,17 +7,7 @@
  * @copyright Copyright (c) 2021
  * 
  */
-#include <stdlib.h>
-#include <sys/types.h>
-#include <signal.h>
-#include <unistd.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkx.h>
-#include <math.h>
-#include <ctype.h>
-//#include <pthread.h>
-#include <stdio.h>
 
 
 #ifndef BOARD_H
@@ -49,6 +39,11 @@ typedef struct {
     GtkWidget *egalite;
     // Compte à rebours de la partie
     GtkWidget *chrono;
+    // Les temps de jeu
+    GtkWidget *time_1;
+    GtkWidget *time_2;
+    GtkWidget *temps_j1;
+    GtkWidget *temps_j2;
 } Tools;
 
 

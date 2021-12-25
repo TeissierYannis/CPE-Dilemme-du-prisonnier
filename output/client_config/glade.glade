@@ -289,7 +289,7 @@
             <property name="width-request">100</property>
             <property name="height-request">80</property>
             <property name="can-focus">False</property>
-            <property name="pixbuf">../images/perdu50.png</property>
+            <property name="pixbuf">./images/perdu50.png</property>
           </object>
           <packing>
             <property name="x">110</property>
@@ -301,7 +301,7 @@
             <property name="width-request">100</property>
             <property name="height-request">80</property>
             <property name="can-focus">False</property>
-            <property name="pixbuf">../images/gagner50.png</property>
+            <property name="pixbuf">./images/gagner50.png</property>
           </object>
           <packing>
             <property name="x">101</property>
@@ -315,7 +315,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-bottom">1</property>
-            <property name="pixbuf">../images/cpe.png</property>
+            <property name="pixbuf">./images/cpe.png</property>
           </object>
           <packing>
             <property name="x">13</property>
@@ -336,6 +336,72 @@
           <packing>
             <property name="x">599</property>
             <property name="y">18</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Temps_j1">
+            <property name="name">Temps_j1</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Temps J1 :</property>
+            <attributes>
+              <attribute name="foreground" value="#9a9a99999696"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">-3</property>
+            <property name="y">32</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Temps_j2">
+            <property name="name">Temps_j2</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Temps J2 :</property>
+            <attributes>
+              <attribute name="foreground" value="#9a9a99999696"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">-3</property>
+            <property name="y">56</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Time_1">
+            <property name="name">Time_1</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#c0c0bfbfbcbc"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">54</property>
+            <property name="y">30</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="Time_2">
+            <property name="name">Time_2</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#c0c0bfbfbcbc"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">54</property>
+            <property name="y">54</property>
           </packing>
         </child>
       </object>

@@ -112,8 +112,6 @@ Game create_game(int socketClient, Joueur player) {
  * @return Answer
  */
 Answer get_answer(Game game) {
-    int time_clique;
-    int correction = 2; // correction taux d'erreurs temps mesuré
     Answer answer;
     // Le choix du joueur est decrit dans une structure "reponse" qui contient les infos de la partie
     // + le choix du joueur + son temps de reponse
@@ -128,7 +126,7 @@ Answer get_answer(Game game) {
     // Valeurs jouées par le joueur
     answer.choice = get_clique();
     time_end = time(NULL);
-    answer.time = (time_end - time_start) - correction;
+    answer.time = (time_end - time_start);
 
     printf("[CLIENT] Player choice completed.\n");
     return answer;

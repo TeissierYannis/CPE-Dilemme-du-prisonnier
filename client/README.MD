@@ -372,20 +372,28 @@ Préparation du build :
 
 Afin de compiler le projet nous vous proposons deux solutions :
 
+/!\ Attention : La branche main sert de démonstration, si vous souhaitez utiliser les scripts, passez par la branche server et la branche client
+
 Via un script adapté à la machine que vous utilisez (Linux, MacOS)
 
 Pour Linux et MacOS, il faut choisir le script "build_unix.sh"
 
 Il faut ensuite ouvrir un terminal et lancer le script.
 ```bash
-./build_unix>.sh
+./build_unix.sh
 ```
 
-Dans le dossier *output*, il y aura un executable "client" et un executable "server".
+Dans le dossier **output**, il y aura un executable "client" et un executable "server".
 
 Dans le dossier "client_config", vous y trouverez les fichiers de configuration du client.
 
 Et dans le dossier "server_config", vous y trouverez les fichiers de configuration du serveur.
+
+Pour lancer les exécutables, il suffit de les lancer dans le dossier "output" en s'assurant de bien avoir les dossiers avec les fichiers de configurations.
+```
+./output/client
+./output/server
+```
 
 Via la ligne de commande.
 
